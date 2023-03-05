@@ -1,10 +1,7 @@
-﻿using TravelAgent.DTO.Offer;
-
-namespace TravelAgent.Model
+﻿namespace TravelAgent.DTO.Offer
 {
-    public class Offer
+    public class OfferReviewDTO
     {
-        public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public double Price { get; set; }
@@ -13,8 +10,7 @@ namespace TravelAgent.Model
         public DateTime EndDate { get; set; }
         public int Duration { get; set; }
         public double Rating { get; set; }
-        public string OfferCode { get; set; }
-        public OfferType OfferType { get; set; }
-        public TransportationType TransportationType { get; set; }
+        public int OfferTypeId { get; set; }
+        public int TransportationTypeId { get; set; }
     }
 }
