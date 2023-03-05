@@ -40,9 +40,9 @@ namespace TravelAgent.Controllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult Put(int id, OfferReviewDTO offer)
+        public ActionResult Put(int id, OfferReviewDTO dataIn)
         {
-            return Ok(_offerService.Update(id, offer));
+            return Ok(_offerService.Update(id, dataIn));
         }
 
     }
