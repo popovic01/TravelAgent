@@ -27,6 +27,7 @@ namespace TravelAgent.Services.Implementations
             if (locationDb != null )
             {
                 retVal.Message = $"Already exists Location {location.Name}";
+                retVal.Status = 409;
             }
             else
             {
@@ -81,12 +82,13 @@ namespace TravelAgent.Services.Implementations
             PaginationDataOut<LocationDTO> retVal = new PaginationDataOut<LocationDTO>();
 
             IQueryable<Location> locations = _context.Locations;
-            retVal.Count = locations.Count();
 
             if (!string.IsNullOrWhiteSpace(searchData.SearchFilter))
             {
                 locations = locations.Where(x => x.Name.ToLower().Contains(searchData.SearchFilter));
             }
+            retVal.Count = locations.Count();
+
             locations.ToList().ForEach(x => retVal.Data.Add(_mapper.Map<LocationDTO>(x)));
             return retVal;
         }
@@ -97,17 +99,25 @@ namespace TravelAgent.Services.Implementations
 
             var locationDb = _context.Locations
                 .FirstOrDefault(x => x.Id == id);
+            var locationNameDb = _context.Locations
+                .FirstOrDefault(x => x.Name.ToLower() == location.Name.ToLower());
 
             if (locationDb == null)
             {
                 retVal.Status = 404;
                 retVal.Message = $"No Location with ID {id}";
-                return retVal;
             }
-            locationDb.Name = location.Name;
-            _context.SaveChanges();
-
-            retVal.Message = $"Successfully updated Location {location.Name}";
+            else if (locationNameDb != null)
+            {
+                retVal.Message = $"Already exists Location {location.Name}";
+                retVal.Status = 409;
+            }
+            else
+            {
+                locationDb.Name = location.Name;
+                _context.SaveChanges();
+                retVal.Message = $"Successfully updated Location {location.Name}";
+            }
 
             return retVal;
         }

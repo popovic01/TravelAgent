@@ -104,7 +104,6 @@ namespace TravelAgent.Services.Implementations
             IQueryable<Offer> offers = _context.Offers
                 .Include(x => x.TransportationType)
                 .Include(x => x.OfferType);
-            retVal.Count = offers.Count();
             offers = offers
                 .OrderByDescending(x => x.Id)
                 .Skip(pageInfo.PageSize * (pageInfo.Page - 1))
@@ -120,6 +119,8 @@ namespace TravelAgent.Services.Implementations
                 DateTime endDate = Convert.ToDateTime(filterParams.EndDate);
                 offers = offers.Where(x => x.StartDate.Date.CompareTo(startDate.Date) == 0 && x.EndDate.Date.CompareTo(endDate.Date) == 0);
             }
+            retVal.Count = offers.Count();
+
             offers.ToList().ForEach(x => retVal.Data.Add(_mapper.Map<OfferDTO>(x)));
             return retVal;
         }
