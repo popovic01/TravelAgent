@@ -15,6 +15,7 @@ namespace TravelAgent.AppDbContext
         public DbSet<OfferLocation> OfferLocations { get; set; }
         public DbSet<OfferType> OfferTypes { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
+        public DbSet<Wishlist> Wishlists { get; set; }
         public DbSet<Tag> Tags { get; set; }
         public DbSet<TagOffer> TagOffers { get; set; }
         public DbSet<TransportationType> TransportationTypes { get; set; }

@@ -16,5 +16,7 @@ namespace TravelAgent.Model
         public string OfferCode { get; set; }
         public OfferType OfferType { get; set; }
         public TransportationType TransportationType { get; set; }
+        public int WishlistCount { get; set; }
+        public int ReservationCount { get; set; }
     }
 }

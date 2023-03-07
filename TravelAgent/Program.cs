@@ -19,6 +19,7 @@ builder.Services.AddScoped<IOfferService, OfferService>();
 builder.Services.AddScoped<ILocationService, LocationService>();
 builder.Services.AddScoped<ITagService, TagService>();
 builder.Services.AddScoped<ITransportationTypeService, TransportationTypeService>();
+builder.Services.AddScoped<IOfferTypeService, OfferTypeService>();
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
 var app = builder.Build();
