@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TravelAgent.DTO.Common;
-using TravelAgent.DTO.Location;
 using TravelAgent.DTO.Tag;
-using TravelAgent.Services.Implementations;
 using TravelAgent.Services.Interfaces;
 
 namespace TravelAgent.Controllers
