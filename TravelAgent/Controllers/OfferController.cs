@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TravelAgent.DTO.Offer;
+using TravelAgent.Services.Implementations;
 using TravelAgent.Services.Interfaces;
 
 namespace TravelAgent.Controllers
@@ -37,6 +38,12 @@ namespace TravelAgent.Controllers
         public ActionResult Delete(int id)
         {
             return Ok(_offerService.Delete(id));
+        }
+
+        [HttpDelete("deleteLocation/{offerId}/{locationId}")]
+        public ActionResult DeleteLocationForOffer(int offerId, int locationId)
+        {
+            return Ok(_offerService.DeleteLocationForOffer(offerId, locationId));
         }
 
         [HttpPut("{id}")]

@@ -37,7 +37,8 @@ namespace TravelAgent.Services.Implementations
                     Rating = offer.Rating,
                     OfferCode = RandomString(6),
                     OfferType = _context.OfferTypes.FirstOrDefault(x => x.Id == offer.OfferTypeId),
-                    TransportationType = _context.TransportationTypes.FirstOrDefault(x => x.Id == offer.TransportationTypeId)
+                    TransportationType = _context.TransportationTypes.FirstOrDefault(x => x.Id == offer.TransportationTypeId),
+                    Locations = _context.Locations.Where(x => offer.LocationIds.Contains(x.Id)).ToList()
                 };
 
                 _context.Offers.Add(offerDb);
@@ -73,6 +74,36 @@ namespace TravelAgent.Services.Implementations
             return retVal;
         }
 
+        public ResponsePackageNoData DeleteLocationForOffer(int offerId, int locationId)
+        {
+            var retVal = new ResponsePackageNoData();
+
+            var offer = _context.Offers
+                .Include(x => x.Locations)
+                .FirstOrDefault(x => x.Id == offerId);
+
+            var location = _context.Locations
+                .FirstOrDefault(x => x.Id == locationId);
+
+            if (offer == null)
+            {
+                retVal.Status = 404;
+                retVal.Message = $"No Offer with ID {offerId}";
+            }
+            else if (location == null)
+            {
+                retVal.Status = 404;
+                retVal.Message = $"No Location with ID {locationId}";
+            }
+            else
+            {
+                offer.Locations.Remove(location);
+                _context.SaveChanges();
+                retVal.Message = $"Successfully deleted Location {locationId} for Offer with ID {offerId}";
+            }
+            return retVal;
+        }
+
         public ResponsePackage<OfferReviewDTO> Get(int id)
         {
             var retVal = new ResponsePackage<OfferReviewDTO>();
@@ -80,6 +111,7 @@ namespace TravelAgent.Services.Implementations
             var offer = _context.Offers
                 .Include(x => x.TransportationType)
                 .Include(x => x.OfferType)
+                .Include(x => x.Locations)
                 .FirstOrDefault(x => x.Id == id);
 
             if (offer == null)
@@ -103,7 +135,8 @@ namespace TravelAgent.Services.Implementations
 
             IQueryable<Offer> offers = _context.Offers
                 .Include(x => x.TransportationType)
-                .Include(x => x.OfferType);
+                .Include(x => x.OfferType)
+                .Include(x => x.Locations);
             offers = offers
                 .OrderByDescending(x => x.Id)
                 .Skip(pageInfo.PageSize * (pageInfo.Page - 1))
@@ -119,6 +152,10 @@ namespace TravelAgent.Services.Implementations
                 DateTime endDate = Convert.ToDateTime(filterParams.EndDate);
                 offers = offers.Where(x => x.StartDate.Date.CompareTo(startDate.Date) == 0 && x.EndDate.Date.CompareTo(endDate.Date) == 0);
             }
+            if (searchData.FilterParams.LocationIds.Count > 0)
+            {
+                offers = offers.Where(x => x.Locations.Any(y => searchData.FilterParams.LocationIds.Contains(y.Id)));
+            }
             retVal.Count = offers.Count();
 
             offers.ToList().ForEach(x => retVal.Data.Add(_mapper.Map<OfferDTO>(x)));
@@ -132,6 +169,7 @@ namespace TravelAgent.Services.Implementations
             var offerDb = _context.Offers
                 .Include(x => x.TransportationType)
                 .Include(x => x.OfferType)
+                .Include(x => x.Locations)
                 .FirstOrDefault(x => x.Id == id);
 
             if (offerDb == null)
@@ -151,6 +189,7 @@ namespace TravelAgent.Services.Implementations
                 offerDb.Price = offer.Price;
                 offerDb.TransportationType = _context.TransportationTypes.FirstOrDefault(x => x.Id == offer.TransportationTypeId);
                 offerDb.OfferType = _context.OfferTypes.FirstOrDefault(x => x.Id == offer.OfferTypeId);
+                offerDb.Locations = _context.Locations.Where(x => offer.LocationIds.Contains(x.Id)).ToList();
                 _context.SaveChanges();
 
                 retVal.Message = $"Successfully updated Offer {offer.Name}";

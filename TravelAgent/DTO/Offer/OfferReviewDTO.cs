@@ -12,5 +12,6 @@
         public double Rating { get; set; }
         public int OfferTypeId { get; set; }
         public int TransportationTypeId { get; set; }
+        public List<int> LocationIds { get; set; }
     }
 }

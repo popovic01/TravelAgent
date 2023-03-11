@@ -18,5 +18,6 @@ namespace TravelAgent.Model
         public TransportationType TransportationType { get; set; }
         public int WishlistCount { get; set; }
         public int ReservationCount { get; set; }
+        public List<Location> Locations { get; set; }
     }
 }

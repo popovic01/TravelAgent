@@ -10,5 +10,6 @@ namespace TravelAgent.Services.Interfaces
         public ResponsePackageNoData Add(OfferReviewDTO offer);
         public ResponsePackageNoData Update(int id, OfferReviewDTO offer);
         public ResponsePackageNoData Delete(int id);
+        public ResponsePackageNoData DeleteLocationForOffer(int offerId, int locationId);
     }
 }
