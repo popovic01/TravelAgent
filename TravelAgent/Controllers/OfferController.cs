@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TravelAgent.DTO.Offer;
-using TravelAgent.Services.Implementations;
 using TravelAgent.Services.Interfaces;
 
 namespace TravelAgent.Controllers
@@ -44,6 +43,18 @@ namespace TravelAgent.Controllers
         public ActionResult DeleteLocationForOffer(int offerId, int locationId)
         {
             return Ok(_offerService.DeleteLocationForOffer(offerId, locationId));
+        }
+
+        [HttpDelete("deleteTag/{offerId}/{tagId}")]
+        public ActionResult DeleteTagForOffer(int offerId, int tagId)
+        {
+            return Ok(_offerService.DeleteTagForOffer(offerId, tagId));
+        }
+
+        [HttpGet("addToWishlist/{offerId}/{clientId}")]
+        public ActionResult AddOfferToWishlist(int offerId, int clientId)
+        {
+            return Ok(_offerService.AddOfferToWishlist(offerId, clientId));
         }
 
         [HttpPut("{id}")]

@@ -8,15 +8,11 @@ namespace TravelAgent.AppDbContext
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
         public DbSet<User> Users { get; set; }
-        public DbSet<Admin> Admins { get; set; }
-        public DbSet<Client> Clients { get; set; }
         public DbSet<Location> Locations { get; set; }
         public DbSet<Offer> Offers { get; set; }
         public DbSet<OfferType> OfferTypes { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
-        public DbSet<Wishlist> Wishlists { get; set; }
         public DbSet<Tag> Tags { get; set; }
-        public DbSet<TagOffer> TagOffers { get; set; }
         public DbSet<TransportationType> TransportationTypes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -32,6 +28,32 @@ namespace TravelAgent.AppDbContext
                     {
                         j.Property<int>("OfferLocationId").ValueGeneratedOnAdd();
                         j.HasKey("OfferLocationId");
+                    });
+
+            modelBuilder.Entity<Offer>()
+                .HasMany(o => o.Tags)
+                .WithMany(t => t.Offers)
+                .UsingEntity<Dictionary<string, object>>(
+                    "OfferTag",
+                    j => j.HasOne<Tag>().WithMany().HasForeignKey("TagId"),
+                    j => j.HasOne<Offer>().WithMany().HasForeignKey("OfferId"),
+                    j =>
+                    {
+                        j.Property<int>("OfferTagId").ValueGeneratedOnAdd();
+                        j.HasKey("OfferTagId");
+                    });
+
+            modelBuilder.Entity<Offer>()
+                .HasMany(o => o.Clients)
+                .WithMany(t => t.Offers)
+                .UsingEntity<Dictionary<string, object>>(
+                    "Wishlist",
+                    j => j.HasOne<Client>().WithMany().HasForeignKey("ClientId"),
+                    j => j.HasOne<Offer>().WithMany().HasForeignKey("OfferId"),
+                    j =>
+                    {
+                        j.Property<int>("OfferClientId").ValueGeneratedOnAdd();
+                        j.HasKey("OfferClientId");
                     });
         }
     }

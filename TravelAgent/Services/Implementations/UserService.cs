@@ -35,10 +35,14 @@ namespace TravelAgent.Services.Implementations
             else
             {
                 _auth.CreatePasswordHash(dataIn.Password, out byte[] passwordHash, out byte[] passwordSalt);
-                User user = new User();
+                Client user = new Client();
                 user.Username = dataIn.Username;
                 user.PasswordHash = passwordHash;
                 user.PasswordSalt = passwordSalt; 
+                user.PassportNo = dataIn.PassportNo;
+                user.PhoneNo = dataIn.PhoneNo;
+                user.FirstName = dataIn.FirstName; 
+                user.LastName = dataIn.LastName;
 
                 _context.Users.Add(user);
                 _context.SaveChanges();

@@ -70,13 +70,8 @@ namespace TravelAgent.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PasswordSalt = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
-                    LozinkaHash = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PassportNo = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNo = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    PasswordHash = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    Username = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -99,7 +94,10 @@ namespace TravelAgent.Migrations
                     Rating = table.Column<double>(type: "float", nullable: false),
                     OfferCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     OfferTypeId = table.Column<int>(type: "int", nullable: false),
-                    TransportationTypeId = table.Column<int>(type: "int", nullable: false)
+                    TransportationTypeId = table.Column<int>(type: "int", nullable: false),
+                    WishlistCount = table.Column<int>(type: "int", nullable: false),
+                    ReservationCount = table.Column<int>(type: "int", nullable: false),
+                    AvailableSpots = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -119,27 +117,74 @@ namespace TravelAgent.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "OfferLocations",
+                name: "Clients",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    OfferId = table.Column<int>(type: "int", nullable: false),
-                    LocationId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PassportNo = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PhoneNo = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OfferLocations", x => x.Id);
+                    table.PrimaryKey("PK_Clients", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_OfferLocations_Locations_LocationId",
+                        name: "FK_Clients_Users_Id",
+                        column: x => x.Id,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OfferLocation",
+                columns: table => new
+                {
+                    OfferLocationId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    LocationId = table.Column<int>(type: "int", nullable: false),
+                    OfferId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OfferLocation", x => x.OfferLocationId);
+                    table.ForeignKey(
+                        name: "FK_OfferLocation_Locations_LocationId",
                         column: x => x.LocationId,
                         principalTable: "Locations",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_OfferLocations_Offers_OfferId",
+                        name: "FK_OfferLocation_Offers_OfferId",
                         column: x => x.OfferId,
                         principalTable: "Offers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OfferTag",
+                columns: table => new
+                {
+                    OfferTagId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    OfferId = table.Column<int>(type: "int", nullable: false),
+                    TagId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OfferTag", x => x.OfferTagId);
+                    table.ForeignKey(
+                        name: "FK_OfferTag_Offers_OfferId",
+                        column: x => x.OfferId,
+                        principalTable: "Offers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_OfferTag_Tags_TagId",
+                        column: x => x.TagId,
+                        principalTable: "Tags",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -159,53 +204,53 @@ namespace TravelAgent.Migrations
                 {
                     table.PrimaryKey("PK_Reservations", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_Reservations_Clients_ClientId",
+                        column: x => x.ClientId,
+                        principalTable: "Clients",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_Reservations_Offers_OfferId",
                         column: x => x.OfferId,
                         principalTable: "Offers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Reservations_Users_ClientId",
-                        column: x => x.ClientId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "TagOffers",
+                name: "Wishlist",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    OfferClientId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    OfferId = table.Column<int>(type: "int", nullable: false),
-                    TagId = table.Column<int>(type: "int", nullable: false)
+                    ClientId = table.Column<int>(type: "int", nullable: false),
+                    OfferId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TagOffers", x => x.Id);
+                    table.PrimaryKey("PK_Wishlist", x => x.OfferClientId);
                     table.ForeignKey(
-                        name: "FK_TagOffers_Offers_OfferId",
+                        name: "FK_Wishlist_Clients_ClientId",
+                        column: x => x.ClientId,
+                        principalTable: "Clients",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Wishlist_Offers_OfferId",
                         column: x => x.OfferId,
                         principalTable: "Offers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_TagOffers_Tags_TagId",
-                        column: x => x.TagId,
-                        principalTable: "Tags",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_OfferLocations_LocationId",
-                table: "OfferLocations",
+                name: "IX_OfferLocation_LocationId",
+                table: "OfferLocation",
                 column: "LocationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OfferLocations_OfferId",
-                table: "OfferLocations",
+                name: "IX_OfferLocation_OfferId",
+                table: "OfferLocation",
                 column: "OfferId");
 
             migrationBuilder.CreateIndex(
@@ -219,6 +264,16 @@ namespace TravelAgent.Migrations
                 column: "TransportationTypeId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_OfferTag_OfferId",
+                table: "OfferTag",
+                column: "OfferId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OfferTag_TagId",
+                table: "OfferTag",
+                column: "TagId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Reservations_ClientId",
                 table: "Reservations",
                 column: "ClientId");
@@ -229,39 +284,45 @@ namespace TravelAgent.Migrations
                 column: "OfferId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TagOffers_OfferId",
-                table: "TagOffers",
-                column: "OfferId");
+                name: "IX_Wishlist_ClientId",
+                table: "Wishlist",
+                column: "ClientId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TagOffers_TagId",
-                table: "TagOffers",
-                column: "TagId");
+                name: "IX_Wishlist_OfferId",
+                table: "Wishlist",
+                column: "OfferId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "OfferLocations");
+                name: "OfferLocation");
+
+            migrationBuilder.DropTable(
+                name: "OfferTag");
 
             migrationBuilder.DropTable(
                 name: "Reservations");
 
             migrationBuilder.DropTable(
-                name: "TagOffers");
+                name: "Wishlist");
 
             migrationBuilder.DropTable(
                 name: "Locations");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Tags");
+
+            migrationBuilder.DropTable(
+                name: "Clients");
 
             migrationBuilder.DropTable(
                 name: "Offers");
 
             migrationBuilder.DropTable(
-                name: "Tags");
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "OfferTypes");

@@ -33,12 +33,13 @@ namespace TravelAgent.Services.Implementations
                     DepartureLocation = offer.DepartureLocation,
                     StartDate = offer.StartDate,
                     EndDate = offer.EndDate,
-                    Duration = offer.Duration,
                     Rating = offer.Rating,
+                    AvailableSpots = offer.AvailableSpots,
                     OfferCode = RandomString(6),
                     OfferType = _context.OfferTypes.FirstOrDefault(x => x.Id == offer.OfferTypeId),
                     TransportationType = _context.TransportationTypes.FirstOrDefault(x => x.Id == offer.TransportationTypeId),
-                    Locations = _context.Locations.Where(x => offer.LocationIds.Contains(x.Id)).ToList()
+                    Locations = _context.Locations.Where(x => offer.LocationIds.Contains(x.Id)).ToList(),
+                    Tags = _context.Tags.Where(x => offer.TagIds.Contains(x.Id)).ToList()
                 };
 
                 _context.Offers.Add(offerDb);
@@ -104,6 +105,63 @@ namespace TravelAgent.Services.Implementations
             return retVal;
         }
 
+        public ResponsePackageNoData DeleteTagForOffer(int offerId, int tagId)
+        {
+            var retVal = new ResponsePackageNoData();
+
+            var offer = _context.Offers
+                .Include(x => x.Tags)
+                .FirstOrDefault(x => x.Id == offerId);
+
+            var tag = _context.Tags
+                .FirstOrDefault(x => x.Id == tagId);
+
+            if (offer == null)
+            {
+                retVal.Status = 404;
+                retVal.Message = $"No Offer with ID {offerId}";
+            }
+            else if (tag == null)
+            {
+                retVal.Status = 404;
+                retVal.Message = $"No Tag with ID {tagId}";
+            }
+            else
+            {
+                offer.Tags.Remove(tag);
+                _context.SaveChanges();
+                retVal.Message = $"Successfully deleted Tag {tagId} for Offer with ID {offerId}";
+            }
+            return retVal;
+        }
+
+        public ResponsePackageNoData AddOfferToWishlist(int offerId, int clientId)
+        {
+            var retVal = new ResponsePackageNoData();
+
+            var offer = _context.Offers
+                .Include(x => x.Clients)
+                .FirstOrDefault(x => x.Id == offerId);
+
+            var client = (Client)_context.Users
+                .FirstOrDefault(x => x.Id == clientId); 
+
+            if (offer != null && client != null)
+            {
+                offer.Clients.Add(client);
+                offer.WishlistCount++; //ovo bi trebalo da resi triger
+                _context.SaveChanges();
+                retVal.Message = $"Successfully added Offer {offer.Name} to your wishlist";
+            }
+            else
+            {
+                retVal.Status = 404;
+                retVal.Message = "Something went wrong";
+            }
+
+            return retVal;
+        }
+
         public ResponsePackage<OfferReviewDTO> Get(int id)
         {
             var retVal = new ResponsePackage<OfferReviewDTO>();
@@ -112,6 +170,7 @@ namespace TravelAgent.Services.Implementations
                 .Include(x => x.TransportationType)
                 .Include(x => x.OfferType)
                 .Include(x => x.Locations)
+                .Include(x => x.Tags)
                 .FirstOrDefault(x => x.Id == id);
 
             if (offer == null)
@@ -136,7 +195,8 @@ namespace TravelAgent.Services.Implementations
             IQueryable<Offer> offers = _context.Offers
                 .Include(x => x.TransportationType)
                 .Include(x => x.OfferType)
-                .Include(x => x.Locations);
+                .Include(x => x.Locations)
+                .Include(x => x.Tags);
             offers = offers
                 .OrderByDescending(x => x.Id)
                 .Skip(pageInfo.PageSize * (pageInfo.Page - 1))
@@ -156,6 +216,10 @@ namespace TravelAgent.Services.Implementations
             {
                 offers = offers.Where(x => x.Locations.Any(y => searchData.FilterParams.LocationIds.Contains(y.Id)));
             }
+            if (searchData.FilterParams.TagIds.Count > 0)
+            {
+                offers = offers.Where(x => x.Tags.Any(y => searchData.FilterParams.TagIds.Contains(y.Id)));
+            }
             retVal.Count = offers.Count();
 
             offers.ToList().ForEach(x => retVal.Data.Add(_mapper.Map<OfferDTO>(x)));
@@ -170,6 +234,7 @@ namespace TravelAgent.Services.Implementations
                 .Include(x => x.TransportationType)
                 .Include(x => x.OfferType)
                 .Include(x => x.Locations)
+                .Include(x => x.Tags)
                 .FirstOrDefault(x => x.Id == id);
 
             if (offerDb == null)
@@ -182,14 +247,15 @@ namespace TravelAgent.Services.Implementations
             {
                 offerDb.StartDate = offer.StartDate;
                 offerDb.EndDate = offer.EndDate;
-                offerDb.Duration = offer.Duration;
                 offerDb.DepartureLocation = offer.DepartureLocation;
                 offerDb.Name = offer.Name;
                 offerDb.Description = offer.Description;
                 offerDb.Price = offer.Price;
+                offerDb.AvailableSpots = offer.AvailableSpots;
                 offerDb.TransportationType = _context.TransportationTypes.FirstOrDefault(x => x.Id == offer.TransportationTypeId);
                 offerDb.OfferType = _context.OfferTypes.FirstOrDefault(x => x.Id == offer.OfferTypeId);
                 offerDb.Locations = _context.Locations.Where(x => offer.LocationIds.Contains(x.Id)).ToList();
+                offerDb.Tags = _context.Tags.Where(x => offer.TagIds.Contains(x.Id)).ToList();
                 _context.SaveChanges();
 
                 retVal.Message = $"Successfully updated Offer {offer.Name}";

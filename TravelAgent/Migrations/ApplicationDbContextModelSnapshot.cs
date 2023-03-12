@@ -45,6 +45,29 @@ namespace TravelAgent.Migrations
                     b.ToTable("OfferLocation");
                 });
 
+            modelBuilder.Entity("OfferTag", b =>
+                {
+                    b.Property<int>("OfferTagId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OfferTagId"));
+
+                    b.Property<int>("OfferId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TagId")
+                        .HasColumnType("int");
+
+                    b.HasKey("OfferTagId");
+
+                    b.HasIndex("OfferId");
+
+                    b.HasIndex("TagId");
+
+                    b.ToTable("OfferTag");
+                });
+
             modelBuilder.Entity("TravelAgent.Model.Location", b =>
                 {
                     b.Property<int>("Id")
@@ -69,6 +92,9 @@ namespace TravelAgent.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AvailableSpots")
+                        .HasColumnType("int");
 
                     b.Property<string>("DepartureLocation")
                         .IsRequired()
@@ -186,29 +212,6 @@ namespace TravelAgent.Migrations
                     b.ToTable("Tags");
                 });
 
-            modelBuilder.Entity("TravelAgent.Model.TagOffer", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("OfferId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TagId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OfferId");
-
-                    b.HasIndex("TagId");
-
-                    b.ToTable("TagOffers");
-                });
-
             modelBuilder.Entity("TravelAgent.Model.TransportationType", b =>
                 {
                     b.Property<int>("Id")
@@ -234,10 +237,6 @@ namespace TravelAgent.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<byte[]>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
@@ -254,18 +253,16 @@ namespace TravelAgent.Migrations
 
                     b.ToTable("Users");
 
-                    b.HasDiscriminator<string>("Discriminator").HasValue("User");
-
-                    b.UseTphMappingStrategy();
+                    b.UseTptMappingStrategy();
                 });
 
-            modelBuilder.Entity("TravelAgent.Model.Wishlist", b =>
+            modelBuilder.Entity("Wishlist", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("OfferClientId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OfferClientId"));
 
                     b.Property<int>("ClientId")
                         .HasColumnType("int");
@@ -273,20 +270,13 @@ namespace TravelAgent.Migrations
                     b.Property<int>("OfferId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("OfferClientId");
 
                     b.HasIndex("ClientId");
 
                     b.HasIndex("OfferId");
 
-                    b.ToTable("Wishlists");
-                });
-
-            modelBuilder.Entity("TravelAgent.Model.Admin", b =>
-                {
-                    b.HasBaseType("TravelAgent.Model.User");
-
-                    b.HasDiscriminator().HasValue("Admin");
+                    b.ToTable("Wishlist");
                 });
 
             modelBuilder.Entity("TravelAgent.Model.Client", b =>
@@ -309,7 +299,7 @@ namespace TravelAgent.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasDiscriminator().HasValue("Client");
+                    b.ToTable("Clients");
                 });
 
             modelBuilder.Entity("OfferLocation", b =>
@@ -323,6 +313,21 @@ namespace TravelAgent.Migrations
                     b.HasOne("TravelAgent.Model.Offer", null)
                         .WithMany()
                         .HasForeignKey("OfferId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("OfferTag", b =>
+                {
+                    b.HasOne("TravelAgent.Model.Offer", null)
+                        .WithMany()
+                        .HasForeignKey("OfferId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TravelAgent.Model.Tag", null)
+                        .WithMany()
+                        .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -365,42 +370,28 @@ namespace TravelAgent.Migrations
                     b.Navigation("Offer");
                 });
 
-            modelBuilder.Entity("TravelAgent.Model.TagOffer", b =>
+            modelBuilder.Entity("Wishlist", b =>
                 {
-                    b.HasOne("TravelAgent.Model.Offer", "Offer")
-                        .WithMany()
-                        .HasForeignKey("OfferId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TravelAgent.Model.Tag", "Tag")
-                        .WithMany()
-                        .HasForeignKey("TagId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Offer");
-
-                    b.Navigation("Tag");
-                });
-
-            modelBuilder.Entity("TravelAgent.Model.Wishlist", b =>
-                {
-                    b.HasOne("TravelAgent.Model.Client", "Client")
+                    b.HasOne("TravelAgent.Model.Client", null)
                         .WithMany()
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TravelAgent.Model.Offer", "Offer")
+                    b.HasOne("TravelAgent.Model.Offer", null)
                         .WithMany()
                         .HasForeignKey("OfferId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
 
-                    b.Navigation("Client");
-
-                    b.Navigation("Offer");
+            modelBuilder.Entity("TravelAgent.Model.Client", b =>
+                {
+                    b.HasOne("TravelAgent.Model.User", null)
+                        .WithOne()
+                        .HasForeignKey("TravelAgent.Model.Client", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

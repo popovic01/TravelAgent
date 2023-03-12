@@ -1,6 +1,6 @@
 ﻿namespace TravelAgent.Model
 {
-    public class User
+    public abstract class User
     {
         public int Id { get; set; }
         public byte[] PasswordSalt { get; set; }
