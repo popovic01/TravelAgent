@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TravelAgent.DTO.Offer;
+using TravelAgent.DTO.OfferRequest;
 using TravelAgent.Services.Interfaces;
 
 namespace TravelAgent.Controllers
@@ -55,6 +56,12 @@ namespace TravelAgent.Controllers
         public ActionResult AddOfferToWishlist(int offerId, int clientId)
         {
             return Ok(_offerService.AddOfferToWishlist(offerId, clientId));
+        }
+
+        [HttpGet("removeFromWishlist/{offerId}/{clientId}")]
+        public ActionResult RemoveOfferFromWishlist(int offerId, int clientId)
+        {
+            return Ok(_offerService.RemoveOfferFromWishlist(offerId, clientId));
         }
 
         [HttpPut("{id}")]

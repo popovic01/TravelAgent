@@ -1,6 +1,4 @@
-﻿using TravelAgent.DTO.Offer;
-
-namespace TravelAgent.Model
+﻿namespace TravelAgent.Model
 {
     public class Offer
     {

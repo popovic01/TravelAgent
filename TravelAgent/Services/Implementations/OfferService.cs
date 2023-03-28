@@ -162,6 +162,33 @@ namespace TravelAgent.Services.Implementations
             return retVal;
         }
 
+        public ResponsePackageNoData RemoveOfferFromWishlist(int offerId, int clientId)
+        {
+            var retVal = new ResponsePackageNoData();
+
+            var offer = _context.Offers
+                .Include(x => x.Clients)
+                .FirstOrDefault(x => x.Id == offerId);
+
+            var client = (Client)_context.Users
+                .FirstOrDefault(x => x.Id == clientId);
+
+            if (offer != null && client != null)
+            {
+                offer.Clients.Remove(client);
+                offer.WishlistCount--; //ovo bi trebalo da resi triger
+                _context.SaveChanges();
+                retVal.Message = $"Successfully removed Offer {offer.Name} from your wishlist";
+            }
+            else
+            {
+                retVal.Status = 404;
+                retVal.Message = "Something went wrong";
+            }
+
+            return retVal;
+        }
+
         public ResponsePackage<OfferReviewDTO> Get(int id)
         {
             var retVal = new ResponsePackage<OfferReviewDTO>();

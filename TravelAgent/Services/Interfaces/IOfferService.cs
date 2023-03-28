@@ -1,5 +1,6 @@
 ﻿using TravelAgent.DTO.Common;
 using TravelAgent.DTO.Offer;
+using TravelAgent.DTO.OfferRequest;
 
 namespace TravelAgent.Services.Interfaces
 {
@@ -13,5 +14,6 @@ namespace TravelAgent.Services.Interfaces
         public ResponsePackageNoData DeleteLocationForOffer(int offerId, int locationId);
         public ResponsePackageNoData DeleteTagForOffer(int offerId, int tagId);
         public ResponsePackageNoData AddOfferToWishlist(int offerId, int clientId);
+        public ResponsePackageNoData RemoveOfferFromWishlist(int offerId, int clientId);
     }
 }
