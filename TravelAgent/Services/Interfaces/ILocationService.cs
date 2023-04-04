@@ -1,6 +1,5 @@
 ﻿using TravelAgent.DTO.Common;
 using TravelAgent.DTO.Location;
-using TravelAgent.DTO.Offer;
 
 namespace TravelAgent.Services.Interfaces
 {

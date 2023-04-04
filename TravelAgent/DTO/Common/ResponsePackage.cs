@@ -8,19 +8,6 @@
         {
             Status = 200;
         }
-
-        public ResponsePackage(int status, string message)
-        {
-            Status = status;
-            Message = message;
-        }
-
-        public ResponsePackage(T data, int status = 200, string message = "")
-        {
-            TransferObject = data;
-            Status = status;
-            Message = message;
-        }
     }
 
     public class ResponsePackageNoData
@@ -32,12 +19,6 @@
         {
             Status = 200;
             Message = "";
-        }
-
-        public ResponsePackageNoData(int status, string message)
-        {
-            Status = status;
-            Message = message;
         }
     }
 }

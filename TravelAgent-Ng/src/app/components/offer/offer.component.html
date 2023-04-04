@@ -1,0 +1,24 @@
+<div class="container">
+    <div class="card" *ngFor="let offer of offers">
+        <div class="img">
+            <img src="assets/offer.jpg">
+        </div>
+        <div class="body">
+    
+            <div class="title">{{offer.name}}</div>
+    
+            <div class="location-wrapper">
+                <div class="location">Lokacije: </div>
+                <div class="location">Pariz</div>
+                <div class="location">Nica</div>
+            </div>
+    
+            <div class="price">Cena: {{offer.price}}e</div>
+    
+        </div>
+        <div class="bottom">
+            <button class="btn">Book</button>
+        </div>
+    </div>
+    
+</div>

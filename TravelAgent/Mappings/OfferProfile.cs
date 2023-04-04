@@ -9,14 +9,16 @@ namespace TravelAgent.Mappings
         public OfferProfile()
         {
             CreateMap<Offer, OfferReviewDTO>()
-                .ForMember(dest => dest.OfferTypeId, opt => opt.MapFrom(src => src.OfferType.Id))
-                .ForMember(dest => dest.TransportationTypeId, opt => opt.MapFrom(src => src.TransportationType.Id))
-                .ForMember(dest => dest.LocationIds, opt => opt.MapFrom(src => src.Locations.Select(l => l.Id).ToList()))
-                .ForMember(dest => dest.TagIds, opt => opt.MapFrom(src => src.Tags.Select(t => t.Id).ToList()))
+                .ForMember(dest => dest.OfferType, opt => opt.MapFrom(src => src.OfferType.Name))
+                .ForMember(dest => dest.TransportationType, opt => opt.MapFrom(src => src.TransportationType.Name))
+                .ForMember(dest => dest.LocationIds, opt => opt.MapFrom(src => src.Locations.Select(l => l.Name).ToList()))
+                .ForMember(dest => dest.TagIds, opt => opt.MapFrom(src => src.Tags.Select(t => t.Name).ToList()))
                 .ReverseMap();
             CreateMap<Offer, OfferDTO>()
-                .ForMember(dest => dest.LocationIds, opt => opt.MapFrom(src => src.Locations.Select(l => l.Id).ToList()))
-                .ForMember(dest => dest.TagIds, opt => opt.MapFrom(src => src.Tags.Select(t => t.Id).ToList()))
+                .ForMember(dest => dest.OfferType, opt => opt.MapFrom(src => src.OfferType.Name))
+                .ForMember(dest => dest.TransportationType, opt => opt.MapFrom(src => src.TransportationType.Name))
+                .ForMember(dest => dest.LocationIds, opt => opt.MapFrom(src => src.Locations.Select(l => l.Name).ToList()))
+                .ForMember(dest => dest.TagIds, opt => opt.MapFrom(src => src.Tags.Select(t => t.Name).ToList()))
                 .ReverseMap();
         }
     }

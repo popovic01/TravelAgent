@@ -36,8 +36,8 @@ namespace TravelAgent.Services.Implementations
                     Rating = offer.Rating,
                     AvailableSpots = offer.AvailableSpots,
                     OfferCode = RandomString(6),
-                    OfferType = _context.OfferTypes.FirstOrDefault(x => x.Id == offer.OfferTypeId),
-                    TransportationType = _context.TransportationTypes.FirstOrDefault(x => x.Id == offer.TransportationTypeId),
+                    OfferType = _context.OfferTypes.FirstOrDefault(x => x.Id == 1),
+                    TransportationType = _context.TransportationTypes.FirstOrDefault(x => x.Id == 1),
                     Locations = _context.Locations.Where(x => offer.LocationIds.Contains(x.Id)).ToList(),
                     Tags = _context.Tags.Where(x => offer.TagIds.Contains(x.Id)).ToList()
                 };
@@ -279,8 +279,8 @@ namespace TravelAgent.Services.Implementations
                 offerDb.Description = offer.Description;
                 offerDb.Price = offer.Price;
                 offerDb.AvailableSpots = offer.AvailableSpots;
-                offerDb.TransportationType = _context.TransportationTypes.FirstOrDefault(x => x.Id == offer.TransportationTypeId);
-                offerDb.OfferType = _context.OfferTypes.FirstOrDefault(x => x.Id == offer.OfferTypeId);
+                offerDb.TransportationType = _context.TransportationTypes.FirstOrDefault(x => x.Id == 1);
+                offerDb.OfferType = _context.OfferTypes.FirstOrDefault(x => x.Id == 1);
                 offerDb.Locations = _context.Locations.Where(x => offer.LocationIds.Contains(x.Id)).ToList();
                 offerDb.Tags = _context.Tags.Where(x => offer.TagIds.Contains(x.Id)).ToList();
                 _context.SaveChanges();

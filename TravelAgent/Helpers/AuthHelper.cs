@@ -15,6 +15,7 @@ namespace TravelAgent.Helpers
         {
             _config = config;
         }
+
         public void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
             using (var hmac = new HMACSHA512())
