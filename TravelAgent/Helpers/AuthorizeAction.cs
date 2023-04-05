@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using TravelAgent.Utility;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TravelAgent.Helpers
 {
@@ -18,10 +19,15 @@ namespace TravelAgent.Helpers
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
+            // skip authorization if action is decorated with [AllowAnonymous] attribute
+            var allowAnonymous = context.ActionDescriptor.EndpointMetadata.OfType<AllowAnonymousAttribute>().Any();
+            if (allowAnonymous)
+                return;
+
             var token = context.HttpContext.Session.GetString(StaticDetails.UserToken);
             if (_auth.ValidateCurrentToken(token))
             {
-                var role = _auth.GetClaim(token, "Role"); //ovo se ne nalazi u claimu
+                var role = _auth.GetClaim(token, "Role"); 
                 if (role == _claim.Value)
                     return;
             }

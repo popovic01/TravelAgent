@@ -16,23 +16,14 @@ namespace TravelAgent.Helpers
             _config = config;
         }
 
-        public void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
-        {
-            using (var hmac = new HMACSHA512())
-            {
-                passwordSalt = hmac.Key;
-                passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
-            }
-        }
-
         public string CreateToken(User user)
         {
             //properties for token
             List<Claim> claims = new List<Claim>
             {
                 new Claim("Username", user.Username),
-                //new Claim("Role", user.TypeOfUser),
-                //new Claim("UserId", user.Id.ToString())
+                new Claim("Role", GetRole(user)),
+                new Claim("UserId", user.Id.ToString())
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
@@ -48,15 +39,6 @@ namespace TravelAgent.Helpers
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
 
             return jwt;
-        }
-
-        public bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
-        {
-            using (var hmac = new HMACSHA512(passwordSalt))
-            {
-                var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
-                return computedHash.SequenceEqual(passwordHash); //comparing saved and computed hash
-            }
         }
 
         public bool ValidateCurrentToken(string token)
@@ -88,8 +70,36 @@ namespace TravelAgent.Helpers
             var tokenHandler = new JwtSecurityTokenHandler();
             var securityToken = tokenHandler.ReadToken(token) as JwtSecurityToken;
 
-            var ClaimValue = securityToken.Claims.First(claim => claim.Type == claimType).Value;
-            return ClaimValue;
+            var claimValue = securityToken.Claims.First(claim => claim.Type == claimType).Value;
+            return claimValue;
         }
+
+        private string GetRole(User user)
+        {
+            if (user is Admin)
+                return "admin";
+            if (user is Client) 
+                return "client";
+            return null;
+        }
+
+        public void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+        {
+            using (var hmac = new HMACSHA512())
+            {
+                passwordSalt = hmac.Key;
+                passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
+            }
+        }
+
+        public bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
+        {
+            using (var hmac = new HMACSHA512(passwordSalt))
+            {
+                var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
+                return computedHash.SequenceEqual(passwordHash); //comparing saved and computed hash
+            }
+        }
+
     }
 }
