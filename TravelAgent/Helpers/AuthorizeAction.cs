@@ -25,9 +25,13 @@ namespace TravelAgent.Helpers
 
                 if (_auth.ValidateCurrentToken(token))
                 {
-                    var role = _auth.GetClaim(token, "Role");
-                    if (role == _claim.Value)
-                        return;
+                    var roleClaim = _auth.GetClaim(token, "Role");
+                    var roleArray = _claim.Value.Split(',');
+                    foreach (var role in roleArray)
+                    {
+                        if (role == roleClaim)
+                            return;
+                    }
                 }
             }
             context.Result = new JsonResult(new { message = "Unauthorized." }) { StatusCode = StatusCodes.Status401Unauthorized };
