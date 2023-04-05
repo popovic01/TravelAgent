@@ -2,7 +2,6 @@
 
 namespace TravelAgent.Model
 {
-    [Table("Clients")]
     public class Client : User
     {
         public string FirstName { get; set; }

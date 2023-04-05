@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using TravelAgent.Utility;
-using Microsoft.AspNetCore.Authorization;
 
 namespace TravelAgent.Helpers
 {
@@ -19,19 +17,20 @@ namespace TravelAgent.Helpers
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            // skip authorization if action is decorated with [AllowAnonymous] attribute
-            var allowAnonymous = context.ActionDescriptor.EndpointMetadata.OfType<AllowAnonymousAttribute>().Any();
-            if (allowAnonymous)
-                return;
+            string authHeader = context.HttpContext.Request.Headers["Authorization"];
 
-            var token = context.HttpContext.Session.GetString(StaticDetails.UserToken);
-            if (_auth.ValidateCurrentToken(token))
+            if (!string.IsNullOrEmpty(authHeader) && authHeader.StartsWith("Bearer "))
             {
-                var role = _auth.GetClaim(token, "Role"); 
-                if (role == _claim.Value)
-                    return;
+                string token = authHeader.Substring("Bearer ".Length).Trim();
+
+                if (_auth.ValidateCurrentToken(token))
+                {
+                    var role = _auth.GetClaim(token, "Role");
+                    if (role == _claim.Value)
+                        return;
+                }
             }
-            context.Result = new UnauthorizedResult();
+            context.Result = new JsonResult(new { message = "Unauthorized." }) { StatusCode = StatusCodes.Status401Unauthorized };
             return;
         }
     }

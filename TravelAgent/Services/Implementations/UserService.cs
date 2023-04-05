@@ -21,11 +21,11 @@ namespace TravelAgent.Services.Implementations
             _auth = auth;
         }
 
-        public ResponsePackageNoData Register(UserRequestDTO dataIn)
+        public ResponsePackage<string> Register(UserRequestDTO dataIn)
         {
-            var retVal = new ResponsePackageNoData();
+            var retVal = new ResponsePackage<string>();
 
-            var userDb = _context.Users.FirstOrDefault(x => x.Username == dataIn.Username);
+            var userDb = _context.Users.OfType<Client>().FirstOrDefault(x => x.Username == dataIn.Username);
 
             if (userDb != null)
             {
@@ -38,10 +38,10 @@ namespace TravelAgent.Services.Implementations
                 Client user = new Client();
                 user.Username = dataIn.Username;
                 user.PasswordHash = passwordHash;
-                user.PasswordSalt = passwordSalt; 
+                user.PasswordSalt = passwordSalt;
                 user.PassportNo = dataIn.PassportNo;
                 user.PhoneNo = dataIn.PhoneNo;
-                user.FirstName = dataIn.FirstName; 
+                user.FirstName = dataIn.FirstName;
                 user.LastName = dataIn.LastName;
 
                 _context.Users.Add(user);
@@ -49,28 +49,27 @@ namespace TravelAgent.Services.Implementations
                 retVal.Message = $"Successfully registered User {dataIn.Username}";
 
                 string token = _auth.CreateToken(user);
-                //HttpContext.Session.SetString(StaticDetails.UserToken, token);
-                //HttpContext.Session.SetString(StaticDetails.Role, user.TypeOfUser);
+                retVal.TransferObject = token;
             }
 
             return retVal;
         }
 
-        public ResponsePackageNoData Login(UserRequestDTO user)
+        public ResponsePackage<string> Login(UserLoginDTO user)
         {
-            var retVal = new ResponsePackageNoData();
+            var retVal = new ResponsePackage<string>();
 
-            var userFromDb = _context.Users.FirstOrDefault(u => u.Username == user.Username);
+            var userFromDb = _context.Users.OfType<Client>().FirstOrDefault(u => u.Username == user.Username)
+                ?? _context.Users.OfType<User>().FirstOrDefault(u => u.Username == user.Username);
 
             if (userFromDb != null)
             {
                 if (_auth.VerifyPasswordHash(user.Password, userFromDb.PasswordHash, userFromDb.PasswordSalt))
                 {
                     string token = _auth.CreateToken(userFromDb);
-                    //HttpContext.Session.SetString(StaticDetails.UserToken, token);
-                    //HttpContext.Session.SetString(StaticDetails.Role, userFromDb.TypeOfUser);
 
                     retVal.Message = $"You logged in successfully";
+                    retVal.TransferObject = token;
                 }
                 else
                 {
@@ -87,20 +86,12 @@ namespace TravelAgent.Services.Implementations
             return retVal;
         }
 
-        public ResponsePackageNoData Logout(UserRequestDTO user)
-        {
-            var retVal = new ResponsePackageNoData();
-
-            //HttpContext.Session.Clear();
-            retVal.Message = "You logged out successfully";
-            return retVal;
-        }
-
         public ResponsePackageNoData Delete(int id)
         {
             var retVal = new ResponsePackageNoData();
 
-            var user = _context.Users.FirstOrDefault(x => x.Id == id);
+            var user = _context.Users.OfType<Client>().FirstOrDefault(u => u.Id == id)
+                ?? _context.Users.OfType<User>().FirstOrDefault(u => u.Id == id);
 
             if (user == null)
             {
@@ -120,8 +111,8 @@ namespace TravelAgent.Services.Implementations
         {
             var retVal = new ResponsePackage<UserResponseDTO>();
 
-            var user = _context.Users
-                .FirstOrDefault(x => x.Id == id);
+            var user = _context.Users.OfType<Client>().FirstOrDefault(u => u.Id == id)
+                ?? _context.Users.OfType<User>().FirstOrDefault(u => u.Id == id);
 
             if (user == null)
             {
@@ -154,7 +145,7 @@ namespace TravelAgent.Services.Implementations
         {
             var retVal = new ResponsePackageNoData();
 
-            var userDb = _context.Users
+            var userDb = _context.Users.OfType<Client>()
                 .FirstOrDefault(x => x.Id == id);
             var userNameDb = _context.Users
                 .FirstOrDefault(x => x.Username.ToLower() == user.Username.ToLower());
@@ -164,14 +155,18 @@ namespace TravelAgent.Services.Implementations
                 retVal.Status = 404;
                 retVal.Message = $"No User with ID {id}";
             }
-            else if (userNameDb != null)
+            else if (userNameDb != null && userNameDb.Id != userDb.Id)
             {
                 retVal.Message = $"Already exists User {user.Username}";
                 retVal.Status = 409;
             }
             else
             {
-                userDb.Username = user.Username;                
+                userDb.Username = user.Username;
+                userDb.FirstName = user.FirstName;
+                userDb.LastName = user.LastName;
+                userDb.PassportNo = user.PassportNo;
+                userDb.PhoneNo = user.PhoneNo;
                 _context.SaveChanges();
                 retVal.Message = $"Successfully updated User {user.Username}";
             }

@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 using TravelAgent.AppDbContext;
 using TravelAgent.DTO.Common;
 using TravelAgent.DTO.Offer;
+using TravelAgent.Helpers;
 using TravelAgent.Model;
 using TravelAgent.Services.Interfaces;
 
@@ -12,11 +14,13 @@ namespace TravelAgent.Services.Implementations
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
+        private readonly ICommonHelper _commonHelper;
 
-        public OfferService(ApplicationDbContext context, IMapper mapper)
+        public OfferService(ApplicationDbContext context, IMapper mapper, ICommonHelper commonHelper)
         {
             _context = context;
             _mapper = mapper;
+            _commonHelper = commonHelper;
         }
 
         public ResponsePackageNoData Add(OfferReviewDTO offer)
@@ -35,7 +39,7 @@ namespace TravelAgent.Services.Implementations
                     EndDate = offer.EndDate,
                     Rating = offer.Rating,
                     AvailableSpots = offer.AvailableSpots,
-                    OfferCode = RandomString(6),
+                    OfferCode = _commonHelper.RandomString(6),
                     OfferType = _context.OfferTypes.FirstOrDefault(x => x.Id == 1),
                     TransportationType = _context.TransportationTypes.FirstOrDefault(x => x.Id == 1),
                     Locations = _context.Locations.Where(x => offer.LocationIds.Contains(x.Id)).ToList(),
@@ -149,7 +153,7 @@ namespace TravelAgent.Services.Implementations
             if (offer != null && client != null)
             {
                 offer.Clients.Add(client);
-                offer.WishlistCount++; //ovo bi trebalo da resi triger
+                _commonHelper.ExecuteProcedure("WISHLIST_PROCEDURE", offerId, 1);
                 _context.SaveChanges();
                 retVal.Message = $"Successfully added Offer {offer.Name} to your wishlist";
             }
@@ -176,7 +180,7 @@ namespace TravelAgent.Services.Implementations
             if (offer != null && client != null)
             {
                 offer.Clients.Remove(client);
-                offer.WishlistCount--; //ovo bi trebalo da resi triger
+                _commonHelper.ExecuteProcedure("WISHLIST_PROCEDURE", offerId, 0);
                 _context.SaveChanges();
                 retVal.Message = $"Successfully removed Offer {offer.Name} from your wishlist";
             }
@@ -295,13 +299,5 @@ namespace TravelAgent.Services.Implementations
 
             return retVal;
         }
-
-        private static string RandomString(int length)
-        {
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            return new string(Enumerable.Repeat(chars, length)
-                .Select(s => s[new Random().Next(s.Length)]).ToArray());
-        }
-
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Xml;
 using TravelAgent.Model;
 
 namespace TravelAgent.AppDbContext
@@ -18,6 +19,17 @@ namespace TravelAgent.AppDbContext
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<User>()
+                .HasKey(u => u.Id);
+
+            modelBuilder.Entity<User>()
+                .HasDiscriminator<string>("UserType")
+                .HasValue<User>("Admin")
+                .HasValue<Client>("Client");
+
+            modelBuilder.Entity<Client>()
+                .HasBaseType<User>();
+
             modelBuilder.Entity<Offer>()
                 .HasMany(o => o.Locations)
                 .WithMany(l => l.Offers)

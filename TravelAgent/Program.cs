@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration.UserSecrets;
 using TravelAgent.AppDbContext;
 using TravelAgent.Helpers;
 using TravelAgent.Services.Implementations;
@@ -27,12 +26,14 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IOfferService, OfferService>();
 builder.Services.AddScoped<IOfferRequestService, OfferRequestService>();
+builder.Services.AddScoped<IReservationService, ReservationService>();
 builder.Services.AddScoped<ILocationService, LocationService>();
 builder.Services.AddScoped<ITagService, TagService>();
 builder.Services.AddScoped<ITransportationTypeService, TransportationTypeService>();
 builder.Services.AddScoped<IOfferTypeService, OfferTypeService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthHelper, AuthHelper>();
+builder.Services.AddScoped<ICommonHelper, CommonHelper>();
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
 var app = builder.Build();

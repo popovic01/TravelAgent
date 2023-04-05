@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TravelAgent.DTO.Common;
 using TravelAgent.DTO.User;
+using TravelAgent.Helpers;
 using TravelAgent.Services.Interfaces;
 
 namespace TravelAgent.Controllers
@@ -23,36 +24,34 @@ namespace TravelAgent.Controllers
         }
 
         [HttpPost("login")]
-        public ActionResult Login(UserRequestDTO dataIn)
+        public ActionResult Login(UserLoginDTO dataIn)
         {
             return Ok(_userService.Login(dataIn));
         }
 
-        [HttpPost("logout")]
-        public ActionResult Logout(UserRequestDTO dataIn)
-        {
-            return Ok(_userService.Logout(dataIn));
-        }
-
         [HttpPost("getAll")]
+        [AuthRole("Role", "admin")]
         public ActionResult GetAll(SearchDTO searchData)
         {
             return Ok(_userService.GetAll(searchData));
         }
 
         [HttpGet("{id}")]
+        [AuthRole("Role", "client")]
         public ActionResult GetById(int id)
         {
             return Ok(_userService.Get(id));
         }
 
         [HttpDelete("{id}")]
+        [AuthRole("Role", "admin")]
         public ActionResult Delete(int id)
         {
             return Ok(_userService.Delete(id));
         }
 
         [HttpPut("{id}")]
+        [AuthRole("Role", "client")]
         public ActionResult Put(int id, UserRequestDTO dataIn)
         {
             return Ok(_userService.Update(id, dataIn));

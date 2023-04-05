@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using System;
 using TravelAgent.AppDbContext;
 using TravelAgent.DTO.Common;
 using TravelAgent.DTO.Reservation;
+using TravelAgent.Helpers;
 using TravelAgent.Model;
 using TravelAgent.Services.Interfaces;
 
@@ -11,20 +14,39 @@ namespace TravelAgent.Services.Implementations
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
+        private readonly ICommonHelper _commonHelper;
 
-        public ReservationService(ApplicationDbContext context, IMapper mapper)
+        public ReservationService(ApplicationDbContext context, IMapper mapper, ICommonHelper commonHelper)
         {
             _context = context;
             _mapper = mapper;
+            _commonHelper = commonHelper;
         }
 
         public ResponsePackageNoData Add(ReservationDTO reservation)
         {
             var retVal = new ResponsePackageNoData();
 
-            _context.Reservations.Add(_mapper.Map<Reservation>(reservation));
-            _context.SaveChanges();
-            retVal.Message = $"Successfully added Reservation {reservation.ReservationCode}";
+            try
+            {
+                var reservationDb = new Reservation()
+                {
+                    ReservationCode = _commonHelper.RandomString(6),
+                    Date = reservation.Date,
+                    Offer = _context.Offers.FirstOrDefault(x => x.Id == reservation.OfferId),
+                    Client = (Client)_context.Users.FirstOrDefault(x => x.Id == reservation.ClientId)
+                };
+
+                _context.Reservations.Add(reservationDb);
+                _commonHelper.ExecuteProcedure("BUY_OFFER_PROCEDURE", reservation.OfferId, 1);
+                _context.SaveChanges();
+                retVal.Message = $"Successfully added Reservation {reservationDb.ReservationCode}";
+            }
+            catch (Exception ex)
+            {
+                retVal.Message = "Something went wrong";
+                retVal.Status = 400;
+            }
 
             return retVal;
         }
@@ -33,7 +55,9 @@ namespace TravelAgent.Services.Implementations
         {
             var retVal = new ResponsePackageNoData();
 
-            var reservation = _context.Reservations.FirstOrDefault(x => x.Id == id);
+            var reservation = _context.Reservations
+                .Include(x => x.Offer)
+                .FirstOrDefault(x => x.Id == id);
 
             if (reservation == null)
             {
@@ -43,6 +67,7 @@ namespace TravelAgent.Services.Implementations
             else
             {
                 _context.Reservations.Remove(reservation);
+                _commonHelper.ExecuteProcedure("BUY_OFFER_PROCEDURE", reservation.Offer.Id, 0);
                 _context.SaveChanges();
                 retVal.Message = $"Successfully deleted Reservation {reservation.ReservationCode}";
             }
@@ -53,7 +78,10 @@ namespace TravelAgent.Services.Implementations
         {
             var retVal = new ResponsePackage<ReservationDTO>();
 
-            var reservation = _context.Reservations.FirstOrDefault(x => x.Id == id);
+            var reservation = _context.Reservations
+                .Include(x => x.Offer)
+                .Include(x => x.Client)
+                .FirstOrDefault(x => x.Id == id);
 
             if (reservation == null)
             {
@@ -70,7 +98,9 @@ namespace TravelAgent.Services.Implementations
         {
             PaginationDataOut<ReservationDTO> retVal = new PaginationDataOut<ReservationDTO>();
 
-            IQueryable<Reservation> reservations = _context.Reservations;
+            IQueryable<Reservation> reservations = _context.Reservations
+                .Include(x => x.Offer)
+                .Include(x => x.Client);
 
             retVal.Count = reservations.Count();
 
