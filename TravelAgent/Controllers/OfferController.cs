@@ -17,14 +17,12 @@ namespace TravelAgent.Controllers
         }
 
         [HttpPost("getAll")]
-        [AuthRole("Role", "admin,client")]
         public ActionResult GetAll(OfferPageInfo dataIn)
         {
             return Ok(_offerService.GetAll(dataIn));
         }
 
         [HttpGet("{id}")]
-        [AuthRole("Role", "admin,client")]
         public ActionResult GetById(int id)
         {
             return Ok(_offerService.Get(id));
