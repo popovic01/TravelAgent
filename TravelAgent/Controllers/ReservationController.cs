@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TravelAgent.DTO.Reservation;
 using TravelAgent.Helpers;
+using TravelAgent.Model;
 using TravelAgent.Services.Interfaces;
 
 namespace TravelAgent.Controllers
@@ -21,6 +22,12 @@ namespace TravelAgent.Controllers
         public ActionResult GetAll()
         {
             return Ok(_reservationService.GetAll());
+        }
+
+        [HttpPost("getAllByUser/{id}")]
+        public ActionResult GetAllByUser(int id)
+        {
+            return Ok(_reservationService.GetAllByUser(id));
         }
 
         [HttpGet("{id}")]

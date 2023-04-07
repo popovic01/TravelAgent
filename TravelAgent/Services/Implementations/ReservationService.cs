@@ -108,6 +108,21 @@ namespace TravelAgent.Services.Implementations
             return retVal;
         }
 
+        public PaginationDataOut<ReservationDTO> GetAllByUser(int id)
+        {
+            PaginationDataOut<ReservationDTO> retVal = new PaginationDataOut<ReservationDTO>();
+
+            IQueryable<Reservation> reservations = _context.Reservations
+                .Include(x => x.Offer)
+                .Include(x => x.Client)
+                .Where(x => x.Client.Id == id);
+
+            retVal.Count = reservations.Count();
+
+            reservations.ToList().ForEach(x => retVal.Data.Add(_mapper.Map<ReservationDTO>(x)));
+            return retVal;
+        }
+
         public ResponsePackageNoData Update(int id, ReservationDTO reservation)
         {
             var retVal = new ResponsePackageNoData();

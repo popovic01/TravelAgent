@@ -4,6 +4,7 @@ using System.Data;
 using TravelAgent.AppDbContext;
 using TravelAgent.DTO.Common;
 using TravelAgent.DTO.Offer;
+using TravelAgent.DTO.Reservation;
 using TravelAgent.Helpers;
 using TravelAgent.Model;
 using TravelAgent.Services.Interfaces;
@@ -40,8 +41,8 @@ namespace TravelAgent.Services.Implementations
                     Rating = offer.Rating,
                     AvailableSpots = offer.AvailableSpots,
                     OfferCode = _commonHelper.RandomString(6),
-                    OfferType = _context.OfferTypes.FirstOrDefault(x => x.Id == 1),
-                    TransportationType = _context.TransportationTypes.FirstOrDefault(x => x.Id == 1),
+                    OfferType = _context.OfferTypes.FirstOrDefault(x => x.Name == offer.OfferType),
+                    TransportationType = _context.TransportationTypes.FirstOrDefault(x => x.Name == offer.TransportationType),
                     Locations = _context.Locations.Where(x => offer.LocationIds.Contains(x.Id)).ToList(),
                     Tags = _context.Tags.Where(x => offer.TagIds.Contains(x.Id)).ToList()
                 };
@@ -210,7 +211,10 @@ namespace TravelAgent.Services.Implementations
                 retVal.Message = $"No Offer with ID {id}";
             }
             else
+            {
                 retVal.TransferObject = _mapper.Map<OfferReviewDTO>(offer);
+                retVal.TransferObject.Duration = retVal.TransferObject.EndDate.Subtract(retVal.TransferObject.StartDate).Days;
+            }
 
             return retVal;
         }
@@ -254,6 +258,30 @@ namespace TravelAgent.Services.Implementations
             retVal.Count = offers.Count();
 
             offers.ToList().ForEach(x => retVal.Data.Add(_mapper.Map<OfferDTO>(x)));
+
+            foreach (var offer in retVal.Data)
+                offer.Duration = offer.EndDate.Subtract(offer.StartDate).Days;
+
+            return retVal;
+        }
+
+        public PaginationDataOut<OfferDTO> GetWishlist(int id)
+        {
+            PaginationDataOut<OfferDTO> retVal = new PaginationDataOut<OfferDTO>();
+
+            IQueryable<Offer> wishlist = _context.Offers
+                .Include(x => x.Clients)
+                .Include(x => x.TransportationType)
+                .Include(x => x.OfferType)
+                .Where(x => x.Clients.Any(x => x.Id == id));
+
+            retVal.Count = wishlist.Count();
+
+            wishlist.ToList().ForEach(x => retVal.Data.Add(_mapper.Map<OfferDTO>(x)));
+
+            foreach (var offer in retVal.Data)
+                offer.Duration = offer.EndDate.Subtract(offer.StartDate).Days;
+
             return retVal;
         }
 
@@ -283,8 +311,8 @@ namespace TravelAgent.Services.Implementations
                 offerDb.Description = offer.Description;
                 offerDb.Price = offer.Price;
                 offerDb.AvailableSpots = offer.AvailableSpots;
-                offerDb.TransportationType = _context.TransportationTypes.FirstOrDefault(x => x.Id == 1);
-                offerDb.OfferType = _context.OfferTypes.FirstOrDefault(x => x.Id == 1);
+                offerDb.TransportationType = _context.TransportationTypes.FirstOrDefault(x => x.Name == offer.TransportationType);
+                offerDb.OfferType = _context.OfferTypes.FirstOrDefault(x => x.Name == offer.OfferType);
                 offerDb.Locations = _context.Locations.Where(x => offer.LocationIds.Contains(x.Id)).ToList();
                 offerDb.Tags = _context.Tags.Where(x => offer.TagIds.Contains(x.Id)).ToList();
                 _context.SaveChanges();

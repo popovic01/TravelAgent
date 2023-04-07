@@ -22,8 +22,7 @@ namespace TravelAgent.Helpers
             List<Claim> claims = new List<Claim>
             {
                 new Claim("Username", user.Username),
-                new Claim("Role", GetRole(user)),
-                new Claim("UserId", user.Id.ToString())
+                new Claim("Role", GetRole(user))
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(

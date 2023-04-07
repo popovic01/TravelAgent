@@ -22,6 +22,12 @@ namespace TravelAgent.Controllers
             return Ok(_offerService.GetAll(dataIn));
         }
 
+        [HttpPost("getWishlist/{id}")]
+        public ActionResult GetWishlist(int id)
+        {
+            return Ok(_offerService.GetWishlist(id));
+        }
+
         [HttpGet("{id}")]
         public ActionResult GetById(int id)
         {
