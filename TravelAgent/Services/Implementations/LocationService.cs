@@ -24,7 +24,7 @@ namespace TravelAgent.Services.Implementations
 
             var locationDb = _context.Locations.FirstOrDefault(x => x.Name == location.Name);
 
-            if (locationDb != null )
+            if (locationDb != null)
             {
                 retVal.Message = $"Already exists Location {location.Name}";
                 retVal.Status = 409;
@@ -34,7 +34,7 @@ namespace TravelAgent.Services.Implementations
                 _context.Locations.Add(_mapper.Map<Location>(location));
                 _context.SaveChanges();
                 retVal.Message = $"Successfully added Location {location.Name}";
-            }    
+            }
 
             return retVal;
         }

@@ -155,6 +155,8 @@ namespace TravelAgent.Services.Implementations
             var userNameDb = _context.Users
                 .FirstOrDefault(x => x.Username.ToLower() == user.Username.ToLower());
 
+            _auth.CreatePasswordHash(user.Password, out byte[] passwordHash, out byte[] passwordSalt);
+
             if (userDb == null)
             {
                 retVal.Status = 404;
@@ -172,6 +174,8 @@ namespace TravelAgent.Services.Implementations
                 userDb.LastName = user.LastName;
                 userDb.PassportNo = user.PassportNo;
                 userDb.PhoneNo = user.PhoneNo;
+                userDb.PasswordHash = passwordHash;
+                userDb.PasswordSalt = passwordSalt;
                 _context.SaveChanges();
                 retVal.Message = $"Successfully updated User {user.Username}";
             }

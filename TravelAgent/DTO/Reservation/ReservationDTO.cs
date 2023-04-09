@@ -1,6 +1,4 @@
-﻿using TravelAgent.Model;
-
-namespace TravelAgent.DTO.Reservation
+﻿namespace TravelAgent.DTO.Reservation
 {
     public class ReservationDTO
     {

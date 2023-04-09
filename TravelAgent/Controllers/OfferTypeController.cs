@@ -2,7 +2,6 @@
 using TravelAgent.DTO.Common;
 using TravelAgent.DTO.OfferType;
 using TravelAgent.Helpers;
-using TravelAgent.Services.Implementations;
 using TravelAgent.Services.Interfaces;
 
 namespace TravelAgent.Controllers

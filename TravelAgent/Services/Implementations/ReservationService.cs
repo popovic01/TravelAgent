@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using System;
 using TravelAgent.AppDbContext;
 using TravelAgent.DTO.Common;
 using TravelAgent.DTO.Reservation;

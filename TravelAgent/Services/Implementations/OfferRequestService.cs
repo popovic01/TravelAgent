@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using System;
 using TravelAgent.AppDbContext;
 using TravelAgent.DTO.Common;
 using TravelAgent.DTO.OfferRequest;
-using TravelAgent.DTO.Reservation;
 using TravelAgent.Model;
 using TravelAgent.Services.Interfaces;
 

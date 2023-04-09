@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Xml;
 using TravelAgent.Model;
 
 namespace TravelAgent.AppDbContext

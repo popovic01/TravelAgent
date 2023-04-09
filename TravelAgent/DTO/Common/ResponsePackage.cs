@@ -4,7 +4,7 @@
     {
         public T TransferObject { get; set; }
 
-        public ResponsePackage() 
+        public ResponsePackage()
         {
             Status = 200;
         }

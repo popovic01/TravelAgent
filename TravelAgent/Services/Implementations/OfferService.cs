@@ -4,7 +4,6 @@ using System.Data;
 using TravelAgent.AppDbContext;
 using TravelAgent.DTO.Common;
 using TravelAgent.DTO.Offer;
-using TravelAgent.DTO.Reservation;
 using TravelAgent.Helpers;
 using TravelAgent.Model;
 using TravelAgent.Services.Interfaces;
@@ -149,7 +148,7 @@ namespace TravelAgent.Services.Implementations
                 .FirstOrDefault(x => x.Id == offerId);
 
             var client = (Client)_context.Users
-                .FirstOrDefault(x => x.Id == clientId); 
+                .FirstOrDefault(x => x.Id == clientId);
 
             if (offer != null && client != null)
             {
@@ -221,7 +220,7 @@ namespace TravelAgent.Services.Implementations
 
         public PaginationDataOut<OfferDTO> GetAll(OfferPageInfo searchData)
         {
-            PaginationDataOut<OfferDTO> retVal = new PaginationDataOut<OfferDTO>();
+            PaginationDataOut<OfferDTO> retVal = new();
 
             var pageInfo = searchData.PageInfo;
             var filterParams = searchData.FilterParams;
@@ -268,7 +267,7 @@ namespace TravelAgent.Services.Implementations
 
         public PaginationDataOut<OfferDTO> GetWishlist(int id)
         {
-            PaginationDataOut<OfferDTO> retVal = new PaginationDataOut<OfferDTO>();
+            PaginationDataOut<OfferDTO> retVal = new();
 
             IQueryable<Offer> wishlist = _context.Offers
                 .Include(x => x.Clients)
