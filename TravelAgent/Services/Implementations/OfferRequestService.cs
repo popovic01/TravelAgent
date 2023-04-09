@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using TravelAgent.AppDbContext;
 using TravelAgent.DTO.Common;
+using TravelAgent.DTO.Offer;
 using TravelAgent.DTO.OfferRequest;
 using TravelAgent.Model;
 using TravelAgent.Services.Interfaces;
@@ -23,14 +26,46 @@ namespace TravelAgent.Services.Implementations
             throw new NotImplementedException();
         }
 
-        public ResponsePackage<List<OfferRequestDTO>> GetAllRequestedOffers()
+        public PaginationDataOut<OfferRequestDTO> GetAllRequestedOffers(PageInfo pageInfo)
         {
-            throw new NotImplementedException();
+            PaginationDataOut<OfferRequestDTO> retVal = new PaginationDataOut<OfferRequestDTO>();
+
+            IQueryable<OfferRequest> offerRequests = _context.OfferRequests
+                .Include(x => x.TransportationType)
+                .Include(x => x.Locations);
+
+            retVal.Count = offerRequests.Count();
+
+            offerRequests = offerRequests
+                .OrderByDescending(x => x.Id)
+                .Skip(pageInfo.PageSize * (pageInfo.Page - 1))
+                .Take(pageInfo.PageSize);
+
+            offerRequests.ToList().ForEach(x => retVal.Data.Add(_mapper.Map<OfferRequestDTO>(x)));
+
+            return retVal;
         }
 
         public ResponsePackage<OfferRequestDTO> GetRequestedOfferById(int offerReqId)
         {
-            throw new NotImplementedException();
+            var retVal = new ResponsePackage<OfferRequestDTO>();
+
+            var offerReq = _context.OfferRequests
+                .Include(x => x.TransportationType)
+                .Include(x => x.Locations)
+                .FirstOrDefault(x => x.Id == offerReqId);
+
+            if (offerReq == null)
+            {
+                retVal.Status = 404;
+                retVal.Message = $"No Offer with ID {offerReqId}";
+            }
+            else
+            {
+                retVal.TransferObject = _mapper.Map<OfferRequestDTO>(offerReq);
+            }
+
+            return retVal;
         }
 
         public ResponsePackageNoData RequestOffer(int clientId, OfferRequestDTO dataIn)

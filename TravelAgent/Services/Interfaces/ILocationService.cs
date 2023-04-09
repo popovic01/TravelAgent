@@ -5,7 +5,7 @@ namespace TravelAgent.Services.Interfaces
 {
     public interface ILocationService
     {
-        public PaginationDataOut<LocationDTO> GetAll(SearchDTO searchData);
+        public PaginationDataOut<LocationDTO> GetAll(FilterParamsDTO filterParams);
         public ResponsePackage<LocationDTO> Get(int id);
         public ResponsePackageNoData Add(LocationDTO location);
         public ResponsePackageNoData Update(int id, LocationDTO location);

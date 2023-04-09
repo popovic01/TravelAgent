@@ -43,6 +43,19 @@ namespace TravelAgent.AppDbContext
                         j.HasKey("OfferLocationId");
                     });
 
+            modelBuilder.Entity<OfferRequest>()
+                .HasMany(o => o.Locations)
+                .WithMany(l => l.OfferRequests)
+                .UsingEntity<Dictionary<string, object>>(
+                    "OfferRequestLocation",
+                    j => j.HasOne<Location>().WithMany().HasForeignKey("LocationId"),
+                    j => j.HasOne<OfferRequest>().WithMany().HasForeignKey("OfferRequestId"),
+                    j =>
+                    {
+                        j.Property<int>("OfferReqLocationId").ValueGeneratedOnAdd();
+                        j.HasKey("OfferReqLocationId");
+                    });
+
             modelBuilder.Entity<Offer>()
                 .HasMany(o => o.Tags)
                 .WithMany(t => t.Offers)

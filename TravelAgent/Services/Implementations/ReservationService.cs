@@ -94,7 +94,7 @@ namespace TravelAgent.Services.Implementations
             return retVal;
         }
 
-        public PaginationDataOut<ReservationDTO> GetAll()
+        public PaginationDataOut<ReservationDTO> GetAll(PageInfo pageInfo)
         {
             PaginationDataOut<ReservationDTO> retVal = new PaginationDataOut<ReservationDTO>();
 
@@ -104,11 +104,16 @@ namespace TravelAgent.Services.Implementations
 
             retVal.Count = reservations.Count();
 
+            reservations = reservations
+                .OrderByDescending(x => x.Id)
+                .Skip(pageInfo.PageSize * (pageInfo.Page - 1))
+                .Take(pageInfo.PageSize);
+
             reservations.ToList().ForEach(x => retVal.Data.Add(_mapper.Map<ReservationDTO>(x)));
             return retVal;
         }
 
-        public PaginationDataOut<ReservationDTO> GetAllByUser(int id)
+        public PaginationDataOut<ReservationDTO> GetAllByUser(PageInfo pageInfo, int id)
         {
             PaginationDataOut<ReservationDTO> retVal = new PaginationDataOut<ReservationDTO>();
 
@@ -118,6 +123,11 @@ namespace TravelAgent.Services.Implementations
                 .Where(x => x.Client.Id == id);
 
             retVal.Count = reservations.Count();
+
+            reservations = reservations
+                .OrderByDescending(x => x.Id)
+                .Skip(pageInfo.PageSize * (pageInfo.Page - 1))
+                .Take(pageInfo.PageSize);
 
             reservations.ToList().ForEach(x => retVal.Data.Add(_mapper.Map<ReservationDTO>(x)));
             return retVal;

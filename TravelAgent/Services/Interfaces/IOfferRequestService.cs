@@ -8,7 +8,7 @@ namespace TravelAgent.Services.Interfaces
         public ResponsePackageNoData RequestOffer(int clientId, OfferRequestDTO dataIn);
         public ResponsePackageNoData UpdateRequestedOffer(int clientId, OfferRequestDTO dataIn);
         public ResponsePackageNoData DeleteRequestedOffer(int clientId, int offerReqId);
-        public ResponsePackage<List<OfferRequestDTO>> GetAllRequestedOffers();
+        public PaginationDataOut<OfferRequestDTO> GetAllRequestedOffers(PageInfo pageInfo);
         public ResponsePackage<OfferRequestDTO> GetRequestedOfferById(int offerReqId);
     }
 }

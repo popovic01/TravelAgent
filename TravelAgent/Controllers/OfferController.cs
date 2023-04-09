@@ -23,6 +23,7 @@ namespace TravelAgent.Controllers
         }
 
         [HttpPost("getWishlist/{id}")]
+        [AuthRole("UserId", "id")]
         public ActionResult GetWishlist(int id)
         {
             return Ok(_offerService.GetWishlist(id));

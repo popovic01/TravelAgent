@@ -78,17 +78,22 @@ namespace TravelAgent.Services.Implementations
             return retVal;
         }
 
-        public PaginationDataOut<TagDTO> GetAll(SearchDTO searchData)
+        public PaginationDataOut<TagDTO> GetAll(FilterParamsDTO filterParams)
         {
             PaginationDataOut<TagDTO> retVal = new PaginationDataOut<TagDTO>();
 
             IQueryable<Tag> tags = _context.Tags;
 
-            if (!string.IsNullOrWhiteSpace(searchData.SearchFilter))
+            if (!string.IsNullOrWhiteSpace(filterParams.SearchFilter))
             {
-                tags = tags.Where(x => x.Name.ToLower().Contains(searchData.SearchFilter));
+                tags = tags.Where(x => x.Name.ToLower().Contains(filterParams.SearchFilter));
             }
             retVal.Count = tags.Count();
+
+            tags = tags
+                .OrderByDescending(x => x.Id)
+                .Skip(filterParams.PageSize * (filterParams.Page - 1))
+                .Take(filterParams.PageSize);
 
             tags.ToList().ForEach(x => retVal.Data.Add(_mapper.Map<TagDTO>(x)));
             return retVal;

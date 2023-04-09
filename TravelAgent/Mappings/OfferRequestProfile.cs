@@ -8,7 +8,10 @@ namespace TravelAgent.Mappings
     {
         public OfferRequestProfile()
         {
-            CreateMap<OfferRequest, OfferRequestDTO>().ReverseMap();
+            CreateMap<OfferRequest, OfferRequestDTO>()
+                .ForMember(dest => dest.TransportationTypeId, opt => opt.MapFrom(src => src.TransportationType.Id))
+                .ForMember(dest => dest.LocationIds, opt => opt.MapFrom(src => src.Locations.Select(l => l.Id).ToList()))
+                .ReverseMap();
         }
     }
 }

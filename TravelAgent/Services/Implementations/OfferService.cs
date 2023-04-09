@@ -232,10 +232,6 @@ namespace TravelAgent.Services.Implementations
                 .Include(x => x.OfferType)
                 .Include(x => x.Locations)
                 .Include(x => x.Tags);
-            offers = offers
-                .OrderByDescending(x => x.Id)
-                .Skip(pageInfo.PageSize * (pageInfo.Page - 1))
-                .Take(pageInfo.PageSize);
 
             if (!string.IsNullOrWhiteSpace(searchString))
             {
@@ -256,6 +252,11 @@ namespace TravelAgent.Services.Implementations
                 offers = offers.Where(x => x.Tags.Any(y => searchData.FilterParams.TagIds.Contains(y.Id)));
             }
             retVal.Count = offers.Count();
+
+            offers = offers
+                .OrderByDescending(x => x.Id)
+                .Skip(pageInfo.PageSize * (pageInfo.Page - 1))
+                .Take(pageInfo.PageSize);
 
             offers.ToList().ForEach(x => retVal.Data.Add(_mapper.Map<OfferDTO>(x)));
 

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TravelAgent.DTO.Common;
 using TravelAgent.DTO.OfferRequest;
 using TravelAgent.Helpers;
 using TravelAgent.Services.Interfaces;
@@ -23,18 +24,18 @@ namespace TravelAgent.Controllers
             return Ok(_offerReqService.RequestOffer(clientId, dataIn));
         }
 
-        [HttpGet]
+        [HttpPost("getAll")]
         [AuthRole("Role", "admin")]
-        public ActionResult GetAllRequestedOffers()
+        public ActionResult GetAllRequestedOffers(PageInfo pageInfo)
         {
-            return Ok(_offerReqService.GetAllRequestedOffers());
+            return Ok(_offerReqService.GetAllRequestedOffers(pageInfo));
         }
 
         [HttpGet("{id}")]
         [AuthRole("Role", "admin")]
-        public ActionResult GetRequestedOfferById(int offerReqId)
+        public ActionResult GetRequestedOfferById(int id)
         {
-            return Ok(_offerReqService.GetRequestedOfferById(offerReqId));
+            return Ok(_offerReqService.GetRequestedOfferById(id));
         }
 
         [HttpPut("{id}")]

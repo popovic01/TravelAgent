@@ -31,9 +31,9 @@ namespace TravelAgent.Controllers
 
         [HttpPost("getAll")]
         [AuthRole("Role", "admin")]
-        public ActionResult GetAll(SearchDTO searchData)
+        public ActionResult GetAll(FilterParamsDTO filterParams)
         {
-            return Ok(_userService.GetAll(searchData));
+            return Ok(_userService.GetAll(filterParams));
         }
 
         [HttpGet("{id}")]

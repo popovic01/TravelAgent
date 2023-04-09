@@ -5,7 +5,7 @@ namespace TravelAgent.Services.Interfaces
 {
     public interface IUserService
     {
-        public PaginationDataOut<UserResponseDTO> GetAll(SearchDTO searchData);
+        public PaginationDataOut<UserResponseDTO> GetAll(FilterParamsDTO filterParams);
         public ResponsePackage<UserResponseDTO> Get(int id);
         public ResponsePackage<string> Register(UserRequestDTO user);
         public ResponsePackage<string> Login(UserLoginDTO user);

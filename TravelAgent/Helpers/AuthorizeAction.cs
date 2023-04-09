@@ -25,7 +25,6 @@ namespace TravelAgent.Helpers
 
                 if (_auth.ValidateCurrentToken(token))
                 {
-                    //var roleClaim = _auth.GetClaim(token, "Role");
                     var claimValue = _auth.GetClaim(token, _claim.Type);
                     if (_claim.Type == "Role")
                     {

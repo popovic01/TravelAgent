@@ -5,8 +5,8 @@ namespace TravelAgent.Services.Interfaces
 {
     public interface IReservationService
     {
-        public PaginationDataOut<ReservationDTO> GetAll();
-        public PaginationDataOut<ReservationDTO> GetAllByUser(int clientId);
+        public PaginationDataOut<ReservationDTO> GetAll(PageInfo pageInfo);
+        public PaginationDataOut<ReservationDTO> GetAllByUser(PageInfo pageInfo, int id);
         public ResponsePackage<ReservationDTO> Get(int id);
         public ResponsePackageNoData Add(ReservationDTO reservation);
         public ResponsePackageNoData Update(int id, ReservationDTO reservation);
