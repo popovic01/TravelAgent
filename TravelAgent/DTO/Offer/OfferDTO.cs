@@ -13,6 +13,7 @@
         public string TransportationType { get; set; }
         public List<int> LocationIds { get; set; }
         public List<int> TagIds { get; set; }
+        public int ReservationCount { get; set; }
         public int WishlistCount { get; set; } //number of users who have this offer in their wishlist
         public int AvailableSpots { get; set; }
         public int AvailableSpotsLeft { get; set; } //availableSpots - reservationCount
