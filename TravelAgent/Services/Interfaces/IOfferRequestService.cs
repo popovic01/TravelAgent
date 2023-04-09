@@ -1,14 +1,16 @@
 ﻿using TravelAgent.DTO.Common;
 using TravelAgent.DTO.OfferRequest;
+using TravelAgent.DTO.Reservation;
 
 namespace TravelAgent.Services.Interfaces
 {
     public interface IOfferRequestService
     {
         public ResponsePackageNoData RequestOffer(int clientId, OfferRequestDTO dataIn);
-        public ResponsePackageNoData UpdateRequestedOffer(int clientId, OfferRequestDTO dataIn);
-        public ResponsePackageNoData DeleteRequestedOffer(int clientId, int offerReqId);
+        public ResponsePackageNoData UpdateRequestedOffer(int id, OfferRequestDTO dataIn);
+        public ResponsePackageNoData DeleteRequestedOffer(int id);
         public PaginationDataOut<OfferRequestDTO> GetAllRequestedOffers(PageInfo pageInfo);
+        public PaginationDataOut<OfferRequestDTO> GetAllByUser(PageInfo pageInfo, int id);
         public ResponsePackage<OfferRequestDTO> GetRequestedOfferById(int offerReqId);
     }
 }

@@ -2,6 +2,7 @@
 using TravelAgent.DTO.Common;
 using TravelAgent.DTO.OfferRequest;
 using TravelAgent.Helpers;
+using TravelAgent.Services.Implementations;
 using TravelAgent.Services.Interfaces;
 
 namespace TravelAgent.Controllers
@@ -31,6 +32,13 @@ namespace TravelAgent.Controllers
             return Ok(_offerReqService.GetAllRequestedOffers(pageInfo));
         }
 
+        [HttpPost("getAllByUser/{id}")]
+        [AuthRole("UserId", "id")]
+        public ActionResult GetAllByUser(PageInfo pageInfo, int id)
+        {
+            return Ok(_offerReqService.GetAllByUser(pageInfo, id));
+        }
+
         [HttpGet("{id}")]
         [AuthRole("Role", "admin")]
         public ActionResult GetRequestedOfferById(int id)
@@ -40,16 +48,16 @@ namespace TravelAgent.Controllers
 
         [HttpPut("{id}")]
         [AuthRole("Role", "client")]
-        public ActionResult UpdateRequestedOffer(int clientId, OfferRequestDTO dataIn)
+        public ActionResult UpdateRequestedOffer(int id, OfferRequestDTO dataIn)
         {
-            return Ok(_offerReqService.UpdateRequestedOffer(clientId, dataIn));
+            return Ok(_offerReqService.UpdateRequestedOffer(id, dataIn));
         }
 
-        [HttpDelete("{clientId}/{offerReqId}")]
+        [HttpDelete("{id}")]
         [AuthRole("Role", "admin")]
-        public ActionResult DeleteRequestedOffer(int clientId, int offerReqId)
+        public ActionResult DeleteRequestedOffer(int id)
         {
-            return Ok(_offerReqService.DeleteRequestedOffer(clientId, offerReqId));
+            return Ok(_offerReqService.DeleteRequestedOffer(id));
         }
     }
 }

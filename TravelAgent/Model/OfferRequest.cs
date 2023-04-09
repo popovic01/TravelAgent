@@ -10,5 +10,6 @@
         public TransportationType TransportationType { get; set; }
         public List<Location> Locations { get; set; }
         public int SpotNumber { get; set; } //za koliko ljudi je ponuda
+        public Client Client { get; set; } //korisnik koji je zatrazio ponudu
     }
 }

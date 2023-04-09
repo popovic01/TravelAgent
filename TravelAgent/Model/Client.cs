@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace TravelAgent.Model
+﻿namespace TravelAgent.Model
 {
     public class Client : User
     {
