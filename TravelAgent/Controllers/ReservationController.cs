@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using TravelAgent.DTO.Reservation;
 using TravelAgent.Helpers;
 using TravelAgent.Model;
@@ -25,6 +26,7 @@ namespace TravelAgent.Controllers
         }
 
         [HttpPost("getAllByUser/{id}")]
+        [AuthRole("UserId", "id")]
         public ActionResult GetAllByUser(int id)
         {
             return Ok(_reservationService.GetAllByUser(id));

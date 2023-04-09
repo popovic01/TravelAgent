@@ -25,11 +25,21 @@ namespace TravelAgent.Helpers
 
                 if (_auth.ValidateCurrentToken(token))
                 {
-                    var roleClaim = _auth.GetClaim(token, "Role");
-                    var roleArray = _claim.Value.Split(',');
-                    foreach (var role in roleArray)
+                    //var roleClaim = _auth.GetClaim(token, "Role");
+                    var claimValue = _auth.GetClaim(token, _claim.Type);
+                    if (_claim.Type == "Role")
                     {
-                        if (role == roleClaim)
+                        var roleArray = _claim.Value.Split(',');
+                        foreach (var role in roleArray)
+                        {
+                            if (role == claimValue)
+                                return;
+                        }
+                    }
+                    else
+                    {
+                        var userId = context.HttpContext.Request.RouteValues["id"];
+                        if (userId.Equals(claimValue))
                             return;
                     }
                 }

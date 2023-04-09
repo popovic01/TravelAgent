@@ -22,6 +22,7 @@ namespace TravelAgent.Helpers
             List<Claim> claims = new List<Claim>
             {
                 new Claim("Username", user.Username),
+                new Claim("UserId", user.Id.ToString()),
                 new Claim("Role", GetRole(user))
             };
 
