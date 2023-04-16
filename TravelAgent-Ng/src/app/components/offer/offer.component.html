@@ -1,24 +1,83 @@
 <div class="container">
+
     <div class="card" *ngFor="let offer of offers">
-        <div class="img">
-            <img src="assets/offer.jpg">
+
+        <div class="img-wrapper">
+            <img src="assets/images/offer.jpg" class="offer-img">
+            <div class="img-hover">
+                <button class="img-btn" (click)="reviewOffer(offer.price)">Pogledaj detalje ponude</button>
+            </div>
+            <div class="bottom-left">
+                {{offer.transportationType}}
+            </div>
+            <div class="top-right">
+                <i class="fa fa-calendar-o"></i> &nbsp;
+                {{offer.duration}} dana
+            </div>
         </div>
+
         <div class="body">
     
-            <div class="title">{{offer.name}}</div>
-    
-            <div class="location-wrapper">
-                <div class="location">Lokacije: </div>
-                <div class="location">Pariz</div>
-                <div class="location">Nica</div>
+            <div class="inline-wrapper">
+                <div class="title">{{offer.name}}</div>
+                <div>                    
+                    <button class="wishlist-btn"><i class="fa fa-heart-o"></i></button> {{offer.wishlistCount}}
+                </div>
+            </div>
+
+            <div>
+                {{offer.startDate | date }} - {{offer.endDate | date}} 
             </div>
     
-            <div class="price">Cena: {{offer.price}}e</div>
+            <div class="subtitle-wrapper">
+                <div *ngIf="offer.locations?.length > 0">
+                    <i class="fa fa-map-marker"></i>
+                    Lokacije: </div>
+                <div *ngFor="let location of offer.locations">
+                    <div>- {{location}} -</div>
+                </div>
+            </div>
+
+            <div class="subtitle-wrapper">
+                <div class="flex-wrapper">Slobodnih mesta: <div class="ml-1 bold">{{offer.availableSpotsLeft}}</div></div>
+                <div class="flex-wrapper">Mesto polaska: <div class="ml-1 bold">{{offer.departureLocation}}</div></div>
+            </div>
+
+            <div class="price-wrapper">
+                <div class="flex-wrapper">
+                    <div class="ml-1 price">{{offer.price}}e</div>
+                </div>
+            </div>
     
         </div>
-        <div class="bottom">
-            <button class="btn">Book</button>
+
+        <div class="bottom-wrapper">
+
+            <div class="rating-wrapper">
+                <div *ngIf="offer.rating < 0.5; else filledStar">
+                    <i class="fa fa-star-o"></i>
+                </div>
+                <div *ngIf="offer.rating < 1.5; else filledStar">
+                    <i class="fa fa-star-o"></i>
+                </div>
+                <div *ngIf="offer.rating < 2.5; else filledStar">
+                    <i class="fa fa-star-o"></i>
+                </div>
+                <div *ngIf="offer.rating < 3.5; else filledStar">
+                    <i class="fa fa-star-o"></i>
+                </div>
+                <div *ngIf="offer.rating < 4.5; else filledStar">
+                    <i class="fa fa-star-o"></i>
+                </div>
+                  
+                <ng-template #filledStar>
+                    <i class="fa fa-star"></i>
+                </ng-template>
+            </div>
+
+            <button class="btn">Kupi</button>
         </div>
+
     </div>
     
 </div>

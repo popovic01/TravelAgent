@@ -1,6 +1,50 @@
 $btn-background: #9d8189;
+$backgound: #f9f9f9;
+$card-color: #edede9;
+$turquoise: #3f979b;
+$pink: #d5b4b4;
 
 body {
     font-family: 'Source Sans Pro', sans-serif;
     font-weight: 400;
+    background-color: $backgound;
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.btn {
+    background-color: $btn-background;
+    color: white;
+    border: none;
+    border-radius: 0.2rem;
+    border: 0.1rem solid $btn-background;
+    padding: 0.4rem;
+    margin-top: 0.4rem;
+    width: 4rem;
+    transition-duration: 0.2s;
+}
+
+.btn:hover {
+    background-color: $card-color;
+    color: $btn-background;
+    border: 0.1rem solid $btn-background;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.bold {
+    font-weight: 600;
+}
+
+.ml-1 {
+    margin-left: 0.4rem;
+}
+
+.flex-wrapper {
+    display: flex;
 }

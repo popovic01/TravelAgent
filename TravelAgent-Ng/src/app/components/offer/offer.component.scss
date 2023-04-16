@@ -2,8 +2,8 @@
 
 .card {
     width: 20rem;
-    height: 26rem;
-    background-color: #edede9;
+    height: 36rem;
+    background-color: $card-color;
     border-radius: 0.4rem;
     display: flex;
     flex-direction: column;
@@ -11,39 +11,123 @@
     margin: 1rem;
     padding-bottom: 0.4rem;
 
-    img {
-        width: 20rem;
-        height: 10rem;
-        border-radius: 0.4rem;
+    .img-wrapper:hover .offer-img {
+        opacity: 0.3;
+    }
+
+    .img-wrapper:hover .top-right, .img-wrapper:hover .bottom-left {
+        opacity: 0;
+    }
+
+    .img-wrapper:hover .img-hover {
+        opacity: 1;
+    }
+
+    .img-wrapper {
+        position: relative;
+
+        img {
+            border-radius: 0.4rem 0.4rem 0 0;
+        }
+    
+        .offer-img {
+            opacity: 1;
+            display: block;
+            width: 100%;
+            height: auto;
+            transition: .5s ease;
+        }
+
+        .img-hover {
+            transition: .5s ease;
+            opacity: 0;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .img-btn {
+            background-color: white;
+            padding: 0.6rem;
+            border-radius: 0.2rem;
+            border: none;
+        }
+
+        .bottom-left {
+            position: absolute;
+            bottom: 0;
+            padding: 0.3rem;
+            background-color: $turquoise;
+            color: white;
+            border-radius: 0 0.2rem 0.2rem 0;
+            transition: .5s ease;
+        }
+
+        .top-right {
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 0.3rem;
+            background-color: $pink;
+            color: white;
+            border-radius: 0.2rem 0.2rem 0 0.2rem;
+            transition: .5s ease;
+        }
     }
 
     .body {
-        height: 50%;
+        height: 80%;
+        width: 80%;
         padding-top: 0.4rem;
-        background-color: aliceblue;
+        text-align: center;
+        position: relative;
 
         .title {
             font-size: 1.4rem;
-            margin-bottom: 1rem;
         }
 
-        .location-wrapper, .price {
+        .subtitle-wrapper {
             margin: 1rem;
         }
+
+        .price-wrapper {
+            position: absolute;
+            bottom: 0.4rem;
+            right: 0;
+
+            .price {
+                color: $turquoise;
+                font-size: 2rem;
+            }
+        }
+
+        .inline-wrapper {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 0.4rem;
+
+            .wishlist-btn{
+                border: none;
+                background: none;
+            }
+        }
     }
 
-    .btn {
-        background-color: $btn-background;
-        color: white;
-        border: none;
-        border-radius: 0.2rem;
-        padding: 0.6rem;
-        margin-top: 0.4rem;
-        width: 4rem;
+    .bottom-wrapper {
+        display: flex;
+        justify-content: space-between;
+        width: 80%;
+
+        .rating-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
     }
 }
 
-.container {
-    display: flex;
-}
 

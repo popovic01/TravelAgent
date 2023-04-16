@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { OfferService } from 'src/app/services/offer.service';
 import { formatDate } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-offer',
@@ -19,7 +20,8 @@ export class OfferComponent implements OnInit {
   public dateFrom: any = new Date();
   public dateTo: any = new Date();
 
-  constructor(private offerService: OfferService) { }
+  constructor(private offerService: OfferService,
+    private router: Router) { }
 
   ngOnInit(): void {
     this.dateFrom = formatDate(new Date().setDate(new Date().getDate() - 7), "yyyy-MM-dd", "en");
@@ -64,6 +66,11 @@ export class OfferComponent implements OnInit {
     }
             
     return obj;
+  }
+
+  reviewOffer(price: number) {
+    //proslediti id umesto price
+    this.router.navigate(['/offer-review/1']);
   }
 
   public pageChange(value: any) {
