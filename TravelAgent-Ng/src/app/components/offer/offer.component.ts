@@ -68,9 +68,8 @@ export class OfferComponent implements OnInit {
     return obj;
   }
 
-  reviewOffer(price: number) {
-    //proslediti id umesto price
-    this.router.navigate(['/offer-review/1']);
+  reviewOffer(id: number) {
+    this.router.navigate(['/offer-review', id]);
   }
 
   public pageChange(value: any) {

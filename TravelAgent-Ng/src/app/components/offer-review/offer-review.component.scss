@@ -1,0 +1,168 @@
+@import '../../../styles.scss';
+
+.container {
+    max-width: 86%;
+}
+
+.title-wrapper {
+    font-size: 2.4rem;
+    text-align: center;
+}
+
+.body-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 2rem;
+
+    .img-wrapper {
+        width: 50%;
+        position: relative;
+
+        .offer-img {
+            display: block;
+            border-radius: 0.4rem 0 0 0.4rem;
+            width: 100%;
+        }
+
+        .top-left {
+            position: absolute;
+            top: 0;
+            color: white;
+            border-radius: 0 0 0.2rem 0;
+            display: flex;
+            gap: 0.2rem;
+
+            .tag {
+                background-color: $pink;
+                padding: 0.3rem 0.5rem;
+                border-radius: 0 0 0.2rem 0.2rem;
+            }
+        }
+
+        .top-right {
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 0.3rem;
+            background-color: $pink;
+            color: white;
+            border-radius: 0 0 0 0.2rem;
+
+            .wishlist-btn {
+                border: none;
+                background: none;
+
+                .fa-heart-o {
+                    color: white;
+                }
+            }
+        }
+
+        .bottom-left {
+            position: absolute;
+            bottom: 0;
+            padding: 0.3rem;
+            background-color: $turquoise;
+            color: white;
+            border-radius: 0 0.2rem 0;
+        }
+
+        .bottom-right {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            padding: 0.3rem;
+            background-color: $turquoise;
+            color: white;
+            border-radius: 0.2rem 0 0 0;
+        }
+    }
+
+    .text-wrapper {
+        padding: 1rem 3rem;
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        font-size: 1.2rem;
+        background-color: $card-color;
+        border-radius: 0 0.4rem 0.4rem 0;
+        justify-content: space-between;
+        font-size: 1.1rem;
+
+        .bold {
+            font-size: 1.4rem;
+        }
+
+        .info-wrapper {
+            display: flex;
+            justify-content: space-between;
+            width: 90%;
+            text-align: center;
+
+            .info {
+                margin-bottom: 2rem;
+            }
+        }
+
+        .location-wrapper {
+            text-align: center;
+            padding: 1rem;
+            border: 0.1rem $btn-background solid;
+
+            .location {
+                font-size: 1.4rem;
+            }
+        }
+
+        .text-bottom-wrapper {
+            display: flex;
+            width: 100%;
+            justify-content: space-between;
+
+            .price-wrapper {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                align-items: start;
+                margin-right: 1rem;
+    
+                .price-text {
+                    display: flex;
+                    align-items: center;
+                }
+    
+                .price {
+                    color: $turquoise;
+                    font-size: 2rem;
+                }
+            }
+
+            .btn-wrapper {
+                display: flex;
+                align-items: center;
+            }
+        }
+    }
+}
+
+.bottom-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.4rem;
+    border-radius: 0.4rem;
+    margin-top: 2rem;
+    padding: 1rem;
+    background-color: $desc;
+
+    .top-wrapper {
+        display: flex;
+    }
+
+    .description-wrapper {
+        font-size: 1.2rem;
+    }
+}

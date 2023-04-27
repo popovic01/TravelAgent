@@ -1,1 +1,84 @@
-<p>offer-review works!</p>
+<div class="container">
+
+    <div class="title-wrapper">
+        {{offer?.name}} &nbsp; | &nbsp; {{offer?.duration}} dana &nbsp; | &nbsp; {{offer?.transportationType}}
+    </div>
+
+    <div class="body-wrapper">
+
+        <div class="img-wrapper">
+
+            <img src="assets/images/offer.jpg" class="offer-img">
+
+            <div class="top-right">
+                <button class="wishlist-btn"><i class="fa fa-heart-o"></i></button> {{offer?.wishlistCount}}
+            </div>
+
+            <div class="top-left">
+                <div *ngFor="let tag of offer?.tags" class="tag">
+                    # {{tag}}
+                </div>
+            </div>
+
+            <div class="bottom-left">
+                {{offer?.offerType}}
+            </div>
+
+            <div class="bottom-right">
+                <i class="fa fa-star-o"></i> &nbsp; {{offer?.rating}}
+            </div>
+
+        </div>
+
+        <div class="text-wrapper">
+
+            <div class="info-wrapper">
+                <div class="info">Mesto polaska: 
+                    <div class="bold">{{offer?.departureLocation}}</div>
+                </div>
+                <div class="info">Datum: 
+                    <div class="bold">
+                        {{offer?.startDate | date}} - {{offer?.endDate | date}}
+                    </div>
+                </div>
+            </div>
+
+            <div class="location-wrapper">
+                <div class="location-text">
+                    <i class="fa fa-map-marker"></i>
+                    Lokacije:
+                </div>
+                <div class="location" *ngFor="let location of offer?.locations">
+                    - {{location}} - 
+                </div>
+            </div>
+
+            <div class="text-bottom-wrapper">
+
+                <div class="price-wrapper">
+                    <div class="price-text">Cena po osobi:</div>
+                    <div class="price">{{offer?.price}}e</div>
+                </div>
+
+                <div class="btn-wrapper">
+                    <button class="btn">Rezerviši</button>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <div class="bottom-wrapper">
+        
+        <div class="top-wrapper">
+            Slobodnih mesta: <div class="bold">&nbsp; {{offer?.availableSpotsLeft}}</div> 
+        </div>
+
+        <div class="description-wrapper">
+            {{offer?.description}}
+        </div>
+
+    </div>
+
+</div>

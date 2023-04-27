@@ -1,8 +1,13 @@
 @import '../../../styles.scss';
 
+.container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
 .card {
     width: 20rem;
-    height: 36rem;
+    height: 34rem;
     background-color: $card-color;
     border-radius: 0.4rem;
     display: flex;
@@ -25,10 +30,6 @@
 
     .img-wrapper {
         position: relative;
-
-        img {
-            border-radius: 0.4rem 0.4rem 0 0;
-        }
     
         .offer-img {
             opacity: 1;
@@ -36,6 +37,7 @@
             width: 100%;
             height: auto;
             transition: .5s ease;
+            border-radius: 0.4rem 0.4rem 0 0;
         }
 
         .img-hover {
@@ -110,7 +112,7 @@
             align-items: center;
             margin: 0.4rem;
 
-            .wishlist-btn{
+            .wishlist-btn {
                 border: none;
                 background: none;
             }

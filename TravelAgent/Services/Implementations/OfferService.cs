@@ -218,9 +218,9 @@ namespace TravelAgent.Services.Implementations
             return retVal;
         }
 
-        public PaginationDataOut<OfferDTO> GetAll(OfferPageInfo searchData)
+        public PaginationDataOut<OfferIdDTO> GetAll(OfferPageInfo searchData)
         {
-            PaginationDataOut<OfferDTO> retVal = new();
+            PaginationDataOut<OfferIdDTO> retVal = new();
 
             var pageInfo = searchData.PageInfo;
             var filterParams = searchData.FilterParams;
@@ -257,7 +257,7 @@ namespace TravelAgent.Services.Implementations
                 .Skip(pageInfo.PageSize * (pageInfo.Page - 1))
                 .Take(pageInfo.PageSize);
 
-            offers.ToList().ForEach(x => retVal.Data.Add(_mapper.Map<OfferDTO>(x)));
+            offers.ToList().ForEach(x => retVal.Data.Add(_mapper.Map<OfferIdDTO>(x)));
 
             foreach (var offer in retVal.Data)
                 offer.Duration = offer.EndDate.Subtract(offer.StartDate).Days;

@@ -13,4 +13,8 @@ export class OfferService {
   getAll(obj: any): Observable<any> {
     return this.http.post(`${environment.apiUrl}offer/getAll`, obj);
   }
+
+  getById(id: number): Observable<any> {
+    return this.http.get(`${environment.apiUrl}offer/${id}`);
+  }
 }

@@ -5,7 +5,7 @@
         <div class="img-wrapper">
             <img src="assets/images/offer.jpg" class="offer-img">
             <div class="img-hover">
-                <button class="img-btn" (click)="reviewOffer(offer.price)">Pogledaj detalje ponude</button>
+                <button class="img-btn" (click)="reviewOffer(offer.id)">Pogledaj detalje ponude</button>
             </div>
             <div class="bottom-left">
                 {{offer.transportationType}}
@@ -40,7 +40,6 @@
 
             <div class="subtitle-wrapper">
                 <div class="flex-wrapper">Slobodnih mesta: <div class="ml-1 bold">{{offer.availableSpotsLeft}}</div></div>
-                <div class="flex-wrapper">Mesto polaska: <div class="ml-1 bold">{{offer.departureLocation}}</div></div>
             </div>
 
             <div class="price-wrapper">
@@ -75,7 +74,7 @@
                 </ng-template>
             </div>
 
-            <button class="btn">Kupi</button>
+            <button class="btn">Rezerviši</button>
         </div>
 
     </div>
