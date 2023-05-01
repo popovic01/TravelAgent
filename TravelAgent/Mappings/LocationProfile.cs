@@ -9,6 +9,7 @@ namespace TravelAgent.Mappings
         public LocationProfile()
         {
             CreateMap<Location, LocationDTO>().ReverseMap();
+            CreateMap<Location, LocationIdDTO>().ReverseMap();
         }
     }
 }

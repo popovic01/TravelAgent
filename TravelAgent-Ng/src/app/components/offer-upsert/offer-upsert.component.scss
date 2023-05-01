@@ -1,0 +1,41 @@
+@import '../../../styles.scss';
+
+.container {
+    margin-top: 2rem;
+    padding: 1rem;
+    width: 50rem;
+    border: 0.01rem $btn-background solid;
+    border-radius: 0.4rem;
+
+    .title-wrapper {
+        display: flex;
+        padding-bottom: 1rem;
+        align-items: center;
+        gap: 0.6rem;
+
+        .title {
+            font-size: 1.8rem;
+            letter-spacing: 0.1rem;
+        }
+    }
+
+    .btn-wrapper {
+        display: flex;
+        justify-content: end;
+        margin-top: 1rem;
+    }
+
+    .col-sm-6, .col-sm-12 {
+        margin-bottom: 0.4rem;
+    }
+}
+
+::ng-deep .multiselect-dropdown {
+    background-color: white;
+    color: #212529;
+    border: none;
+
+    .dropdown-btn {
+        border: 1px solid #ced4da !important;
+    }
+}

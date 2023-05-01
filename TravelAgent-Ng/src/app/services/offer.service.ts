@@ -10,6 +10,10 @@ export class OfferService {
 
   constructor(private http: HttpClient) { }
 
+  add(obj: any): Observable<any> {
+    return this.http.post(`${environment.apiUrl}offer`, obj);
+  }
+
   getAll(obj: any): Observable<any> {
     return this.http.post(`${environment.apiUrl}offer/getAll`, obj);
   }

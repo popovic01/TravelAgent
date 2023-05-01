@@ -9,6 +9,7 @@ namespace TravelAgent.Mappings
         public TagProfile()
         {
             CreateMap<Tag, TagDTO>().ReverseMap();
+            CreateMap<Tag, TagIdDTO>().ReverseMap();
         }
     }
 }

@@ -1,0 +1,108 @@
+<div class="container">
+
+    <div class="title-wrapper">
+        <i class="fa fa-pencil"></i>
+        <div class="title">
+            Create Offer
+        </div>
+    </div>
+
+    <form (submit)="f.form.valid && save()" #f="ngForm">
+        <div class="row">
+
+            <div class="col-sm-6">
+              <label>Name</label>
+              <input class="form-control" name="name" [(ngModel)]="offer.name" #name="ngModel" required/>
+              <div *ngIf="f.submitted && name.invalid" class="form-control-error">Name is required</div>
+            </div>
+
+            <div class="col-sm-6">
+                <label>Price</label>
+                <input class="form-control" type="number" min="0" name="price" [(ngModel)]="offer.price" (ngModelChange)="validatePrice()"/>
+                <div *ngIf="f.submitted && !priceValid" class="form-control-error">Price must be greater than 0</div>
+            </div>
+
+            <div class="col-sm-6">
+                <label>Start Date</label>
+                <input type="date" class="form-control" name="startDate" [(ngModel)]="offer.startDate" (ngModelChange)="validateDates()"/>
+                <div *ngIf="f.submitted && !startDateValid" class="form-control-error">Start Date must be later than today</div>
+            </div>
+
+            <div class="col-sm-6">
+                <label>End Date</label>
+                <input type="date" class="form-control" name="endDate" [(ngModel)]="offer.endDate" (ngModelChange)="validateDates()"/>
+                <div *ngIf="f.submitted && !endDateValid" class="form-control-error">End Date must be later than Start Date</div>
+            </div>
+
+            <div class="col-sm-12">
+                <label>Description</label>
+                <textarea class="form-control" name="description" [(ngModel)]="offer.description" #description="ngModel" required rows="5"></textarea>
+                <div *ngIf="f.submitted && description.invalid" class="form-control-error">Description is required</div>
+            </div>
+
+            <div class="col-sm-6">
+                <label>Transportation Type</label>
+                <select class="form-control" name="transportationType" [(ngModel)]="offer.transportationType" #transportationType="ngModel" required>
+                    <option value="" selected disabled>Select Transportation Type</option>
+                    <option *ngFor="let x of transportationTypes" [ngValue]="x.name">{{x.name}}</option>
+                </select>
+                <div *ngIf="f.submitted && transportationType.invalid" class="form-control-error">Transportation Type is required</div>
+            </div>
+
+            <div class="col-sm-6">
+                <label>Offer Type</label>
+                <select class="form-control" name="offerType" [(ngModel)]="offer.offerType" #offerType="ngModel" required>
+                    <option value="" selected disabled>Select Offer Type</option>
+                    <option *ngFor="let x of offerTypes" [ngValue]="x.name">{{x.name}}</option>
+                </select>                
+                <div *ngIf="f.submitted && offerType.invalid" class="form-control-error">Offer Type is required</div>
+            </div>
+
+            <div class="col-sm-6">
+                <label>Departure Location</label>
+                <select class="form-control" name="departureLocation" [(ngModel)]="offer.departureLocation" #departureLocation="ngModel" required>
+                    <option value="" selected disabled>Select Departure Location</option>
+                    <option *ngFor="let x of locations" [ngValue]="x.item_text">{{x.item_text}}</option>
+                </select>                
+                <div *ngIf="f.submitted && departureLocation.invalid" class="form-control-error">Departure Location is required</div>
+            </div>
+
+            <div class="col-sm-6">
+                <label>Locations</label>
+                <ng-multiselect-dropdown 
+                    [placeholder]="'Select Locations'"
+                    (onSelect)="onLocationSelect($event)"
+                    (onDeSelect)="onLocationDeselect($event)"
+                    [settings]="dropdownSettings"
+                    [data]="locations">
+                </ng-multiselect-dropdown>
+                <div *ngIf="f.submitted && !locationsValid" class="form-control-error">At least one location must be selected</div>
+            </div>
+
+            <div class="col-sm-6">
+                <label>Tags</label>
+                <ng-multiselect-dropdown
+                    [placeholder]="'Select Tags'"
+                    (onSelect)="onTagSelect($event)"
+                    (onDeSelect)="onTagDeselect($event)"
+                    [settings]="dropdownSettings"
+                    [data]="tags">
+                </ng-multiselect-dropdown>
+                <div *ngIf="f.submitted && !tagsValid" class="form-control-error">At least one tag must be selected</div>
+            </div>
+
+            <div class="col-sm-6">
+                <label>Available Spots</label>
+                <input class="form-control" type="number" min="0" name="availableSpots" [(ngModel)]="offer.availableSpots" (ngModelChange)="validateAvailableSpots()"/>
+                <div *ngIf="f.submitted && !availableSpotsValid" class="form-control-error">Available Spots must be greater than 0</div>
+            </div>
+
+          <div class="btn-wrapper">
+              <button type="submit" class="btn">Save</button>
+          </div>
+          
+        </div>
+    </form>
+
+</div>
+
