@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
@@ -12,13 +12,18 @@ import { OfferReviewComponent } from './components/offer-review/offer-review.com
 import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { OfferUpsertComponent } from './components/offer-upsert/offer-upsert.component';
+import { HttpInterceptorService } from './helpers/interceptor';
+import { LoginComponent } from './components/login/login.component';
+import { RegistrationComponent } from './components/registration/registration.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     OfferComponent,
     OfferReviewComponent,
-    OfferUpsertComponent
+    OfferUpsertComponent,
+    LoginComponent,
+    RegistrationComponent
   ],
   imports: [
     BrowserModule,
@@ -30,7 +35,13 @@ import { OfferUpsertComponent } from './components/offer-upsert/offer-upsert.com
     NgMultiSelectDropDownModule.forRoot(),
     ToastrModule.forRoot()
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpInterceptorService,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
