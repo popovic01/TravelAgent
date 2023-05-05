@@ -33,7 +33,8 @@ export class HttpInterceptorService implements HttpInterceptor {
       }), catchError((err: any) => {
         if (err instanceof HttpErrorResponse) {
           if(err.status == 401 && !err.error)
-            this.toastr.error('Session timed out. Please log in.');
+            this.toastr.error('Sesija je istekla. Ulogujte se ponovo.');
+            console.log('Isteklo')
         }
         return throwError(err);
       }));

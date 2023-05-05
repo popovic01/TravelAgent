@@ -3,7 +3,7 @@
     <div class="title-wrapper">
         <i class="fa fa-sign-in"></i>
         <div class="title">
-            Register
+            Registracija
         </div>
     </div>
 
@@ -11,44 +11,44 @@
         <div class="row">
 
             <div class="col-sm-6">
-              <label>Username</label>
+              <label>Korisničko ime</label>
               <input class="form-control" name="username" [(ngModel)]="user.username" #username="ngModel" required/>
               <div *ngIf="f.submitted && username.invalid" class="form-control-error">Username is required</div>
             </div>
 
             <div class="col-sm-6">
-                <label>Password</label>
+                <label>Lozinka</label>
                 <input class="form-control" type="password" minlength="5" name="password" [(ngModel)]="user.password" #password="ngModel" required/>
                 <div *ngIf="f.submitted && password.errors?.required" class="form-control-error">Password is required</div>
                 <div *ngIf="f.submitted && password.errors?.minlength" class="form-control-error">Minimum length for password is 5 characters</div>
             </div>
 
             <div class="col-sm-6">
-                <label>First Name</label>
+                <label>Ime</label>
                 <input class="form-control" name="firstName" [(ngModel)]="user.firstName" #firstName="ngModel" required/>
                 <div *ngIf="f.submitted && firstName.invalid" class="form-control-error">First Name is required</div>
             </div>
 
             <div class="col-sm-6">
-                <label>Last Name</label>
+                <label>Prezime</label>
                 <input class="form-control" name="lastName" [(ngModel)]="user.lastName" #lastName="ngModel" required/>
                 <div *ngIf="f.submitted && lastName.invalid" class="form-control-error">Last Name is required</div>
             </div>
 
             <div class="col-sm-6">
-                <label>Passport Number</label>
+                <label>Broj pasoša</label>
                 <input class="form-control" name="passportNo" [(ngModel)]="user.passportNo" #passportNo="ngModel" required/>
                 <div *ngIf="f.submitted && passportNo.invalid" class="form-control-error">Passport Number is required</div>
             </div>
 
             <div class="col-sm-6">
-                <label>Phone Number</label>
+                <label>Broj telefona</label>
                 <input class="form-control" name="phoneNo" [(ngModel)]="user.phoneNo" #phoneNo="ngModel" required/>
                 <div *ngIf="f.submitted && phoneNo.invalid" class="form-control-error">Phone Number is required</div>
             </div>
 
           <div class="btn-wrapper">
-              <button type="submit" class="btn">Register</button>
+              <button type="submit" class="btn">Registruj se</button>
           </div>
           
         </div>

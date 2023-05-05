@@ -15,6 +15,7 @@ import { OfferUpsertComponent } from './components/offer-upsert/offer-upsert.com
 import { HttpInterceptorService } from './helpers/interceptor';
 import { LoginComponent } from './components/login/login.component';
 import { RegistrationComponent } from './components/registration/registration.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { RegistrationComponent } from './components/registration/registration.co
     OfferReviewComponent,
     OfferUpsertComponent,
     LoginComponent,
-    RegistrationComponent
+    RegistrationComponent,
+    NavbarComponent
   ],
   imports: [
     BrowserModule,

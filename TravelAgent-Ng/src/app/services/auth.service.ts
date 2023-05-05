@@ -22,10 +22,13 @@ export class AuthService {
     return this.http.post(`${environment.apiUrl}user/login`, obj);
   }
 
-  logout() {
-    localStorage.removeItem('token');
-    window.sessionStorage.clear(); //proveriti da li ovo treba
-    this.router.navigate(['']);
+  isAdmin() {
+    let token = localStorage.getItem('token');
+
+    if (!token)
+      return false;
+
+    return this.jwtService.decodeToken(token).Role == 'admin';
   }
 
   isLoggedIn() {
@@ -45,4 +48,10 @@ export class AuthService {
 
     return this.jwtService.decodeToken(token);
   }
+
+  logout() {
+    localStorage.removeItem('token');
+    this.router.navigate(['']);
+  }
+
 }

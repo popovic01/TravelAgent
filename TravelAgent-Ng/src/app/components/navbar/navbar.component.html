@@ -1,0 +1,24 @@
+<ul>
+    <li><a  routerLink="/offers">Ponude</a></li>
+    <li><a  routerLink="/request-offer" *ngIf="authService.isLoggedIn() && !authService.isAdmin()">Zatraži ponudu</a></li>
+    <li><a  routerLink="/reservation" *ngIf="authService.isLoggedIn() && !authService.isAdmin()">Rezervacije</a></li>
+    <li><a  routerLink="/wishlist" *ngIf="authService.isLoggedIn() && !authService.isAdmin()">Lista želja</a></li>
+
+    <li class="dropdown" *ngIf="authService.isLoggedIn() && authService.isAdmin()">
+      <a class="dropbtn">Admin</a>
+      <div class="dropdown-content">
+        <a  routerLink="/offer-create">Kreiraj ponudu</a>
+        <a  routerLink="/location">Lokacije</a>
+        <a  routerLink="/tag">Tagovi</a>
+        <a  routerLink="/offer-type">Tipovi ponuda</a>
+        <a  routerLink="/transporation-type">Načini prevoza</a>
+        <a  routerLink="/offer-request">Zahtevi za ponude</a>
+      </div>
+    </li>
+
+    <li class="right" *ngIf="!authService.isLoggedIn()"><a routerLink="/register">Registruj se</a></li>
+    <li class="right" *ngIf="!authService.isLoggedIn()"><a routerLink="/login">Prijavi se</a></li>
+    <li class="right" *ngIf="authService.isLoggedIn()"><a (click)="logout()">Odjavi se</a></li>
+    <li class="right" *ngIf="authService.isLoggedIn()"><div>Zdravo {{authService.getCurrentUser().Username}}</div></li>
+</ul>
+

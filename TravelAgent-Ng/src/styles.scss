@@ -4,11 +4,15 @@ $card-color: #edede9;
 $turquoise: #3f979b;
 $pink: #d5b4b4;
 $desc: #E4DCCF;
+$navbar: #38444d;
+$dropdown: #8294C4;
+$dropdown-hover: #ACB1D6;
 
 body {
     font-family: 'Source Sans Pro', sans-serif;
     font-weight: 400;
     background-color: $backgound;
+    margin-top: 4rem;
 }
 
 .btn {

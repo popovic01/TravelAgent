@@ -36,7 +36,7 @@ namespace TravelAgent.Controllers
         }
 
         [HttpPost]
-        //[AuthRole("Role", "admin")]
+        [AuthRole("Role", "admin")]
         public ActionResult Add(OfferReviewDTO dataIn)
         {
             return Ok(_offerService.Add(dataIn));
