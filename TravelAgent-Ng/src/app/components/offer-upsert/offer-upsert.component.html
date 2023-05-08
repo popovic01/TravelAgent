@@ -2,8 +2,11 @@
 
     <div class="title-wrapper">
         <i class="fa fa-pencil"></i>
-        <div class="title">
-            Create Offer
+        <div class="title" *ngIf="offerId == 0">
+            Kreiraj ponudu
+        </div>
+        <div class="title" *ngIf="offerId != 0">
+            Izmeni ponudu
         </div>
     </div>
 
@@ -11,94 +14,98 @@
         <div class="row">
 
             <div class="col-sm-6">
-              <label>Name</label>
+              <label>Naziv</label>
               <input class="form-control" name="name" [(ngModel)]="offer.name" #name="ngModel" required/>
-              <div *ngIf="f.submitted && name.invalid" class="form-control-error">Name is required</div>
+              <div *ngIf="f.submitted && name.invalid" class="form-control-error">Naziv je obavezan</div>
             </div>
 
             <div class="col-sm-6">
-                <label>Price</label>
+                <label>Cena</label>
                 <input class="form-control" type="number" min="0" name="price" [(ngModel)]="offer.price" (ngModelChange)="validatePrice()"/>
-                <div *ngIf="f.submitted && !priceValid" class="form-control-error">Price must be greater than 0</div>
+                <div *ngIf="f.submitted && !priceValid" class="form-control-error">Cena mora biti veća od 0</div>
             </div>
 
             <div class="col-sm-6">
-                <label>Start Date</label>
+                <label>Početak</label>
                 <input type="date" class="form-control" name="startDate" [(ngModel)]="offer.startDate" (ngModelChange)="validateDates()"/>
-                <div *ngIf="f.submitted && !startDateValid" class="form-control-error">Start Date must be later than today</div>
+                <div *ngIf="f.submitted && !startDateValid" class="form-control-error">Početak mora biti nakon danas</div>
             </div>
 
             <div class="col-sm-6">
-                <label>End Date</label>
+                <label>Kraj</label>
                 <input type="date" class="form-control" name="endDate" [(ngModel)]="offer.endDate" (ngModelChange)="validateDates()"/>
-                <div *ngIf="f.submitted && !endDateValid" class="form-control-error">End Date must be later than Start Date</div>
+                <div *ngIf="f.submitted && !endDateValid" class="form-control-error">Kraj mora biti nakon početka</div>
             </div>
 
             <div class="col-sm-12">
-                <label>Description</label>
+                <label>Opis</label>
                 <textarea class="form-control" name="description" [(ngModel)]="offer.description" #description="ngModel" required rows="5"></textarea>
-                <div *ngIf="f.submitted && description.invalid" class="form-control-error">Description is required</div>
+                <div *ngIf="f.submitted && description.invalid" class="form-control-error">Opis je obavezan</div>
             </div>
 
             <div class="col-sm-6">
-                <label>Transportation Type</label>
+                <label>Način prevoza</label>
                 <select class="form-control" name="transportationType" [(ngModel)]="offer.transportationType" #transportationType="ngModel" required>
-                    <option value="" selected disabled>Select Transportation Type</option>
+                    <option value="" selected disabled>Odaberite način prevoza</option>
                     <option *ngFor="let x of transportationTypes" [ngValue]="x.name">{{x.name}}</option>
                 </select>
-                <div *ngIf="f.submitted && transportationType.invalid" class="form-control-error">Transportation Type is required</div>
+                <div *ngIf="f.submitted && transportationType.invalid" class="form-control-error">Način prevoza je obavezan</div>
             </div>
 
             <div class="col-sm-6">
-                <label>Offer Type</label>
+                <label>Tip ponude</label>
                 <select class="form-control" name="offerType" [(ngModel)]="offer.offerType" #offerType="ngModel" required>
-                    <option value="" selected disabled>Select Offer Type</option>
+                    <option value="" selected disabled>Odaberite tip ponude</option>
                     <option *ngFor="let x of offerTypes" [ngValue]="x.name">{{x.name}}</option>
                 </select>                
-                <div *ngIf="f.submitted && offerType.invalid" class="form-control-error">Offer Type is required</div>
+                <div *ngIf="f.submitted && offerType.invalid" class="form-control-error">Tip ponude je obavezan</div>
             </div>
 
             <div class="col-sm-6">
-                <label>Departure Location</label>
+                <label>Mesto polaska</label>
                 <select class="form-control" name="departureLocation" [(ngModel)]="offer.departureLocation" #departureLocation="ngModel" required>
-                    <option value="" selected disabled>Select Departure Location</option>
+                    <option value="" selected disabled>Odaberite mesto polaska</option>
                     <option *ngFor="let x of locations" [ngValue]="x.item_text">{{x.item_text}}</option>
                 </select>                
-                <div *ngIf="f.submitted && departureLocation.invalid" class="form-control-error">Departure Location is required</div>
+                <div *ngIf="f.submitted && departureLocation.invalid" class="form-control-error">Mesto polaska je obavezno</div>
             </div>
 
             <div class="col-sm-6">
-                <label>Locations</label>
+                <label>Lokacije</label>
                 <ng-multiselect-dropdown 
-                    [placeholder]="'Select Locations'"
+                    name="locations"
+                    [placeholder]="'Odaberite lokacije'"
                     (onSelect)="onLocationSelect($event)"
                     (onDeSelect)="onLocationDeselect($event)"
                     [settings]="dropdownSettings"
+                    [(ngModel)]="selectedLocations"
                     [data]="locations">
                 </ng-multiselect-dropdown>
-                <div *ngIf="f.submitted && !locationsValid" class="form-control-error">At least one location must be selected</div>
+                <div *ngIf="f.submitted && !locationsValid" class="form-control-error">Najmanje jedna lokacija mora biti odabrana</div>
             </div>
 
             <div class="col-sm-6">
-                <label>Tags</label>
+                <label>Tagovi</label>
                 <ng-multiselect-dropdown
-                    [placeholder]="'Select Tags'"
+                    name="tags"
+                    [placeholder]="'Odaberite tagove'"
                     (onSelect)="onTagSelect($event)"
                     (onDeSelect)="onTagDeselect($event)"
                     [settings]="dropdownSettings"
+                    [(ngModel)]="selectedTags"
                     [data]="tags">
                 </ng-multiselect-dropdown>
-                <div *ngIf="f.submitted && !tagsValid" class="form-control-error">At least one tag must be selected</div>
+                <div *ngIf="f.submitted && !tagsValid" class="form-control-error">Najmanje jedan tag mora biti odabran</div>
             </div>
 
             <div class="col-sm-6">
-                <label>Available Spots</label>
+                <label>Broj slobodnih mesta</label>
                 <input class="form-control" type="number" min="0" name="availableSpots" [(ngModel)]="offer.availableSpots" (ngModelChange)="validateAvailableSpots()"/>
-                <div *ngIf="f.submitted && !availableSpotsValid" class="form-control-error">Available Spots must be greater than 0</div>
+                <div *ngIf="f.submitted && !availableSpotsValid" class="form-control-error">Broj slobodnih mesta mora biti veći od 0</div>
             </div>
 
           <div class="btn-wrapper">
-              <button type="submit" class="btn">Save</button>
+              <button type="submit" class="btn">Sačuvaj</button>
           </div>
           
         </div>

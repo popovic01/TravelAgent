@@ -34,7 +34,6 @@ export class HttpInterceptorService implements HttpInterceptor {
         if (err instanceof HttpErrorResponse) {
           if(err.status == 401 && !err.error)
             this.toastr.error('Sesija je istekla. Ulogujte se ponovo.');
-            console.log('Isteklo')
         }
         return throwError(err);
       }));

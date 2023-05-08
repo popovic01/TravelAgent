@@ -74,7 +74,8 @@
                 </ng-template>
             </div>
 
-            <button class="btn">Rezerviši</button>
+            <button class="btn" routerLink="/book" *ngIf="(authService.isLoggedIn() && !authService.isAdmin()) || !authService.isLoggedIn()">Rezerviši</button>
+            <button class="btn" [routerLink]="['/offer-edit', offer.id]" *ngIf="authService.isLoggedIn() && authService.isAdmin()">Izmeni</button>
         </div>
 
     </div>

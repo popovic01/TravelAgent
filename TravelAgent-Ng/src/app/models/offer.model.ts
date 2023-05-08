@@ -3,8 +3,8 @@ export class Offer {
     name: string = '';
     description: string = '';
     departureLocation: string = '';
-    startDate: Date = new Date();
-    endDate: Date = new Date();
+    startDate: string = '';
+    endDate: string = '';
     price: number = 0.0;
     transportationType: string = '';
     offerType: string = '';

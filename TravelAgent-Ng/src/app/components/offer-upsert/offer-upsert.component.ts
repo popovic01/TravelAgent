@@ -9,16 +9,20 @@ import { TagService } from 'src/app/services/tag.service';
 import { TransportationTypeService } from 'src/app/services/transportation-type.service';
 import { OfferTypeService } from 'src/app/services/offer-type.service';
 import { OfferService } from 'src/app/services/offer.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { DatePipe, formatDate } from '@angular/common';
+import { type } from 'os';
 
 @Component({
   selector: 'app-offer-upsert',
   templateUrl: './offer-upsert.component.html',
-  styleUrls: ['./offer-upsert.component.scss']
+  styleUrls: ['./offer-upsert.component.scss'],
+  providers: [DatePipe]
 })
 export class OfferUpsertComponent implements OnInit {
 
   offer: Offer = new Offer();
+  offerId: number = 0;
 
   transportationTypes: any[] = [];
   offerTypes: any[] = [];
@@ -33,31 +37,30 @@ export class OfferUpsertComponent implements OnInit {
   endDateValid: boolean = false;
 
   dropdownSettings: IDropdownSettings = {};
+  selectedTags: any[] = [];
+  selectedLocations: any[] = [];
 
   constructor(private toastr: ToastrService, private locationService: LocationService,
     private tagService: TagService, private transportationTypeService: TransportationTypeService, 
-    private offerTypeService: OfferTypeService, private offerService: OfferService, private router: Router) { }
+    private offerTypeService: OfferTypeService, private offerService: OfferService, 
+    private router: Router, private route: ActivatedRoute, private datePipe: DatePipe) { }
 
   ngOnInit(): void {
-
     this.getDataFromBackend();
     this.setDropdownSettings();
-
+    this.offerId = Number(this.route.snapshot.paramMap.get('id'));
   }
 
   setDropdownSettings() {
-
     this.dropdownSettings = {
       idField: 'item_id',
       textField: 'item_text',
       enableCheckAll: false,
       allowSearchFilter: true
     };
-
   }
 
   getDataFromBackend() {
-
     let obj = {
       searchFilter: "",
       page: 1,
@@ -82,6 +85,9 @@ export class OfferUpsertComponent implements OnInit {
             item_text: item.name
           }
         });
+        if (this.offerId) {
+          this.getOfferFromBackend();
+        }
       });
 
     this.transportationTypeService.getAll(obj).subscribe(x => 
@@ -95,10 +101,53 @@ export class OfferUpsertComponent implements OnInit {
       });
   }
 
+  getOfferFromBackend() {
+    this.offerService.getById(this.offerId).subscribe(x => {
+      if (x?.status == 200) {
+        this.offer = x.transferObject;
+        this.offer.startDate = this.datePipe.transform(this.offer.startDate, 'yyyy-MM-dd')!;
+        this.offer.endDate = this.datePipe.transform(this.offer.endDate, 'yyyy-MM-dd')!;
+
+        this.validateFields();
+
+        this.selectedTags = this.offer.tags.map((tag: any) => {
+          return {
+            item_id: this.tags.find(t => t.item_text == tag)?.item_id ?? 0,
+            item_text: tag
+          };
+        });
+
+        this.selectedLocations = this.offer.locations.map((location: any) => {
+          return {
+            item_id: this.locations.find(l => l.item_text == location)?.item_id ?? 0,
+            item_text: location
+          };
+        });
+
+        console.log(this.selectedLocations)
+        console.log(this.selectedTags)
+        console.log(this.tags)
+      }
+      else {
+        this.toastr.error(x.message);
+      }
+      
+    }, error => {
+      this.toastr.error(error?.error?.title);
+    });
+  }
+
   save() {
     if (!this.locationsValid || !this.tagsValid || !this.availableSpotsValid || !this.priceValid || !this.startDateValid || !this.endDateValid)
       return;
 
+    if (this.offerId == 0)
+      this.createOffer();
+    else 
+      this.editOffer();
+  }
+
+  createOffer() {
     this.offerService.add(this.offer).subscribe(x => 
       {
         if (x.status === 200){
@@ -109,6 +158,19 @@ export class OfferUpsertComponent implements OnInit {
       }, error => {
         this.toastr.error('An error occurred. ' + error.message);
       });
+  }
+
+  editOffer() {
+    this.offerService.edit(this.offer, this.offerId).subscribe(x => 
+      {
+        if (x.status === 200){
+          this.toastr.success(x.message);
+          this.router.navigate(['offers']);
+        } else
+          this.toastr.error(x.message);
+      }, error => {
+        this.toastr.error('An error occurred. ' + error.message);
+      }); 
   }
 
   onLocationSelect(e: any) {
@@ -135,6 +197,14 @@ export class OfferUpsertComponent implements OnInit {
       this.tagsValid = false;
   }
 
+  validateFields() {
+    this.validateAvailableSpots();
+    this.validatePrice();
+    this.validateDates();
+    this.validateTags();
+    this.validateLocations();
+  }
+
   validateAvailableSpots() {
     if (this.offer.availableSpots > 0)
       this.availableSpotsValid = true;
@@ -159,5 +229,19 @@ export class OfferUpsertComponent implements OnInit {
       this.endDateValid = false;
     else
       this.endDateValid = true;
+  }
+
+  validateTags() {
+    if (this.offer.tags.length > 0)
+      this.tagsValid = true;
+    else 
+      this.tagsValid = false;
+  }
+
+  validateLocations() {
+    if (this.offer.locations.length > 0)
+      this.locationsValid = true;
+    else 
+      this.locationsValid = false;
   }
 }

@@ -10,6 +10,11 @@ export class OfferService {
 
   constructor(private http: HttpClient) { }
 
+  edit(obj: any, id: number): Observable<any> {
+    console.log(obj)
+    return this.http.put(`${environment.apiUrl}offer/${id}`, obj);
+  }
+
   add(obj: any): Observable<any> {
     return this.http.post(`${environment.apiUrl}offer`, obj);
   }

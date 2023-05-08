@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { OfferService } from 'src/app/services/offer.service';
 import { formatDate } from '@angular/common';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-offer',
@@ -21,7 +22,7 @@ export class OfferComponent implements OnInit {
   public dateTo: any = new Date();
 
   constructor(private offerService: OfferService,
-    private router: Router) { }
+    private router: Router, public authService: AuthService) { }
 
   ngOnInit(): void {
     this.dateFrom = formatDate(new Date().setDate(new Date().getDate() - 7), "yyyy-MM-dd", "en");

@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
+import { NgxUiLoaderModule, NgxUiLoaderRouterModule, NgxUiLoaderHttpModule, NgxUiLoaderConfig, POSITION, SPINNER } from 'ngx-ui-loader';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { OfferComponent } from './components/offer/offer.component';
@@ -16,6 +17,16 @@ import { HttpInterceptorService } from './helpers/interceptor';
 import { LoginComponent } from './components/login/login.component';
 import { RegistrationComponent } from './components/registration/registration.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
+
+const loaderColor = '#d5b4b4';
+
+const ngxUiLoaderConfig: NgxUiLoaderConfig = {
+  bgsPosition: POSITION.centerCenter,
+  bgsColor: loaderColor,
+  fgsColor: loaderColor,
+  bgsSize: 70,
+  fgsSize: 70
+}
 
 @NgModule({
   declarations: [
@@ -34,6 +45,9 @@ import { NavbarComponent } from './components/navbar/navbar.component';
     BrowserAnimationsModule,    
     ReactiveFormsModule,
     FormsModule,
+    NgxUiLoaderModule.forRoot(ngxUiLoaderConfig),
+    NgxUiLoaderRouterModule.forRoot({ showForeground: false }),
+    NgxUiLoaderHttpModule.forRoot({ showForeground: false }),
     NgMultiSelectDropDownModule.forRoot(),
     ToastrModule.forRoot()
   ],
