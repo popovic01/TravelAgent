@@ -1,0 +1,13 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    min-width: 20rem;
+}
+
+.form {
+    display: flex;
+}
+
+.mat-form-field {
+    flex-grow: 1;
+}

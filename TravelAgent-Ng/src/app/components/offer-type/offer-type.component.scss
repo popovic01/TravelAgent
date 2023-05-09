@@ -1,0 +1,61 @@
+@import '../../../styles.scss';
+
+.container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 3.8rem;
+}
+
+.btn-action {
+    background-color: $dropdown-hover;
+    color: white;
+    border: none;
+    border-radius: 0.2rem;
+    border: 0.1rem solid $dropdown-hover;
+    padding: 0.1rem;
+    width: 2.4rem;
+    margin-right: 0.2rem;
+    transition-duration: 0.2s;
+}
+
+.btn-action:hover {
+    background-color: $card-color;
+    color: $dropdown-hover;
+    border: 0.1rem solid $dropdown-hover;
+}
+
+.mat-form-field {
+    flex-grow: 1;
+}
+
+.no-result {
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+    font-size: 1rem;
+    font-style:  italic;
+}
+
+.mat-cell:nth-child(1),
+.mat-header-cell:nth-child(1){
+    flex: 0 0 5%;   
+}
+
+.mat-cell:nth-child(2),
+.mat-header-cell:nth-child(2){
+    flex: 0 0 40%;
+}
+
+.mat-cell:nth-child(3),
+.mat-header-cell:nth-child(3){
+    flex: 0 0 20%;
+}
+
+.mat-cell:nth-child(4),
+.mat-header-cell:nth-child(4){
+    flex: 0 0 15%;
+}
+
+.title-center {
+    margin: 0 auto;
+} 

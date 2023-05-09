@@ -1,3 +1,23 @@
+
+@import '~@angular/material/theming';
+
+@include mat-core();
+
+$TravelAgent-Ng-primary: mat-palette($mat-pink);
+$TravelAgent-Ng-accent: mat-palette($mat-pink, A200, A100, A400);
+
+$TravelAgent-Ng-warn: mat-palette($mat-red);
+
+$TravelAgent-Ng-theme: mat-light-theme((
+  color: (
+    primary: $TravelAgent-Ng-primary,
+    accent: $TravelAgent-Ng-accent,
+    warn: $TravelAgent-Ng-warn,
+  )
+));
+
+@include angular-material-theme($TravelAgent-Ng-theme);
+
 $btn-background: #9d8189;
 $backgound: #f9f9f9;
 $card-color: #edede9;
@@ -52,3 +72,5 @@ body {
 .form-control-error {
     color: red;
 }
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

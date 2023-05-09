@@ -1,0 +1,52 @@
+<div class="container">
+
+    <mat-form-field>
+        <input matInput placeholder="Pretraži tipove ponuda" (keyup)="applyFilter($event)">
+    </mat-form-field>
+
+    <mat-table #table [dataSource]="dataSource" class="mat-cell" matSort>
+
+        <!--ID-->
+        <ng-container matColumnDef="id">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>ID</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{ row.id }}</mat-cell>
+        </ng-container>
+
+        <!--Naziv-->
+        <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Naziv</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{ row.name }}</mat-cell>
+        </ng-container>
+
+        <!-- Action Buttons -->
+        <ng-container matColumnDef="actions">
+
+        <mat-header-cell *matHeaderCellDef>
+            <button (click)="openDialog(1)" class="btn-action">
+                <mat-icon>add</mat-icon>
+            </button>
+        </mat-header-cell>
+
+        <mat-cell *matCellDef="let row; let i = index">
+            <button (click)="openDialog(2, row.id, row.name)" class="btn-action">
+                <mat-icon aria-label="Edit">edit</mat-icon>
+            </button>
+            <button (click)="openDialog(3, row.id, row.name)" class="btn-action">
+                <mat-icon aria-label="Delete">delete</mat-icon>
+            </button>
+        </mat-cell>
+
+        </ng-container>
+        
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+
+        <mat-row
+        style="cursor: pointer;"
+        *matRowDef="let row; columns: displayedColumns">
+        </mat-row>
+
+    </mat-table>
+
+    <mat-paginator [length]="100" [pageSize]="5" [pageSizeOptions]="[5,10,25,100]"></mat-paginator>
+    
+</div>

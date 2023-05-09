@@ -10,6 +10,18 @@ export class OfferTypeService {
 
   constructor(private http: HttpClient) { }
 
+  edit(obj: any, id: number): Observable<any> {
+    return this.http.put(`${environment.apiUrl}offerType/${id}`, obj);
+  }
+
+  add(obj: any): Observable<any> {
+    return this.http.post(`${environment.apiUrl}offerType`, obj);
+  }
+
+  delete(id: number): Observable<any> {
+    return this.http.delete(`${environment.apiUrl}offerType/${id}`);
+  }
+
   getAll(obj: any): Observable<any> {
     return this.http.post(`${environment.apiUrl}offerType/getAll`, obj);
   }

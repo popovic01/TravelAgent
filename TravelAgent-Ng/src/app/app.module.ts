@@ -4,8 +4,16 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
-import { NgxUiLoaderModule, NgxUiLoaderRouterModule, NgxUiLoaderHttpModule, NgxUiLoaderConfig, POSITION, SPINNER } from 'ngx-ui-loader';
+import { NgxUiLoaderModule, NgxUiLoaderRouterModule, NgxUiLoaderHttpModule, NgxUiLoaderConfig, POSITION } from 'ngx-ui-loader';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { OfferComponent } from './components/offer/offer.component';
@@ -17,6 +25,14 @@ import { HttpInterceptorService } from './helpers/interceptor';
 import { LoginComponent } from './components/login/login.component';
 import { RegistrationComponent } from './components/registration/registration.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { LocationComponent } from './components/location/location.component';
+import { TagComponent } from './components/tag/tag.component';
+import { OfferTypeComponent } from './components/offer-type/offer-type.component';
+import { TransportationTypeComponent } from './components/transportation-type/transportation-type.component';
+import { LocationDialogComponent } from './components/location-dialog/location-dialog.component';
+import { TagDialogComponent } from './components/tag-dialog/tag-dialog.component';
+import { OfferTypeDialogComponent } from './components/offer-type-dialog/offer-type-dialog.component';
+import { TransportationTypeDialogComponent } from './components/transportation-type-dialog/transportation-type-dialog.component';
 
 const loaderColor = '#d5b4b4';
 
@@ -36,7 +52,15 @@ const ngxUiLoaderConfig: NgxUiLoaderConfig = {
     OfferUpsertComponent,
     LoginComponent,
     RegistrationComponent,
-    NavbarComponent
+    NavbarComponent,
+    LocationComponent,
+    TagComponent,
+    OfferTypeComponent,
+    TransportationTypeComponent,
+    LocationDialogComponent,
+    TagDialogComponent,
+    OfferTypeDialogComponent,
+    TransportationTypeDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -45,6 +69,14 @@ const ngxUiLoaderConfig: NgxUiLoaderConfig = {
     BrowserAnimationsModule,    
     ReactiveFormsModule,
     FormsModule,
+    MatToolbarModule,
+    MatPaginatorModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatTableModule,
+    MatIconModule,
+    MatDialogModule,
+    MatSnackBarModule,
     NgxUiLoaderModule.forRoot(ngxUiLoaderConfig),
     NgxUiLoaderRouterModule.forRoot({ showForeground: false }),
     NgxUiLoaderHttpModule.forRoot({ showForeground: false }),

@@ -123,10 +123,6 @@ export class OfferUpsertComponent implements OnInit {
             item_text: location
           };
         });
-
-        console.log(this.selectedLocations)
-        console.log(this.selectedTags)
-        console.log(this.tags)
       }
       else {
         this.toastr.error(x.message);
@@ -150,7 +146,7 @@ export class OfferUpsertComponent implements OnInit {
   createOffer() {
     this.offerService.add(this.offer).subscribe(x => 
       {
-        if (x.status === 200){
+        if (x.status === 200) {
           this.toastr.success(x.message);
           this.router.navigate(['offers']);
         } else
