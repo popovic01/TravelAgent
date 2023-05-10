@@ -8,17 +8,17 @@
                <input matInput placeholder="Naziv" [(ngModel)] = "data.name" name="name" [disabled]= "flag == 3" required>
            </mat-form-field>     
         </div>
-        <div mat-dialog-actions>
-            <button mat-button *ngIf="flag==1" type="submit" [mat-dialog-close]="1" (click)="add()" [disabled]="!formControl.valid">
+        <div class="btn-wrapper">
+            <button class="btn" *ngIf="flag==1" type="submit" [mat-dialog-close]="1" (click)="add()" [disabled]="!formControl.valid">
                 Sačuvaj
             </button>
-            <button mat-button *ngIf="flag==2" type="submit" [mat-dialog-close]="1" (click)="update()" [disabled]="!formControl.valid">
+            <button class="btn" *ngIf="flag==2" type="submit" [mat-dialog-close]="1" (click)="update()" [disabled]="!formControl.valid">
                 Sačuvaj
             </button>
-            <button mat-button *ngIf="flag==3" type="submit" [mat-dialog-close]="1" (click)="delete()">
+            <button class="btn" *ngIf="flag==3" type="submit" [mat-dialog-close]="1" (click)="delete()">
                 Obriši
             </button>
-            <button mat-button (click)="cancel()">
+            <button class="btn" (click)="cancel()">
                 Poništi
             </button>
         </div>
