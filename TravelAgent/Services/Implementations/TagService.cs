@@ -26,14 +26,14 @@ namespace TravelAgent.Services.Implementations
 
             if (tagDb != null)
             {
-                retVal.Message = $"Already exists Tag {tag.Name}";
+                retVal.Message = $"Već postoji tag {tag.Name}";
                 retVal.Status = 409;
             }
             else
             {
                 _context.Tags.Add(_mapper.Map<Tag>(tag));
                 _context.SaveChanges();
-                retVal.Message = $"Successfully added Tag {tag.Name}";
+                retVal.Message = $"Uspešno dodat tag {tag.Name}";
             }
 
             return retVal;
@@ -48,13 +48,13 @@ namespace TravelAgent.Services.Implementations
             if (tag == null)
             {
                 retVal.Status = 404;
-                retVal.Message = $"No Tag with ID {id}";
+                retVal.Message = $"Ne postoji tag sa id-jem {id}";
             }
             else
             {
                 _context.Tags.Remove(tag);
                 _context.SaveChanges();
-                retVal.Message = $"Successfully deleted Tag {tag.Name}";
+                retVal.Message = $"Uspešno obrisan tag {tag.Name}";
             }
             return retVal;
         }
@@ -69,7 +69,7 @@ namespace TravelAgent.Services.Implementations
             if (tag == null)
             {
                 retVal.Status = 404;
-                retVal.Message = $"No Tag with ID {id}";
+                retVal.Message = $"Ne postoji tag sa id-jem {id}";
             }
             else
                 retVal.TransferObject = _mapper.Map<TagDTO>(tag);
@@ -110,18 +110,18 @@ namespace TravelAgent.Services.Implementations
             if (tagDb == null)
             {
                 retVal.Status = 404;
-                retVal.Message = $"No Tag with ID {id}";
+                retVal.Message = $"Ne postoji tag sa id-jem {id}";
             }
             else if (tagNameDb != null)
             {
-                retVal.Message = $"Already exists Tag {tag.Name}";
+                retVal.Message = $"Već postoji tag {tag.Name}";
                 retVal.Status = 409;
             }
             else
             {
                 tagDb.Name = tag.Name;
                 _context.SaveChanges();
-                retVal.Message = $"Successfully updated Tag {tag.Name}";
+                retVal.Message = $"Uspešno izmenjen tag {tag.Name}";
             }
 
             return retVal;

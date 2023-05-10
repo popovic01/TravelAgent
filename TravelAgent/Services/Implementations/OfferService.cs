@@ -48,11 +48,11 @@ namespace TravelAgent.Services.Implementations
 
                 _context.Offers.Add(offerDb);
                 _context.SaveChanges();
-                retVal.Message = $"Successfully added Offer {offer.Name}";
+                retVal.Message = $"Uspešno dodata ponuda {offer.Name}";
             }
             catch (Exception ex)
             {
-                retVal.Message = "Something went wrong";
+                retVal.Message = "Došlo je do greške";
                 retVal.Status = 400;
             }
 
@@ -68,13 +68,13 @@ namespace TravelAgent.Services.Implementations
             if (offer == null)
             {
                 retVal.Status = 404;
-                retVal.Message = $"No Offer with ID {id}";
+                retVal.Message = $"Ne postoji ponuda sa id-jem {id}";
             }
             else
             {
                 _context.Offers.Remove(offer);
                 _context.SaveChanges();
-                retVal.Message = $"Successfully deleted Offer with ID {id}";
+                retVal.Message = $"Uspešno obrisana ponuda sa id-jem {id}";
             }
             return retVal;
         }
@@ -93,18 +93,18 @@ namespace TravelAgent.Services.Implementations
             if (offer == null)
             {
                 retVal.Status = 404;
-                retVal.Message = $"No Offer with ID {offerId}";
+                retVal.Message = $"Ne postoji ponuda sa id-jem {offerId}";
             }
             else if (location == null)
             {
                 retVal.Status = 404;
-                retVal.Message = $"No Location with ID {locationId}";
+                retVal.Message = $"Ne postoji lookacija sa id-jem {locationId}";
             }
             else
             {
                 offer.Locations.Remove(location);
                 _context.SaveChanges();
-                retVal.Message = $"Successfully deleted Location {locationId} for Offer with ID {offerId}";
+                retVal.Message = $"Uspešno obrisana lokacija {locationId} za ponudu sa id-jem {offerId}";
             }
             return retVal;
         }
@@ -123,18 +123,18 @@ namespace TravelAgent.Services.Implementations
             if (offer == null)
             {
                 retVal.Status = 404;
-                retVal.Message = $"No Offer with ID {offerId}";
+                retVal.Message = $"Ne postoji ponuda sa id-jem {offerId}";
             }
             else if (tag == null)
             {
                 retVal.Status = 404;
-                retVal.Message = $"No Tag with ID {tagId}";
+                retVal.Message = $"Ne postoji tag sa id-jem {tagId}";
             }
             else
             {
                 offer.Tags.Remove(tag);
                 _context.SaveChanges();
-                retVal.Message = $"Successfully deleted Tag {tagId} for Offer with ID {offerId}";
+                retVal.Message = $"Uspešno obrisan tag {tagId} za ponudu sa id-jem {offerId}";
             }
             return retVal;
         }
@@ -155,12 +155,12 @@ namespace TravelAgent.Services.Implementations
                 offer.Clients.Add(client);
                 _commonHelper.ExecuteProcedure("WISHLIST_PROCEDURE", offerId, 1);
                 _context.SaveChanges();
-                retVal.Message = $"Successfully added Offer {offer.Name} to your wishlist";
+                retVal.Message = $"Uspešno dodata ponuda {offer.Name} u listu želja";
             }
             else
             {
                 retVal.Status = 404;
-                retVal.Message = "Something went wrong";
+                retVal.Message = "Došlo je do greške";
             }
 
             return retVal;
@@ -182,12 +182,12 @@ namespace TravelAgent.Services.Implementations
                 offer.Clients.Remove(client);
                 _commonHelper.ExecuteProcedure("WISHLIST_PROCEDURE", offerId, 0);
                 _context.SaveChanges();
-                retVal.Message = $"Successfully removed Offer {offer.Name} from your wishlist";
+                retVal.Message = $"Uspešno je uklonjena ponuda {offer.Name} iz liste želja";
             }
             else
             {
                 retVal.Status = 404;
-                retVal.Message = "Something went wrong";
+                retVal.Message = "Došlo je do greške";
             }
 
             return retVal;
@@ -207,7 +207,7 @@ namespace TravelAgent.Services.Implementations
             if (offer == null)
             {
                 retVal.Status = 404;
-                retVal.Message = $"No Offer with ID {id}";
+                retVal.Message = $"Ne postoji ponuda sa id-jem {id}";
             }
             else
             {
@@ -299,7 +299,7 @@ namespace TravelAgent.Services.Implementations
             if (offerDb == null)
             {
                 retVal.Status = 404;
-                retVal.Message = $"No Offer with ID {id}";
+                retVal.Message = $"Ne postoji ponuda sa id-jem {id}";
                 return retVal;
             }
             try
@@ -317,11 +317,11 @@ namespace TravelAgent.Services.Implementations
                 offerDb.Tags = _context.Tags.Where(x => offer.Tags.Contains(x.Name)).ToList();
                 _context.SaveChanges();
 
-                retVal.Message = $"Successfully updated Offer {offer.Name}";
+                retVal.Message = $"Uspešno izmenjena ponuda {offer.Name}";
             }
             catch (Exception ex)
             {
-                retVal.Message = "Something went wrong";
+                retVal.Message = "Došlo je do greške";
                 retVal.Status = 400;
             }
 

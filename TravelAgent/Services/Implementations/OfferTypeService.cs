@@ -26,14 +26,14 @@ namespace TravelAgent.Services.Implementations
 
             if (offerTypeDb != null)
             {
-                retVal.Message = $"Already exists Offer Type {offerType.Name}";
+                retVal.Message = $"Već postoji tip ponude {offerType.Name}";
                 retVal.Status = 409;
             }
             else
             {
                 _context.OfferTypes.Add(_mapper.Map<OfferType>(offerType));
                 _context.SaveChanges();
-                retVal.Message = $"Successfully added Offer Type {offerType.Name}";
+                retVal.Message = $"Uspešno dodat tip ponude {offerType.Name}";
             }
 
             return retVal;
@@ -48,13 +48,13 @@ namespace TravelAgent.Services.Implementations
             if (offerType == null)
             {
                 retVal.Status = 404;
-                retVal.Message = $"No Offer Type with ID {id}";
+                retVal.Message = $"Ne postoji tip ponude sa id-jem {id}";
             }
             else
             {
                 _context.OfferTypes.Remove(offerType);
                 _context.SaveChanges();
-                retVal.Message = $"Successfully deleted Offer Type {offerType.Name}";
+                retVal.Message = $"Uspešno obrisan tip ponude {offerType.Name}";
             }
             return retVal;
         }
@@ -69,7 +69,7 @@ namespace TravelAgent.Services.Implementations
             if (offerType == null)
             {
                 retVal.Status = 404;
-                retVal.Message = $"No Offer Type with ID {id}";
+                retVal.Message = $"Ne postoji tip ponude sa id-jem {id}";
             }
             else
                 retVal.TransferObject = _mapper.Map<OfferTypeDTO>(offerType);
@@ -110,18 +110,18 @@ namespace TravelAgent.Services.Implementations
             if (offerTypeDb == null)
             {
                 retVal.Status = 404;
-                retVal.Message = $"No Offer Type with ID {id}";
+                retVal.Message = $"Ne postoji tip ponude sa id-jem {id}";
             }
             else if (offerNameDb != null)
             {
-                retVal.Message = $"Already exists Offer Type {offerType.Name}";
+                retVal.Message = $"Već postoji tip ponude {offerType.Name}";
                 retVal.Status = 409;
             }
             else
             {
                 offerTypeDb.Name = offerType.Name;
                 _context.SaveChanges();
-                retVal.Message = $"Successfully updated Offer Type {offerType.Name}";
+                retVal.Message = $"Uspešno izmenjen tip ponude {offerType.Name}";
             }
 
             return retVal;

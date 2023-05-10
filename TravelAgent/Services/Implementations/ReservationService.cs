@@ -39,11 +39,11 @@ namespace TravelAgent.Services.Implementations
                 _context.Reservations.Add(reservationDb);
                 _commonHelper.ExecuteProcedure("BUY_OFFER_PROCEDURE", reservation.OfferId, 1);
                 _context.SaveChanges();
-                retVal.Message = $"Successfully added Reservation {reservationDb.ReservationCode}";
+                retVal.Message = $"Uspešno dodata rezervacija {reservationDb.ReservationCode}";
             }
             catch (Exception ex)
             {
-                retVal.Message = "Something went wrong";
+                retVal.Message = "Došlo je do greške";
                 retVal.Status = 400;
             }
 
@@ -61,14 +61,14 @@ namespace TravelAgent.Services.Implementations
             if (reservation == null)
             {
                 retVal.Status = 404;
-                retVal.Message = $"No Reservation with ID {id}";
+                retVal.Message = $"Ne postoji rezervacija sa id-jem {id}";
             }
             else
             {
                 _context.Reservations.Remove(reservation);
                 _commonHelper.ExecuteProcedure("BUY_OFFER_PROCEDURE", reservation.Offer.Id, 0);
                 _context.SaveChanges();
-                retVal.Message = $"Successfully deleted Reservation {reservation.ReservationCode}";
+                retVal.Message = $"Uspešno obrisana rezervacija {reservation.ReservationCode}";
             }
             return retVal;
         }
@@ -85,7 +85,7 @@ namespace TravelAgent.Services.Implementations
             if (reservation == null)
             {
                 retVal.Status = 404;
-                retVal.Message = $"No Reservation with ID {id}";
+                retVal.Message = $"No postoji rezervacija sa id-jem {id}";
             }
             else
                 retVal.TransferObject = _mapper.Map<ReservationDTO>(reservation);
@@ -142,7 +142,7 @@ namespace TravelAgent.Services.Implementations
             if (reservationDb == null)
             {
                 retVal.Status = 404;
-                retVal.Message = $"No Reservation with ID {id}";
+                retVal.Message = $"Ne postoji rezervacija sa id-jem {id}";
             }
             else
             {
@@ -151,7 +151,7 @@ namespace TravelAgent.Services.Implementations
                 reservationDb.Client = (Client)_context.Users.FirstOrDefault(x => x.Id == reservation.ClientId);
                 reservationDb.Offer = _context.Offers.FirstOrDefault(x => x.Id == reservation.OfferId);
                 _context.SaveChanges();
-                retVal.Message = $"Successfully updated Reservation {reservation.ReservationCode}";
+                retVal.Message = $"Uspešno izmenjena rezervacija {reservation.ReservationCode}";
             }
 
             return retVal;

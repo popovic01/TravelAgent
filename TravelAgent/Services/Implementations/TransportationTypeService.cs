@@ -26,14 +26,14 @@ namespace TravelAgent.Services.Implementations
 
             if (transportationTypeDb != null)
             {
-                retVal.Message = $"Already exists Transportation Type {transportationType.Name}";
+                retVal.Message = $"Već postoji tip transporta {transportationType.Name}";
                 retVal.Status = 409;
             }
             else
             {
                 _context.TransportationTypes.Add(_mapper.Map<TransportationType>(transportationType));
                 _context.SaveChanges();
-                retVal.Message = $"Successfully added Transportation Type {transportationType.Name}";
+                retVal.Message = $"Uspešno dodat tip transporta {transportationType.Name}";
             }
 
             return retVal;
@@ -48,13 +48,13 @@ namespace TravelAgent.Services.Implementations
             if (transportationType == null)
             {
                 retVal.Status = 404;
-                retVal.Message = $"No Transportation Type with ID {id}";
+                retVal.Message = $"Ne postoji tip transporta sa id-jem {id}";
             }
             else
             {
                 _context.TransportationTypes.Remove(transportationType);
                 _context.SaveChanges();
-                retVal.Message = $"Successfully deleted Transportation Type {transportationType.Name}";
+                retVal.Message = $"Uspešno obrisan tip transporta {transportationType.Name}";
             }
             return retVal;
         }
@@ -69,7 +69,7 @@ namespace TravelAgent.Services.Implementations
             if (transportationType == null)
             {
                 retVal.Status = 404;
-                retVal.Message = $"No Transportation Type with ID {id}";
+                retVal.Message = $"Ne postoji tip transporta sa id-jem {id}";
             }
             else
                 retVal.TransferObject = _mapper.Map<TransportationTypeDTO>(transportationType);
@@ -110,18 +110,18 @@ namespace TravelAgent.Services.Implementations
             if (transportationTypeDb == null)
             {
                 retVal.Status = 404;
-                retVal.Message = $"No Transportation Type with ID {id}";
+                retVal.Message = $"Ne postoji tip transporta sa id-jem {id}";
             }
             else if (transportationTypeNameDb != null)
             {
-                retVal.Message = $"Already exists Transportation Type {transportationType.Name}";
+                retVal.Message = $"Već postoji tip transporta {transportationType.Name}";
                 retVal.Status = 409;
             }
             else
             {
                 transportationTypeDb.Name = transportationType.Name;
                 _context.SaveChanges();
-                retVal.Message = $"Successfully updated Transportation Type {transportationType.Name}";
+                retVal.Message = $"Uspešno izmenjen tip transporta {transportationType.Name}";
             }
 
             return retVal;

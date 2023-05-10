@@ -26,14 +26,14 @@ namespace TravelAgent.Services.Implementations
 
             if (locationDb != null)
             {
-                retVal.Message = $"Already exists Location {location.Name}";
+                retVal.Message = $"Već postoji lokacija {location.Name}";
                 retVal.Status = 409;
             }
             else
             {
                 _context.Locations.Add(_mapper.Map<Location>(location));
                 _context.SaveChanges();
-                retVal.Message = $"Successfully added Location {location.Name}";
+                retVal.Message = $"Uspešno dodata lokacija {location.Name}";
             }
 
             return retVal;
@@ -48,13 +48,13 @@ namespace TravelAgent.Services.Implementations
             if (location == null)
             {
                 retVal.Status = 404;
-                retVal.Message = $"No Location with ID {id}";
+                retVal.Message = $"Ne postoji lokacija sa id-jem {id}";
             }
             else
             {
                 _context.Locations.Remove(location);
                 _context.SaveChanges();
-                retVal.Message = $"Successfully deleted Location {location.Name}";
+                retVal.Message = $"Uspešno obrisana lokacija {location.Name}";
             }
             return retVal;
         }
@@ -69,7 +69,7 @@ namespace TravelAgent.Services.Implementations
             if (location == null)
             {
                 retVal.Status = 404;
-                retVal.Message = $"No Location with ID {id}";
+                retVal.Message = $"Ne postoji lokacija sa id-jem {id}";
             }
             else
                 retVal.TransferObject = _mapper.Map<LocationDTO>(location);
@@ -110,18 +110,18 @@ namespace TravelAgent.Services.Implementations
             if (locationDb == null)
             {
                 retVal.Status = 404;
-                retVal.Message = $"No Location with ID {id}";
+                retVal.Message = $"Ne postoji lokacija sa id-jem {id}";
             }
             else if (locationNameDb != null)
             {
-                retVal.Message = $"Already exists Location {location.Name}";
+                retVal.Message = $"Već postoji lokacija {location.Name}";
                 retVal.Status = 409;
             }
             else
             {
                 locationDb.Name = location.Name;
                 _context.SaveChanges();
-                retVal.Message = $"Successfully updated Location {location.Name}";
+                retVal.Message = $"Uspešno izmenjena lokacija {location.Name}";
             }
 
             return retVal;

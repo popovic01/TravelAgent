@@ -29,7 +29,7 @@ namespace TravelAgent.Services.Implementations
 
             if (userDb != null)
             {
-                retVal.Message = $"Already exists User {dataIn.Username}";
+                retVal.Message = $"Već postoji korisnik {dataIn.Username}";
                 retVal.Status = 409;
             }
             else
@@ -46,7 +46,7 @@ namespace TravelAgent.Services.Implementations
 
                 _context.Users.Add(user);
                 _context.SaveChanges();
-                retVal.Message = $"Successfully registered User {dataIn.Username}";
+                retVal.Message = $"Uspešno registrovan korisnik {dataIn.Username}";
 
                 string token = _auth.CreateToken(user);
                 retVal.TransferObject = token;
@@ -68,18 +68,18 @@ namespace TravelAgent.Services.Implementations
                 {
                     string token = _auth.CreateToken(userFromDb);
 
-                    retVal.Message = $"You logged in successfully";
+                    retVal.Message = $"Uspešna prijava";
                     retVal.TransferObject = token;
                 }
                 else
                 {
-                    retVal.Message = $"Password is not correct";
+                    retVal.Message = $"Neispravna lozinka";
                     retVal.Status = 401;
                 }
             }
             else
             {
-                retVal.Message = $"Username {user.Username} doesn't exist";
+                retVal.Message = $"Korisničko ime {user.Username} ne postoji";
                 retVal.Status = 404;
             }
 
@@ -96,13 +96,13 @@ namespace TravelAgent.Services.Implementations
             if (user == null)
             {
                 retVal.Status = 404;
-                retVal.Message = $"No User with ID {id}";
+                retVal.Message = $"Ne postoji korisnik sa id-jem {id}";
             }
             else
             {
                 _context.Users.Remove(user);
                 _context.SaveChanges();
-                retVal.Message = $"Successfully deleted User {user.Username}";
+                retVal.Message = $"Uspešno obrisan korisnik {user.Username}";
             }
             return retVal;
         }
@@ -117,7 +117,7 @@ namespace TravelAgent.Services.Implementations
             if (user == null)
             {
                 retVal.Status = 404;
-                retVal.Message = $"No User with ID {id}";
+                retVal.Message = $"Ne postoji korisnik sa id-jem {id}";
             }
             else
                 retVal.TransferObject = _mapper.Map<UserResponseDTO>(user);
@@ -160,11 +160,11 @@ namespace TravelAgent.Services.Implementations
             if (userDb == null)
             {
                 retVal.Status = 404;
-                retVal.Message = $"No User with ID {id}";
+                retVal.Message = $"Ne postoji korisnik sa id-jem {id}";
             }
             else if (userNameDb != null && userNameDb.Id != userDb.Id)
             {
-                retVal.Message = $"Already exists User {user.Username}";
+                retVal.Message = $"Već postoji korisnik {user.Username}";
                 retVal.Status = 409;
             }
             else
@@ -177,7 +177,7 @@ namespace TravelAgent.Services.Implementations
                 userDb.PasswordHash = passwordHash;
                 userDb.PasswordSalt = passwordSalt;
                 _context.SaveChanges();
-                retVal.Message = $"Successfully updated User {user.Username}";
+                retVal.Message = $"Uspešno izmenjeno korisnik {user.Username}";
             }
 
             return retVal;

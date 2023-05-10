@@ -28,13 +28,13 @@ namespace TravelAgent.Services.Implementations
             if (offerReq == null)
             {
                 retVal.Status = 404;
-                retVal.Message = $"No Offer with ID {id}";
+                retVal.Message = $"Ne postoji zahtev za ponudom sa id-jem {id}";
             }
             else
             {
                 _context.OfferRequests.Remove(offerReq);
                 _context.SaveChanges();
-                retVal.Message = $"Successfully deleted Requested Offer with ID {id}";
+                retVal.Message = $"Uspešno obrisan zahtev za ponudom sa id-jem {id}";
             }
             return retVal;
         }
@@ -91,7 +91,7 @@ namespace TravelAgent.Services.Implementations
             if (offerReq == null)
             {
                 retVal.Status = 404;
-                retVal.Message = $"No Offer with ID {offerReqId}";
+                retVal.Message = $"Ne postoji zahtev za ponudom sa id-jem {offerReqId}";
             }
             else
             {
@@ -121,11 +121,11 @@ namespace TravelAgent.Services.Implementations
 
                 _context.OfferRequests.Add(offerReqDb);
                 _context.SaveChanges();
-                retVal.Message = $"Your Offer Reqest has been successfully submitted.";
+                retVal.Message = $"Zahtev za ponudom je uspešno poslat";
             }
             catch (Exception ex)
             {
-                retVal.Message = "Something went wrong";
+                retVal.Message = "Došlo je do greške";
                 retVal.Status = 400;
             }
             return retVal;
@@ -143,7 +143,7 @@ namespace TravelAgent.Services.Implementations
             if (offerReqDb == null)
             {
                 retVal.Status = 404;
-                retVal.Message = $"No Offer Request with ID {id}";
+                retVal.Message = $"Ne postoji zahtev za ponudom sa id-jem {id}";
                 return retVal;
             }
             try
@@ -158,11 +158,11 @@ namespace TravelAgent.Services.Implementations
                 offerReqDb.Locations = _context.Locations.Where(x => dataIn.LocationIds.Contains(x.Id)).ToList();
                 _context.SaveChanges();
 
-                retVal.Message = $"Successfully updated Offer Requeste with ID {id}";
+                retVal.Message = $"Uspešno izmenjen zahtev za ponudom sa id-jem {id}";
             }
             catch (Exception ex)
             {
-                retVal.Message = "Something went wrong";
+                retVal.Message = "Došlo je do greške";
                 retVal.Status = 400;
             }
 
