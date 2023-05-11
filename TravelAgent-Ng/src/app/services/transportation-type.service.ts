@@ -26,7 +26,4 @@ export class TransportationTypeService {
     return this.http.post(`${environment.apiUrl}transportationType/getAll`, obj);
   }
 
-  getById(id: number): Observable<any> {
-    return this.http.get(`${environment.apiUrl}transportationType/${id}`);
-  }
 }

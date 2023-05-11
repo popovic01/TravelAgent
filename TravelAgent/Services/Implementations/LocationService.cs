@@ -59,40 +59,17 @@ namespace TravelAgent.Services.Implementations
             return retVal;
         }
 
-        public ResponsePackage<LocationDTO> Get(int id)
-        {
-            var retVal = new ResponsePackage<LocationDTO>();
-
-            var location = _context.Locations
-                .FirstOrDefault(x => x.Id == id);
-
-            if (location == null)
-            {
-                retVal.Status = 404;
-                retVal.Message = $"Ne postoji lokacija sa id-jem {id}";
-            }
-            else
-                retVal.TransferObject = _mapper.Map<LocationDTO>(location);
-
-            return retVal;
-        }
-
-        public PaginationDataOut<LocationIdDTO> GetAll(FilterParamsDTO filterParams)
+        public PaginationDataOut<LocationIdDTO> GetAll(PageInfo pageInfo)
         {
             PaginationDataOut<LocationIdDTO> retVal = new ();
 
             IQueryable<Location> locations = _context.Locations;
-
-            if (!string.IsNullOrWhiteSpace(filterParams.SearchFilter))
-            {
-                locations = locations.Where(x => x.Name.ToLower().Contains(filterParams.SearchFilter));
-            }
             retVal.Count = locations.Count();
 
-            //locations = locations
-            //    .OrderByDescending(x => x.Id)
-            //    .Skip(filterParams.PageSize * (filterParams.Page - 1))
-            //    .Take(filterParams.PageSize);
+            locations = locations
+                .OrderByDescending(x => x.Id)
+                .Skip(pageInfo.PageSize * (pageInfo.Page))
+                .Take(pageInfo.PageSize);
 
             locations.ToList().ForEach(x => retVal.Data.Add(_mapper.Map<LocationIdDTO>(x)));
             return retVal;

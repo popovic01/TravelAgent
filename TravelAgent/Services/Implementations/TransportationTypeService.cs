@@ -59,40 +59,17 @@ namespace TravelAgent.Services.Implementations
             return retVal;
         }
 
-        public ResponsePackage<TransportationTypeDTO> Get(int id)
-        {
-            var retVal = new ResponsePackage<TransportationTypeDTO>();
-
-            var transportationType = _context.TransportationTypes
-                .FirstOrDefault(x => x.Id == id);
-
-            if (transportationType == null)
-            {
-                retVal.Status = 404;
-                retVal.Message = $"Ne postoji tip transporta sa id-jem {id}";
-            }
-            else
-                retVal.TransferObject = _mapper.Map<TransportationTypeDTO>(transportationType);
-
-            return retVal;
-        }
-
-        public PaginationDataOut<TransportationTypeDTO> GetAll(FilterParamsDTO filterParams)
+        public PaginationDataOut<TransportationTypeDTO> GetAll(PageInfo pageInfo)
         {
             PaginationDataOut<TransportationTypeDTO> retVal = new PaginationDataOut<TransportationTypeDTO>();
 
             IQueryable<TransportationType> transportationTypes = _context.TransportationTypes;
-
-            if (!string.IsNullOrWhiteSpace(filterParams.SearchFilter))
-            {
-                transportationTypes = transportationTypes.Where(x => x.Name.ToLower().Contains(filterParams.SearchFilter));
-            }
             retVal.Count = transportationTypes.Count();
 
             transportationTypes = transportationTypes
                 .OrderByDescending(x => x.Id)
-                .Skip(filterParams.PageSize * (filterParams.Page - 1))
-                .Take(filterParams.PageSize);
+                .Skip(pageInfo.PageSize * (pageInfo.Page))
+                .Take(pageInfo.PageSize);
 
             transportationTypes.ToList().ForEach(x => retVal.Data.Add(_mapper.Map<TransportationTypeDTO>(x)));
             return retVal;

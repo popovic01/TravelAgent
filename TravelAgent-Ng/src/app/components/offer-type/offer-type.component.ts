@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subscription } from 'rxjs';
@@ -20,11 +20,10 @@ export class OfferTypeComponent implements OnInit, OnDestroy {
     dataSource!: MatTableDataSource<OfferType>;
     subscription!: Subscription;
     @ViewChild(MatSort, {static: false}) sort!: MatSort;
-    @ViewChild(MatPaginator, {static: false}) paginator!: MatPaginator;
 
     public currentPage: number = 1;
     public pageSize: number = 10;
-    public count: number = 0;
+    public length: number = 0;
     public search: string = '';
 
   constructor(private offerTypeService: OfferTypeService, public dialog: MatDialog) { }
@@ -33,25 +32,28 @@ export class OfferTypeComponent implements OnInit, OnDestroy {
     this.loadData();
   }
 
-  loadData() {
-    let obj = this.getTableParams();
+  loadData(event?: PageEvent) {
+    let obj = this.getTableParams(event);
     this.subscription = this.offerTypeService.getAll(obj).subscribe(x => {
+      this.length = x.count;
       this.dataSource = new MatTableDataSource(x.data);
       this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
     },
     (error: Error) => {
       console.log(error.name + ' ' + error.message);
     });
   }
 
-  private getTableParams() {  
-    let obj = {
-      pageSize: this.pageSize,
-      page: this.currentPage,
-      searchFilter: this.search,
+  private getTableParams(event?: PageEvent) {  
+    if (event != null) {
+      this.pageSize = event.pageSize;
+      this.currentPage = event.pageIndex + 1;
     }
-            
+    let obj = {
+      pageSize: event == null ? this.pageSize : event.pageSize,
+      page: event == null ? this.currentPage - 1: event.pageIndex
+    }
+              
     return obj;
   }
 

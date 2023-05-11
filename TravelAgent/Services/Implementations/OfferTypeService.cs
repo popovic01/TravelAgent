@@ -59,40 +59,17 @@ namespace TravelAgent.Services.Implementations
             return retVal;
         }
 
-        public ResponsePackage<OfferTypeDTO> Get(int id)
-        {
-            var retVal = new ResponsePackage<OfferTypeDTO>();
-
-            var offerType = _context.OfferTypes
-                .FirstOrDefault(x => x.Id == id);
-
-            if (offerType == null)
-            {
-                retVal.Status = 404;
-                retVal.Message = $"Ne postoji tip ponude sa id-jem {id}";
-            }
-            else
-                retVal.TransferObject = _mapper.Map<OfferTypeDTO>(offerType);
-
-            return retVal;
-        }
-
-        public PaginationDataOut<OfferTypeDTO> GetAll(FilterParamsDTO filterParams)
+        public PaginationDataOut<OfferTypeDTO> GetAll(PageInfo pageInfo)
         {
             PaginationDataOut<OfferTypeDTO> retVal = new PaginationDataOut<OfferTypeDTO>();
 
             IQueryable<OfferType> offerTypes = _context.OfferTypes;
-
-            if (!string.IsNullOrWhiteSpace(filterParams.SearchFilter))
-            {
-                offerTypes = offerTypes.Where(x => x.Name.ToLower().Contains(filterParams.SearchFilter));
-            }
             retVal.Count = offerTypes.Count();
 
             offerTypes = offerTypes
                 .OrderByDescending(x => x.Id)
-                .Skip(filterParams.PageSize * (filterParams.Page - 1))
-                .Take(filterParams.PageSize);
+                .Skip(pageInfo.PageSize * (pageInfo.Page))
+                .Take(pageInfo.PageSize);
 
             offerTypes.ToList().ForEach(x => retVal.Data.Add(_mapper.Map<OfferTypeDTO>(x)));
             return retVal;

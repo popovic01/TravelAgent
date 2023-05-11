@@ -26,7 +26,4 @@ export class OfferTypeService {
     return this.http.post(`${environment.apiUrl}offerType/getAll`, obj);
   }
 
-  getById(id: number): Observable<any> {
-    return this.http.get(`${environment.apiUrl}offerType/${id}`);
-  }
 }

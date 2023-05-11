@@ -5,8 +5,7 @@ namespace TravelAgent.Services.Interfaces
 {
     public interface IOfferTypeService
     {
-        public PaginationDataOut<OfferTypeDTO> GetAll(FilterParamsDTO filterParams);
-        public ResponsePackage<OfferTypeDTO> Get(int id);
+        public PaginationDataOut<OfferTypeDTO> GetAll(PageInfo pageInfo);
         public ResponsePackageNoData Add(OfferTypeDTO offerType);
         public ResponsePackageNoData Update(int id, OfferTypeDTO offerType);
         public ResponsePackageNoData Delete(int id);

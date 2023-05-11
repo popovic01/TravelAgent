@@ -23,18 +23,18 @@ ngOnInit(): void {}
 public add(): void {
   this.subscription = this.transportationTypeService.add(this.data).subscribe(x => {
     if (x.status === 200) {
-      this.snackBar.open('Uspešno dodat tipa prevoza: ' + this.data.name, 'OK', {duration: 2500});
+      this.snackBar.open(x.message, 'OK', {duration: 2500});
     } else
       this.snackBar.open(x.message);
   }, () => {
-      this.snackBar.open('Došlo je do greške prilikom dodavanja novog tipa prevoza!', 'Zatvori', {duration: 2500})
+      this.snackBar.open('Došlo je do greške prilikom dodavanja novog tipa prevoz', 'Zatvori', {duration: 2500})
   });
 }
 
 public update(): void {
   this.subscription = this.transportationTypeService.edit(this.data, this.data.id).subscribe(x => {
     if (x.status === 200) {
-      this.snackBar.open('Uspešno izmenjen tip prevoza: ' + this.data.name, 'OK', {duration: 2500})
+      this.snackBar.open(x.message, 'OK', {duration: 2500})
     } else
       this.snackBar.open(x.message);
   }, () => {
@@ -45,11 +45,11 @@ public update(): void {
 public delete(): void {
   this.subscription = this.transportationTypeService.delete(this.data.id).subscribe(x => {
     if (x.status === 200) {
-      this.snackBar.open('Uspešno obrisan tipa prevoza: ' + this.data.name, 'OK', {duration: 2500})
+      this.snackBar.open(x.message, 'OK', {duration: 2500})
     } else
       this.snackBar.open(x.message);
   }, () => {
-      this.snackBar.open('Došlo je do greške prilikom brisanja postojećeg tipa prevoza!', 'Zatvori', {duration: 2500})
+      this.snackBar.open('Došlo je do greške prilikom brisanja postojećeg tipa prevoza', 'Zatvori', {duration: 2500})
   });
 }
 

@@ -26,7 +26,4 @@ export class TagService {
     return this.http.post(`${environment.apiUrl}tag/getAll`, obj);
   }
 
-  getById(id: number): Observable<any> {
-    return this.http.get(`${environment.apiUrl}tag/${id}`);
-  }
 }

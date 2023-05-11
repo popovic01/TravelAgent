@@ -9,6 +9,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -71,6 +72,7 @@ const ngxUiLoaderConfig: NgxUiLoaderConfig = {
     FormsModule,
     MatToolbarModule,
     MatPaginatorModule,
+    MatSortModule,
     MatFormFieldModule,
     MatInputModule,
     MatTableModule,

@@ -25,8 +25,5 @@ export class LocationService {
   getAll(obj: any): Observable<any> {
     return this.http.post(`${environment.apiUrl}location/getAll`, obj);
   }
-
-  getById(id: number): Observable<any> {
-    return this.http.get(`${environment.apiUrl}location/${id}`);
-  }
+  
 }

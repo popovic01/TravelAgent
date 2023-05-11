@@ -24,33 +24,33 @@ ngOnInit(): void {}
 public add(): void {
   this.subscription = this.locationService.add(this.data).subscribe(x => {
     if (x.status === 200) {
-      this.snackBar.open('Uspešno dodata lokacija: ' + this.data.name, 'OK', {duration: 2500});
+      this.snackBar.open(x.message, 'OK', {duration: 2500});
     } else
       this.snackBar.open(x.message);
   }, () => {
-      this.snackBar.open('Došlo je do greške prilikom dodavanja nove lokacije!', 'Zatvori', {duration: 2500})
+      this.snackBar.open('Došlo je do greške prilikom dodavanja nove lokacije', 'Zatvori', {duration: 2500})
   });
 }
 
 public update(): void {
   this.subscription = this.locationService.edit(this.data, this.data.id).subscribe(x => {
     if (x.status === 200) {
-      this.snackBar.open('Uspešno izmenjena lokacija: ' + this.data.name, 'OK', {duration: 2500})
+      this.snackBar.open(x.message, 'OK', {duration: 2500})
     } else
       this.snackBar.open(x.message);
   }, () => {
-      this.snackBar.open('Došlo je do greške prilikom modifikacije lokacije!', 'Zatvori', {duration: 2500})
+      this.snackBar.open('Došlo je do greške prilikom modifikacije lokacije', 'Zatvori', {duration: 2500})
   });
 }
 
 public delete(): void {
   this.subscription = this.locationService.delete(this.data.id).subscribe(x => {
     if (x.status === 200) {
-      this.snackBar.open('Uspešno obrisana lokacija: ' + this.data.name, 'OK', {duration: 2500})
+      this.snackBar.open(x.message, 'OK', {duration: 2500})
     } else
       this.snackBar.open(x.message);
   }, () => {
-      this.snackBar.open('Došlo je do greške prilikom brisanja postojeće lokacije!', 'Zatvori', {duration: 2500})
+      this.snackBar.open('Došlo je do greške prilikom brisanja postojeće lokacije', 'Zatvori', {duration: 2500})
   });
 }
 

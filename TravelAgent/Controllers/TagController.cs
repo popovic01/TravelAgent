@@ -19,16 +19,9 @@ namespace TravelAgent.Controllers
 
         [HttpPost("getAll")]
         [AuthRole("Role", "admin,client")]
-        public ActionResult GetAll(FilterParamsDTO filterParams)
+        public ActionResult GetAll(PageInfo pageInfo)
         {
-            return Ok(_tagService.GetAll(filterParams));
-        }
-
-        [HttpGet("{id}")]
-        [AuthRole("Role", "admin")]
-        public ActionResult GetById(int id)
-        {
-            return Ok(_tagService.Get(id));
+            return Ok(_tagService.GetAll(pageInfo));
         }
 
         [HttpPost]
