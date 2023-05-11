@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ToastrService } from 'ngx-toastr';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Offer } from 'src/app/models/offer.model';
 import { Location } from 'src/app/models/location.model';
 import { IDropdownSettings, } from 'ng-multiselect-dropdown';
@@ -40,7 +40,7 @@ export class OfferUpsertComponent implements OnInit {
   selectedTags: any[] = [];
   selectedLocations: any[] = [];
 
-  constructor(private toastr: ToastrService, private locationService: LocationService,
+  constructor(public snackBar: MatSnackBar, private locationService: LocationService,
     private tagService: TagService, private transportationTypeService: TransportationTypeService, 
     private offerTypeService: OfferTypeService, private offerService: OfferService, 
     private router: Router, private route: ActivatedRoute, private datePipe: DatePipe) { }
@@ -125,11 +125,11 @@ export class OfferUpsertComponent implements OnInit {
         });
       }
       else {
-        this.toastr.error(x.message);
+        this.snackBar.open(x?.message, 'OK', {duration: 2500});
       }
       
     }, error => {
-      this.toastr.error(error?.error?.title);
+      this.snackBar.open(error?.error?.title, 'OK', {duration: 2500});
     });
   }
 
@@ -147,12 +147,12 @@ export class OfferUpsertComponent implements OnInit {
     this.offerService.add(this.offer).subscribe(x => 
       {
         if (x.status === 200) {
-          this.toastr.success(x.message);
-          this.router.navigate(['offers']);
+        this.snackBar.open(x?.message, 'OK', {duration: 2500});
+        this.router.navigate(['offers']);
         } else
-          this.toastr.error(x.message);
+        this.snackBar.open(x?.message, 'OK', {duration: 2500});
       }, error => {
-        this.toastr.error('An error occurred. ' + error.message);
+        this.snackBar.open(error?.message, 'OK', {duration: 2500});
       });
   }
 
@@ -160,12 +160,12 @@ export class OfferUpsertComponent implements OnInit {
     this.offerService.edit(this.offer, this.offerId).subscribe(x => 
       {
         if (x.status === 200){
-          this.toastr.success(x.message);
-          this.router.navigate(['offers']);
+        this.snackBar.open(x?.message, 'OK', {duration: 2500});
+        this.router.navigate(['offers']);
         } else
-          this.toastr.error(x.message);
+        this.snackBar.open(x?.message, 'OK', {duration: 2500});
       }, error => {
-        this.toastr.error('An error occurred. ' + error.message);
+        this.snackBar.open(error?.message, 'OK', {duration: 2500});
       }); 
   }
 

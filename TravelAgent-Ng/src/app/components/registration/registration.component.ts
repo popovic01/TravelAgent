@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { User } from 'src/app/models/user.model';
 import { AuthService } from 'src/app/services/auth.service';
 
@@ -15,7 +15,7 @@ export class RegistrationComponent implements OnInit {
 
   constructor(private authService: AuthService, 
     private router: Router, 
-    private toastr: ToastrService) { }
+    public snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
   }
@@ -27,11 +27,11 @@ export class RegistrationComponent implements OnInit {
         this.router.navigate(['/']);
       }
       else {
-        this.toastr.error(x.message);
+        this.snackBar.open(x?.message, 'OK', {duration: 2500});
       }
       
     }, error => {
-      this.toastr.error(error?.error?.title);
+      this.snackBar.open(error?.message, 'OK', {duration: 2500});
     });
   }
 

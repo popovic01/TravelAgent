@@ -2,7 +2,7 @@ import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpResponse, Htt
 import { Observable, throwError } from "rxjs";
 import { Injectable } from '@angular/core';
 import { tap, catchError } from 'rxjs/operators';
-import { ToastrService } from "ngx-toastr";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Injectable()
 export class HttpInterceptorService implements HttpInterceptor {
@@ -13,7 +13,7 @@ export class HttpInterceptorService implements HttpInterceptor {
   public static errorResponses = [400, 401, 403, 404, 405];
   public static serverErrorResponses = [500, 504];
 
-  constructor(private toastr: ToastrService) { }
+  constructor(public snackBar: MatSnackBar) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
@@ -32,8 +32,8 @@ export class HttpInterceptorService implements HttpInterceptor {
         }
       }), catchError((err: any) => {
         if (err instanceof HttpErrorResponse) {
-          if(err.status == 401 && !err.error)
-            this.toastr.error('Sesija je istekla. Ulogujte se ponovo.');
+          if (err.status == 401 && !err.error)
+            this.snackBar.open('Sesija je istekla. Ulogujte se ponovo.', 'OK', {duration: 2500});
         }
         return throwError(err);
       }));

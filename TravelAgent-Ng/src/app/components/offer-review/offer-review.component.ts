@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { OfferService } from 'src/app/services/offer.service';
 
 @Component({
@@ -15,7 +15,7 @@ export class OfferReviewComponent implements OnInit {
 
   constructor(private offerService: OfferService,
     private route: ActivatedRoute,
-    private toastr: ToastrService) { }
+    public snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.route.params.subscribe(x => {
@@ -27,10 +27,10 @@ export class OfferReviewComponent implements OnInit {
         this.offer = x.transferObject;
         console.log(this.offer);
       } else {
-        this.toastr.error(x?.message);
+        this.snackBar.open(x?.message, 'OK', {duration: 2500});
       }
     }, error => {
-      this.toastr.error(error?.statusText);
+      this.snackBar.open(error?.statusText, 'OK', {duration: 2500});
     });
   }
 

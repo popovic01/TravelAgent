@@ -19,7 +19,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { OfferComponent } from './components/offer/offer.component';
 import { OfferReviewComponent } from './components/offer-review/offer-review.component';
-import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { OfferUpsertComponent } from './components/offer-upsert/offer-upsert.component';
 import { HttpInterceptorService } from './helpers/interceptor';
@@ -82,8 +81,7 @@ const ngxUiLoaderConfig: NgxUiLoaderConfig = {
     NgxUiLoaderModule.forRoot(ngxUiLoaderConfig),
     NgxUiLoaderRouterModule.forRoot({ showForeground: false }),
     NgxUiLoaderHttpModule.forRoot({ showForeground: false }),
-    NgMultiSelectDropDownModule.forRoot(),
-    ToastrModule.forRoot()
+    NgMultiSelectDropDownModule.forRoot()
   ],
   providers: [
     {
