@@ -35,6 +35,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthHelper, AuthHelper>();
 builder.Services.AddScoped<ICommonHelper, CommonHelper>();
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
@@ -45,6 +46,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseStaticFiles();
 app.UseHttpsRedirection();
 
 app.UseCors("EnableCORS");

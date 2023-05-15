@@ -4,7 +4,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subscription } from 'rxjs';
-import { OfferType } from 'src/app/models/offerType';
+import { OfferType } from 'src/app/models/offer-type';
 import { OfferTypeService } from 'src/app/services/offer-type.service';
 import { OfferTypeDialogComponent } from '../offer-type-dialog/offer-type-dialog.component';
 

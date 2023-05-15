@@ -4,7 +4,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subscription } from 'rxjs';
-import { TransportationType } from 'src/app/models/transportationType';
+import { TransportationType } from 'src/app/models/transportation-type';
 import { TransportationTypeService } from 'src/app/services/transportation-type.service';
 import { TransportationTypeDialogComponent } from '../transportation-type-dialog/transportation-type-dialog.component';
 

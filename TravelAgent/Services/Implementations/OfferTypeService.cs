@@ -66,10 +66,13 @@ namespace TravelAgent.Services.Implementations
             IQueryable<OfferType> offerTypes = _context.OfferTypes;
             retVal.Count = offerTypes.Count();
 
-            offerTypes = offerTypes
-                .OrderByDescending(x => x.Id)
-                .Skip(pageInfo.PageSize * (pageInfo.Page))
-                .Take(pageInfo.PageSize);
+            if (!pageInfo.GetAll)
+            {
+                offerTypes = offerTypes
+                    .OrderByDescending(x => x.Id)
+                    .Skip(pageInfo.PageSize * (pageInfo.Page))
+                    .Take(pageInfo.PageSize);
+            }
 
             offerTypes.ToList().ForEach(x => retVal.Data.Add(_mapper.Map<OfferTypeDTO>(x)));
             return retVal;

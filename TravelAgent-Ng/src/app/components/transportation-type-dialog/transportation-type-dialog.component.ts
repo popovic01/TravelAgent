@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
-import { TransportationType } from 'src/app/models/transportationType';
+import { TransportationType } from 'src/app/models/transportation-type';
 import { TransportationTypeService } from 'src/app/services/transportation-type.service';
 @Component({
   selector: 'app-transportation-type-dialog',

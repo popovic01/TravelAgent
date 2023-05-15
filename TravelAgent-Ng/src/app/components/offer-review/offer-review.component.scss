@@ -96,6 +96,8 @@
 
         .bold {
             font-size: 1.4rem;
+            margin-top: 0.3rem;
+            font-weight: 500;
         }
 
         .info-wrapper {
@@ -114,8 +116,13 @@
             padding: 1rem;
             border: 0.1rem $btn-background solid;
 
+            .location-text {
+                margin-bottom: 0.4rem;
+            }
+
             .location {
                 font-size: 1.4rem;
+                margin-bottom: 0.2rem;
             }
         }
 
@@ -139,6 +146,7 @@
                 .price {
                     color: $turquoise;
                     font-size: 2rem;
+                    margin-top: 0.4rem;
                 }
             }
 

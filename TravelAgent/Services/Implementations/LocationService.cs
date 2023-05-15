@@ -66,10 +66,13 @@ namespace TravelAgent.Services.Implementations
             IQueryable<Location> locations = _context.Locations;
             retVal.Count = locations.Count();
 
-            locations = locations
-                .OrderByDescending(x => x.Id)
-                .Skip(pageInfo.PageSize * (pageInfo.Page))
-                .Take(pageInfo.PageSize);
+            if (!pageInfo.GetAll)
+            {
+                locations = locations
+                    .OrderByDescending(x => x.Id)
+                    .Skip(pageInfo.PageSize * (pageInfo.Page))
+                    .Take(pageInfo.PageSize);
+            }
 
             locations.ToList().ForEach(x => retVal.Data.Add(_mapper.Map<LocationIdDTO>(x)));
             return retVal;

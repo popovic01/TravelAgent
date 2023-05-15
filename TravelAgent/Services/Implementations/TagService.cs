@@ -66,10 +66,13 @@ namespace TravelAgent.Services.Implementations
             IQueryable<Tag> tags = _context.Tags;
             retVal.Count = tags.Count();
 
-            tags = tags
-                .OrderByDescending(x => x.Id)
-                .Skip(pageInfo.PageSize * (pageInfo.Page))
-                .Take(pageInfo.PageSize);
+            if (!pageInfo.GetAll)
+            {
+                tags = tags
+                    .OrderByDescending(x => x.Id)
+                    .Skip(pageInfo.PageSize * (pageInfo.Page))
+                    .Take(pageInfo.PageSize);
+            }
 
             tags.ToList().ForEach(x => retVal.Data.Add(_mapper.Map<TagIdDTO>(x)));
             return retVal;

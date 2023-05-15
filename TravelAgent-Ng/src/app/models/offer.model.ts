@@ -1,6 +1,7 @@
 export class Offer {
     id: number = 0;
     name: string = '';
+    imagePath: string = '';
     description: string = '';
     departureLocation: string = '';
     startDate: string = '';

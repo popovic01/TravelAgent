@@ -10,8 +10,7 @@ import { TransportationTypeService } from 'src/app/services/transportation-type.
 import { OfferTypeService } from 'src/app/services/offer-type.service';
 import { OfferService } from 'src/app/services/offer.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DatePipe, formatDate } from '@angular/common';
-import { type } from 'os';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-offer-upsert',
@@ -23,6 +22,8 @@ export class OfferUpsertComponent implements OnInit {
 
   offer: Offer = new Offer();
   offerId: number = 0;
+
+  image: File | undefined;
 
   transportationTypes: any[] = [];
   offerTypes: any[] = [];
@@ -62,9 +63,9 @@ export class OfferUpsertComponent implements OnInit {
 
   getDataFromBackend() {
     let obj = {
-      searchFilter: "",
-      page: 1,
-      pageSize: 10
+      page: 0,
+      pageSize: 10,
+      getAll: true
     }
 
     this.locationService.getAll(obj).subscribe(x => 
@@ -144,7 +145,16 @@ export class OfferUpsertComponent implements OnInit {
   }
 
   createOffer() {
-    this.offerService.add(this.offer).subscribe(x => 
+    const formData: FormData = new FormData();
+    formData.append('dataIn', JSON.stringify(this.offer));
+    if (this.image) {
+      formData.append('image', this.image);
+    }
+    console.log(this.offer)
+    console.log(formData)
+    console.log(this.image)
+
+    this.offerService.add(formData).subscribe(x => 
       {
         if (x.status === 200) {
         this.snackBar.open(x?.message, 'OK', {duration: 2500});
@@ -167,6 +177,17 @@ export class OfferUpsertComponent implements OnInit {
       }, error => {
         this.snackBar.open(error?.message, 'OK', {duration: 2500});
       }); 
+  }
+
+  onFileSelected(e: any) {
+    if (e.target.files) {
+      var reader = new FileReader();
+      reader.readAsDataURL(e.target.files[0]);
+      reader.onload = (event: any) => {
+        this.offer.imagePath = event.target.result;
+      };
+      this.image = e.target.files[0] as File;
+    }
   }
 
   onLocationSelect(e: any) {

@@ -66,10 +66,13 @@ namespace TravelAgent.Services.Implementations
             IQueryable<TransportationType> transportationTypes = _context.TransportationTypes;
             retVal.Count = transportationTypes.Count();
 
-            transportationTypes = transportationTypes
-                .OrderByDescending(x => x.Id)
-                .Skip(pageInfo.PageSize * (pageInfo.Page))
-                .Take(pageInfo.PageSize);
+            if (!pageInfo.GetAll)
+            {
+                transportationTypes = transportationTypes
+                    .OrderByDescending(x => x.Id)
+                    .Skip(pageInfo.PageSize * (pageInfo.Page))
+                    .Take(pageInfo.PageSize);
+            }
 
             transportationTypes.ToList().ForEach(x => retVal.Data.Add(_mapper.Map<TransportationTypeDTO>(x)));
             return retVal;

@@ -10,7 +10,7 @@
         </div>
     </div>
 
-    <form (submit)="f.form.valid && save()" #f="ngForm">
+    <form (submit)="f.form.valid && save()" #f="ngForm" enctype="multipart/form-data">
         <div class="row">
 
             <div class="col-sm-6">
@@ -102,6 +102,14 @@
                 <label>Broj slobodnih mesta</label>
                 <input class="form-control" type="number" min="0" name="availableSpots" [(ngModel)]="offer.availableSpots" (ngModelChange)="validateAvailableSpots()"/>
                 <div *ngIf="f.submitted && !availableSpotsValid" class="form-control-error">Broj slobodnih mesta mora biti veći od 0</div>
+            </div>
+
+            <div class="col-sm-12">
+                <label>Slika</label>
+                <img [src]="offer.imagePath" height="200">
+                <input type="file" accept="image/png, image/jpeg" class="form-control" name="image" 
+                    [(ngModel)]="offer.imagePath" #image="ngModel" (change)="onFileSelected($event)" required/>
+                <div *ngIf="f.submitted && image.invalid" class="form-control-error">Slika mora biti odabrana</div>
             </div>
 
           <div class="btn-wrapper">

@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
-import { OfferType } from 'src/app/models/offerType';
+import { OfferType } from 'src/app/models/offer-type';
 import { OfferTypeService } from 'src/app/services/offer-type.service';
 
 @Component({
