@@ -2,11 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { OfferService } from 'src/app/services/offer.service';
+import { OfferComponent } from '../offer/offer.component';
 
 @Component({
   selector: 'app-offer-review',
   templateUrl: './offer-review.component.html',
-  styleUrls: ['./offer-review.component.scss']
+  styleUrls: ['./offer-review.component.scss'],
+  providers: [OfferComponent]
 })
 export class OfferReviewComponent implements OnInit {
 
@@ -14,7 +16,7 @@ export class OfferReviewComponent implements OnInit {
   public offer: any;
 
   constructor(private offerService: OfferService,
-    private route: ActivatedRoute,
+    private route: ActivatedRoute, public offerComponent: OfferComponent,
     public snackBar: MatSnackBar) { }
 
   ngOnInit(): void {

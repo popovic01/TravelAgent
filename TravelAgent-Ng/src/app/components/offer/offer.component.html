@@ -20,8 +20,11 @@
     
             <div class="inline-wrapper">
                 <div class="title">{{offer.name}}</div>
-                <div>                    
-                    <button class="wishlist-btn"><i class="fa fa-heart-o"></i></button> {{offer.wishlistCount}}
+                <div *ngIf="!offer?.isInWishlist">                    
+                    <button class="wishlist-btn" (click)="addToWishlist(offer.id)"><i class="fa fa-heart-o"></i></button> {{offer.wishlistCount}}
+                </div>
+                <div *ngIf="offer?.isInWishlist">
+                    <button class="wishlist-btn" (click)="removeFromWishlist(offer.id)"><i class="fa fa-heart"></i></button> {{offer.wishlistCount}}
                 </div>
             </div>
 
@@ -75,7 +78,10 @@
             </div>
 
             <button class="btn" routerLink="/book" *ngIf="(authService.isLoggedIn() && !authService.isAdmin()) || !authService.isLoggedIn()">Rezerviši</button>
-            <button class="btn" [routerLink]="['/offer-edit', offer.id]" *ngIf="authService.isLoggedIn() && authService.isAdmin()">Izmeni</button>
+            <div class="btn-wrapper">
+                <button class="btn" *ngIf="authService.isLoggedIn() && authService.isAdmin()" (click)="openDialog(offer?.id, offer?.name)">Obriši</button>
+                <button class="btn" [routerLink]="['/offer-edit', offer.id]" *ngIf="authService.isLoggedIn() && authService.isAdmin()">Izmeni</button>
+            </div>
         </div>
 
     </div>

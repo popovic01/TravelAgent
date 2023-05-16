@@ -102,67 +102,7 @@ namespace TravelAgent.Services.Implementations
             {
                 _context.Offers.Remove(offer);
                 _context.SaveChanges();
-                retVal.Message = $"Uspešno obrisana ponuda sa id-jem {id}";
-            }
-            return retVal;
-        }
-
-        public ResponsePackageNoData DeleteLocationForOffer(int offerId, int locationId)
-        {
-            var retVal = new ResponsePackageNoData();
-
-            var offer = _context.Offers
-                .Include(x => x.Locations)
-                .FirstOrDefault(x => x.Id == offerId);
-
-            var location = _context.Locations
-                .FirstOrDefault(x => x.Id == locationId);
-
-            if (offer == null)
-            {
-                retVal.Status = 404;
-                retVal.Message = $"Ne postoji ponuda sa id-jem {offerId}";
-            }
-            else if (location == null)
-            {
-                retVal.Status = 404;
-                retVal.Message = $"Ne postoji lookacija sa id-jem {locationId}";
-            }
-            else
-            {
-                offer.Locations.Remove(location);
-                _context.SaveChanges();
-                retVal.Message = $"Uspešno obrisana lokacija {locationId} za ponudu sa id-jem {offerId}";
-            }
-            return retVal;
-        }
-
-        public ResponsePackageNoData DeleteTagForOffer(int offerId, int tagId)
-        {
-            var retVal = new ResponsePackageNoData();
-
-            var offer = _context.Offers
-                .Include(x => x.Tags)
-                .FirstOrDefault(x => x.Id == offerId);
-
-            var tag = _context.Tags
-                .FirstOrDefault(x => x.Id == tagId);
-
-            if (offer == null)
-            {
-                retVal.Status = 404;
-                retVal.Message = $"Ne postoji ponuda sa id-jem {offerId}";
-            }
-            else if (tag == null)
-            {
-                retVal.Status = 404;
-                retVal.Message = $"Ne postoji tag sa id-jem {tagId}";
-            }
-            else
-            {
-                offer.Tags.Remove(tag);
-                _context.SaveChanges();
-                retVal.Message = $"Uspešno obrisan tag {tagId} za ponudu sa id-jem {offerId}";
+                retVal.Message = $"Uspešno obrisana ponuda {offer.Name}";
             }
             return retVal;
         }
@@ -261,10 +201,16 @@ namespace TravelAgent.Services.Implementations
             var searchString = filterParams.SearchFilter.ToLower();
 
             IQueryable<Offer> offers = _context.Offers
+                .Include(x => x.Clients)
                 .Include(x => x.TransportationType)
                 .Include(x => x.OfferType)
                 .Include(x => x.Locations)
                 .Include(x => x.Tags);
+
+            if (searchData.FilterParams.IsWishlist)
+            {
+                offers = offers.Where(x => x.Clients.Any(x => x.Id == searchData.FilterParams.UserId));
+            }
 
             if (!string.IsNullOrWhiteSpace(searchString))
             {
@@ -295,6 +241,14 @@ namespace TravelAgent.Services.Implementations
 
             foreach (var offer in retVal.Data)
                 offer.Duration = offer.EndDate.Subtract(offer.StartDate).Days;
+
+            if (searchData.FilterParams.UserId.HasValue)
+            {
+                var client = (Client)_context.Users
+                    .FirstOrDefault(x => x.Id == searchData.FilterParams.UserId);
+                foreach (var offer in retVal.Data)
+                    offer.IsInWishlist = offers.FirstOrDefault(x => x.Clients.Contains(client) && x.Id == offer.Id) != null;
+            }
 
             return retVal;
         }

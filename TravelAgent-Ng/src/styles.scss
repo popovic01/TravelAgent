@@ -53,6 +53,24 @@ body {
     border: 0.1rem solid $btn-background;
 }
 
+.btn-contrast {
+    background-color: $card-color;
+    color: $btn-background;
+    border: none;
+    border-radius: 0.2rem;
+    border: 0.1rem solid $card-color;
+    padding: 0.4rem;
+    margin-top: 0.4rem;
+    width: 5rem;
+    transition-duration: 0.2s;
+}
+
+.btn-contrast:hover {
+    background-color: $card-color;
+    color: $btn-background;
+    border: 0.1rem solid $btn-background;
+}
+
 .text-center {
     text-align: center;
 }

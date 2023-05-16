@@ -1,0 +1,14 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    min-width: 20rem;
+}
+
+.btn-wrapper {
+    display: flex;
+    gap: 0.2rem;
+}
+
+.form {
+    display: flex;
+}

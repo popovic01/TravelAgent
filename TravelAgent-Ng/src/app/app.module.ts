@@ -33,6 +33,7 @@ import { LocationDialogComponent } from './components/location-dialog/location-d
 import { TagDialogComponent } from './components/tag-dialog/tag-dialog.component';
 import { OfferTypeDialogComponent } from './components/offer-type-dialog/offer-type-dialog.component';
 import { TransportationTypeDialogComponent } from './components/transportation-type-dialog/transportation-type-dialog.component';
+import { OfferDialogComponent } from './components/offer-dialog/offer-dialog.component';
 
 const loaderColor = '#d5b4b4';
 
@@ -60,7 +61,8 @@ const ngxUiLoaderConfig: NgxUiLoaderConfig = {
     LocationDialogComponent,
     TagDialogComponent,
     OfferTypeDialogComponent,
-    TransportationTypeDialogComponent
+    TransportationTypeDialogComponent,
+    OfferDialogComponent
   ],
   imports: [
     BrowserModule,

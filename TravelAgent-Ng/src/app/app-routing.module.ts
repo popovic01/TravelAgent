@@ -10,6 +10,7 @@ import { LocationComponent } from './components/location/location.component';
 import { TagComponent } from './components/tag/tag.component';
 import { OfferTypeComponent } from './components/offer-type/offer-type.component';
 import { TransportationTypeComponent } from './components/transportation-type/transportation-type.component';
+import { UserGuard } from './services/guards/user-guard.service';
 
 const routes: Routes = [
   // { path: '', pathMatch: 'full', redirectTo: 'home'  },
@@ -19,6 +20,7 @@ const routes: Routes = [
   { path: 'register', component: RegistrationComponent, pathMatch: 'full' },
 
   { path: 'offers', component: OfferComponent, pathMatch: 'full' },
+  { path: 'wishlist/:id', component: OfferComponent, pathMatch: 'full', canActivate: [UserGuard] },
   { path: 'offer-review/:id', component: OfferReviewComponent, pathMatch: 'full' },
   { path: 'offer-create', component: OfferUpsertComponent, pathMatch: 'full', canActivate: [AdminGuard] },
   { path: 'offer-edit/:id', component: OfferUpsertComponent, pathMatch: 'full', canActivate: [AdminGuard] },

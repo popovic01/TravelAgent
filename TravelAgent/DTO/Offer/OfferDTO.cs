@@ -15,6 +15,7 @@
         public int WishlistCount { get; set; } //number of users who have this offer in their wishlist
         public int AvailableSpots { get; set; }
         public int AvailableSpotsLeft { get; set; } //availableSpots - reservationCount
+        public bool IsInWishlist { get; set; }
 
     }
 }

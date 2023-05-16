@@ -14,6 +14,10 @@ export class OfferService {
     return this.http.put(`${environment.apiUrl}offer/${id}`, obj);
   }
 
+  delete(id: number): Observable<any> {
+    return this.http.delete(`${environment.apiUrl}offer/${id}`);
+  }
+
   add(obj: any): Observable<any> {
     return this.http.post(`${environment.apiUrl}offer`, obj);
   }
@@ -24,5 +28,13 @@ export class OfferService {
 
   getById(id: number): Observable<any> {
     return this.http.get(`${environment.apiUrl}offer/${id}`);
+  }
+
+  addToWishlist(offerId: number, userId: number): Observable<any> {
+    return this.http.get(`${environment.apiUrl}offer/addToWishlist/${offerId}/${userId}`);
+  }
+
+  removeFromWishlist(offerId: number, userId: number): Observable<any> {
+    return this.http.get(`${environment.apiUrl}offer/removeFromWishlist/${offerId}/${userId}`);
   }
 }

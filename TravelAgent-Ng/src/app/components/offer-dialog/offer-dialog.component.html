@@ -1,0 +1,13 @@
+<div class="container">
+    <h3 mat-dialog-title>Brisanje ponude {{data.name}}</h3>
+    <form class="mat-dialog-content" #formControl= "ngForm">
+        <div class="btn-wrapper">
+            <button class="btn-contrast" (click)="cancel()">
+                Poništi
+            </button>
+            <button class="btn" type="submit" [mat-dialog-close]="1" (click)="delete()">
+                Obriši
+            </button>
+        </div>
+    </form>
+</div>
