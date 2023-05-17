@@ -34,6 +34,9 @@ import { TagDialogComponent } from './components/tag-dialog/tag-dialog.component
 import { OfferTypeDialogComponent } from './components/offer-type-dialog/offer-type-dialog.component';
 import { TransportationTypeDialogComponent } from './components/transportation-type-dialog/transportation-type-dialog.component';
 import { OfferDialogComponent } from './components/offer-dialog/offer-dialog.component';
+import { OfferRequestComponent } from './components/offer-request/offer-request.component';
+import { OfferRequestUpsertComponent } from './components/offer-request-upsert/offer-request-upsert.component';
+import { ReservationComponent } from './components/reservation/reservation.component';
 
 const loaderColor = '#d5b4b4';
 
@@ -62,7 +65,10 @@ const ngxUiLoaderConfig: NgxUiLoaderConfig = {
     TagDialogComponent,
     OfferTypeDialogComponent,
     TransportationTypeDialogComponent,
-    OfferDialogComponent
+    OfferDialogComponent,
+    OfferRequestComponent,
+    OfferRequestUpsertComponent,
+    ReservationComponent
   ],
   imports: [
     BrowserModule,

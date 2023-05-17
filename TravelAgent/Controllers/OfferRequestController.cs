@@ -19,27 +19,20 @@ namespace TravelAgent.Controllers
 
         [HttpPost]
         [AuthRole("Role", "client")]
-        public ActionResult RequestOffer(int clientId, OfferRequestDTO dataIn)
+        public ActionResult RequestOffer(OfferRequestDTO dataIn)
         {
-            return Ok(_offerReqService.RequestOffer(clientId, dataIn));
+            return Ok(_offerReqService.RequestOffer(dataIn));
         }
 
         [HttpPost("getAll")]
         [AuthRole("Role", "admin")]
-        public ActionResult GetAllRequestedOffers(PageInfo pageInfo)
+        public ActionResult GetAllRequestedOffers(RequestDTO pageInfo)
         {
             return Ok(_offerReqService.GetAllRequestedOffers(pageInfo));
         }
 
-        [HttpPost("getAllByUser/{id}")]
-        [AuthRole("UserId", "id")]
-        public ActionResult GetAllByUser(PageInfo pageInfo, int id)
-        {
-            return Ok(_offerReqService.GetAllByUser(pageInfo, id));
-        }
-
         [HttpGet("{id}")]
-        [AuthRole("Role", "admin")]
+        [AuthRole("Role", "admin,client")]
         public ActionResult GetRequestedOfferById(int id)
         {
             return Ok(_offerReqService.GetRequestedOfferById(id));

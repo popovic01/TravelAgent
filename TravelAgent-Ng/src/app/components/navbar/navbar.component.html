@@ -1,6 +1,6 @@
 <ul>
     <li><a  routerLink="/offers">Ponude</a></li>
-    <li><a  routerLink="/request-offer" *ngIf="authService.isLoggedIn() && !authService.isAdmin()">Zatraži ponudu</a></li>
+    <li><a  routerLink="/offer-request" *ngIf="authService.isLoggedIn() && !authService.isAdmin()">Zatraži ponudu</a></li>
     <li><a  routerLink="/reservation" *ngIf="authService.isLoggedIn() && !authService.isAdmin()">Rezervacije</a></li>
     <li><a  (click)="wishlist()" *ngIf="authService.isLoggedIn() && !authService.isAdmin()">Lista želja</a></li>
 

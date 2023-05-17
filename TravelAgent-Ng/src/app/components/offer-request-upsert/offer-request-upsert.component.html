@@ -1,0 +1,81 @@
+<div class="container">
+
+    <div class="title-wrapper">
+        <i class="fa fa-pencil"></i>
+        <div class="title" *ngIf="offerRequestId == 0">
+            Zatraži ponudu
+        </div>
+        <div class="title" *ngIf="offerRequestId != 0">
+            Izmeni ponudu
+        </div>
+    </div>
+
+    <form (submit)="f.form.valid && save()" #f="ngForm">
+        <div class="row">
+
+            <div class="col-sm-6">
+                <label>Cena po osobi</label>
+                <input class="form-control" type="number" min="0" name="price" [(ngModel)]="offerRequest.maxPrice" (ngModelChange)="validatePrice()"/>
+                <div *ngIf="f.submitted && !priceValid" class="form-control-error">Cena mora biti veća od 0</div>
+            </div>
+
+            <div class="col-sm-6">
+                <label>Početak</label>
+                <input type="date" class="form-control" name="startDate" [(ngModel)]="offerRequest.startDate" (ngModelChange)="validateDates()"/>
+                <div *ngIf="f.submitted && !startDateValid" class="form-control-error">Početak mora biti nakon danas</div>
+            </div>
+
+            <div class="col-sm-6">
+                <label>Kraj</label>
+                <input type="date" class="form-control" name="endDate" [(ngModel)]="offerRequest.endDate" (ngModelChange)="validateDates()"/>
+                <div *ngIf="f.submitted && !endDateValid" class="form-control-error">Kraj mora biti nakon početka</div>
+            </div>
+
+            <div class="col-sm-6">
+                <label>Način prevoza</label>
+                <select class="form-control" name="transportationType" [(ngModel)]="offerRequest.transportationTypeId" #transportationType="ngModel" required>
+                    <option value="" selected disabled>Odaberite način prevoza</option>
+                    <option *ngFor="let x of transportationTypes" [ngValue]="x.id">{{x.name}}</option>
+                </select>
+                <div *ngIf="f.submitted && transportationType.invalid" class="form-control-error">Način prevoza je obavezan</div>
+            </div>
+
+            <div class="col-sm-6">
+                <label>Mesto polaska</label>
+                <select class="form-control" name="departureLocation" [(ngModel)]="offerRequest.departureLocation" #departureLocation="ngModel" required>
+                    <option value="" selected disabled>Odaberite mesto polaska</option>
+                    <option *ngFor="let x of locations" [ngValue]="x.item_text">{{x.item_text}}</option>
+                </select>                
+                <div *ngIf="f.submitted && departureLocation.invalid" class="form-control-error">Mesto polaska je obavezno</div>
+            </div>
+
+            <div class="col-sm-6">
+                <label>Lokacije</label>
+                <ng-multiselect-dropdown 
+                    name="locations"
+                    [placeholder]="'Odaberite lokacije'"
+                    (onSelect)="onLocationSelect($event)"
+                    (onDeSelect)="onLocationDeselect($event)"
+                    [settings]="dropdownSettings"
+                    [(ngModel)]="selectedLocations"
+                    [data]="locations">
+                </ng-multiselect-dropdown>
+                <div *ngIf="f.submitted && !locationsValid" class="form-control-error">Najmanje jedna lokacija mora biti odabrana</div>
+            </div>
+
+            <div class="col-sm-6">
+                <label>Broj potrebnih mesta</label>
+                <input class="form-control" type="number" min="0" name="availableSpots" [(ngModel)]="offerRequest.spotNumber" (ngModelChange)="validateSpotNumber()"/>
+                <div *ngIf="f.submitted && !spotNumberValid" class="form-control-error">Broj potrebnih mesta mora biti veći od 0</div>
+            </div>
+
+          <div class="btn-wrapper">
+            <button routerLink="/offers" class="btn">Otkaži</button>
+            <button type="submit" class="btn">Pošalji</button>
+          </div>
+          
+        </div>
+    </form>
+
+</div>
+

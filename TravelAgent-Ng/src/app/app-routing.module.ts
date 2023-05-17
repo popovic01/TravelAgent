@@ -11,6 +11,8 @@ import { TagComponent } from './components/tag/tag.component';
 import { OfferTypeComponent } from './components/offer-type/offer-type.component';
 import { TransportationTypeComponent } from './components/transportation-type/transportation-type.component';
 import { UserGuard } from './services/guards/user-guard.service';
+import { OfferRequestUpsertComponent } from './components/offer-request-upsert/offer-request-upsert.component';
+import { OfferRequestComponent } from './components/offer-request/offer-request.component';
 
 const routes: Routes = [
   // { path: '', pathMatch: 'full', redirectTo: 'home'  },
@@ -24,6 +26,10 @@ const routes: Routes = [
   { path: 'offer-review/:id', component: OfferReviewComponent, pathMatch: 'full' },
   { path: 'offer-create', component: OfferUpsertComponent, pathMatch: 'full', canActivate: [AdminGuard] },
   { path: 'offer-edit/:id', component: OfferUpsertComponent, pathMatch: 'full', canActivate: [AdminGuard] },
+
+  { path: 'offer-request', component: OfferRequestUpsertComponent, pathMatch: 'full', canActivate: [UserGuard] },
+  { path: 'offer-request/:id', component: OfferRequestUpsertComponent, pathMatch: 'full', canActivate: [UserGuard] },
+  { path: 'offer-requests', component: OfferRequestComponent, pathMatch: 'full', canActivate: [AdminGuard] },
 
   { path: 'locations', component: LocationComponent, pathMatch: 'full', canActivate: [AdminGuard] },
   { path: 'tags', component: TagComponent, pathMatch: 'full', canActivate: [AdminGuard] },

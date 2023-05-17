@@ -39,7 +39,7 @@ namespace TravelAgent.Services.Implementations
             return retVal;
         }
 
-        public PaginationDataOut<OfferRequestDTO> GetAllRequestedOffers(PageInfo pageInfo)
+        public PaginationDataOut<OfferRequestDTO> GetAllRequestedOffers(RequestDTO pageInfo)
         {
             PaginationDataOut<OfferRequestDTO> retVal = new PaginationDataOut<OfferRequestDTO>();
 
@@ -47,26 +47,10 @@ namespace TravelAgent.Services.Implementations
                 .Include(x => x.TransportationType)
                 .Include(x => x.Locations);
 
-            retVal.Count = offerRequests.Count();
-
-            offerRequests = offerRequests
-                .OrderByDescending(x => x.Id)
-                .Skip(pageInfo.PageSize * (pageInfo.Page - 1))
-                .Take(pageInfo.PageSize);
-
-            offerRequests.ToList().ForEach(x => retVal.Data.Add(_mapper.Map<OfferRequestDTO>(x)));
-
-            return retVal;
-        }
-
-        public PaginationDataOut<OfferRequestDTO> GetAllByUser(PageInfo pageInfo, int id)
-        {
-            PaginationDataOut<OfferRequestDTO> retVal = new PaginationDataOut<OfferRequestDTO>();
-
-            IQueryable<OfferRequest> offerRequests = _context.OfferRequests
-                .Include(x => x.TransportationType)
-                .Include(x => x.Client)
-                .Where(x => x.Client.Id == id);
+            if (pageInfo.ClientId.HasValue)
+            {
+                offerRequests = offerRequests.Where(x => x.Client.Id == pageInfo.ClientId);
+            }
 
             retVal.Count = offerRequests.Count();
 
@@ -76,6 +60,7 @@ namespace TravelAgent.Services.Implementations
                 .Take(pageInfo.PageSize);
 
             offerRequests.ToList().ForEach(x => retVal.Data.Add(_mapper.Map<OfferRequestDTO>(x)));
+
             return retVal;
         }
 
@@ -101,7 +86,7 @@ namespace TravelAgent.Services.Implementations
             return retVal;
         }
 
-        public ResponsePackageNoData RequestOffer(int clientId, OfferRequestDTO dataIn)
+        public ResponsePackageNoData RequestOffer(OfferRequestDTO dataIn)
         {
             var retVal = new ResponsePackageNoData();
 
