@@ -2,15 +2,18 @@
 
     <div class="title-wrapper">
         <i class="fa fa-pencil"></i>
-        <div class="title" *ngIf="offerId == 0">
+        <div class="title" *ngIf="offerId == 0 && !isOfferRequest">
             Kreiraj ponudu
+        </div>
+        <div class="title" *ngIf="isOfferRequest">
+            Kreiraj ponudu prema zahtevu
         </div>
         <div class="title" *ngIf="offerId != 0">
             Izmeni ponudu
         </div>
     </div>
 
-    <form (submit)="f.form.valid && save()" #f="ngForm" enctype="multipart/form-data">
+    <form (submit)="f.form.valid && save()" #f="ngForm">
         <div class="row">
 
             <div class="col-sm-6">
@@ -43,13 +46,18 @@
                 <div *ngIf="f.submitted && description.invalid" class="form-control-error">Opis je obavezan</div>
             </div>
 
-            <div class="col-sm-6">
+            <div class="col-sm-6" *ngIf="!isOfferRequest">
                 <label>Način prevoza</label>
                 <select class="form-control" name="transportationType" [(ngModel)]="offer.transportationType" #transportationType="ngModel" required>
                     <option value="" selected disabled>Odaberite način prevoza</option>
                     <option *ngFor="let x of transportationTypes" [ngValue]="x.name">{{x.name}}</option>
                 </select>
                 <div *ngIf="f.submitted && transportationType.invalid" class="form-control-error">Način prevoza je obavezan</div>
+            </div>
+
+            <div class="col-sm-6" *ngIf="isOfferRequest">
+                <label>Način prevoza</label>
+                <input class="form-control" name="transportationType" [(ngModel)]="offer.transportationType" readonly/>
             </div>
 
             <div class="col-sm-6">
@@ -61,7 +69,7 @@
                 <div *ngIf="f.submitted && offerType.invalid" class="form-control-error">Tip ponude je obavezan</div>
             </div>
 
-            <div class="col-sm-6">
+            <div class="col-sm-6" *ngIf="!isOfferRequest">
                 <label>Mesto polaska</label>
                 <select class="form-control" name="departureLocation" [(ngModel)]="offer.departureLocation" #departureLocation="ngModel" required>
                     <option value="" selected disabled>Odaberite mesto polaska</option>
@@ -70,7 +78,12 @@
                 <div *ngIf="f.submitted && departureLocation.invalid" class="form-control-error">Mesto polaska je obavezno</div>
             </div>
 
-            <div class="col-sm-6">
+            <div class="col-sm-6" *ngIf="isOfferRequest">
+                <label>Mesto polaska</label>
+                <input class="form-control" name="departureLocation" [(ngModel)]="offer.departureLocation" readonly/>            
+            </div>
+
+            <div class="col-sm-6" *ngIf="!isOfferRequest">
                 <label>Lokacije</label>
                 <ng-multiselect-dropdown 
                     name="locations"
@@ -82,6 +95,16 @@
                     [data]="locations">
                 </ng-multiselect-dropdown>
                 <div *ngIf="f.submitted && !locationsValid" class="form-control-error">Najmanje jedna lokacija mora biti odabrana</div>
+            </div>
+
+            <div class="col-sm-6" *ngIf="isOfferRequest">
+                <label>Lokacije</label>
+                <ng-multiselect-dropdown 
+                    name="locations"
+                    [settings]="dropdownSettings"
+                    [(ngModel)]="selectedLocations"
+                    [disabled]="true">
+                </ng-multiselect-dropdown>
             </div>
 
             <div class="col-sm-6">
@@ -98,18 +121,15 @@
                 <div *ngIf="f.submitted && !tagsValid" class="form-control-error">Najmanje jedan tag mora biti odabran</div>
             </div>
 
-            <div class="col-sm-6">
+            <div class="col-sm-6" *ngIf="!isOfferRequest">
                 <label>Broj slobodnih mesta</label>
                 <input class="form-control" type="number" min="0" name="availableSpots" [(ngModel)]="offer.availableSpots" (ngModelChange)="validateAvailableSpots()"/>
                 <div *ngIf="f.submitted && !availableSpotsValid" class="form-control-error">Broj slobodnih mesta mora biti veći od 0</div>
             </div>
 
-            <div class="col-sm-12">
-                <label>Slika</label>
-                <img [src]="offer.imagePath" height="200">
-                <input type="file" accept="image/png, image/jpeg" class="form-control" name="image" 
-                    [(ngModel)]="offer.imagePath" #image="ngModel" (change)="onFileSelected($event)" required/>
-                <div *ngIf="f.submitted && image.invalid" class="form-control-error">Slika mora biti odabrana</div>
+            <div class="col-sm-6" *ngIf="isOfferRequest">
+                <label>Broj slobodnih mesta</label>
+                <input class="form-control" type="number" min="0" name="spotNumber" [(ngModel)]="offer.availableSpots" readonly/>
             </div>
 
           <div class="btn-wrapper">

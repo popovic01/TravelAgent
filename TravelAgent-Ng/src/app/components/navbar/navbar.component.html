@@ -1,6 +1,7 @@
 <ul>
     <li><a  routerLink="/offers">Ponude</a></li>
     <li><a  routerLink="/offer-request" *ngIf="authService.isLoggedIn() && !authService.isAdmin()">Zatraži ponudu</a></li>
+    <li><a *ngIf="authService.isLoggedIn() && !authService.isAdmin()" [routerLink]="['/offer-requests', userId]">Zatražene ponude</a></li>    
     <li><a  routerLink="/reservation" *ngIf="authService.isLoggedIn() && !authService.isAdmin()">Rezervacije</a></li>
     <li><a  (click)="wishlist()" *ngIf="authService.isLoggedIn() && !authService.isAdmin()">Lista želja</a></li>
 
@@ -12,7 +13,7 @@
         <a  routerLink="/tags">Tagovi</a>
         <a  routerLink="/offer-types">Tipovi ponuda</a>
         <a  routerLink="/transportation-types">Načini prevoza</a>
-        <a  routerLink="/offer-request">Zahtevi za ponude</a>
+        <a  routerLink="/offer-requests">Zahtevi za ponude</a>
       </div>
     </li>
 

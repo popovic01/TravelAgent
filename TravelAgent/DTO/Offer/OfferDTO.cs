@@ -3,7 +3,6 @@
     public class OfferDTO
     {
         public string Name { get; set; }
-        public string ImagePath { get; set; }
         public double Price { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
@@ -16,6 +15,7 @@
         public int AvailableSpots { get; set; }
         public int AvailableSpotsLeft { get; set; } //availableSpots - reservationCount
         public bool IsInWishlist { get; set; }
+        public int? OfferRequestId { get; set; }
 
     }
 }

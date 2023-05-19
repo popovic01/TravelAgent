@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
@@ -10,7 +10,7 @@ import { OfferService } from 'src/app/services/offer.service';
   templateUrl: './offer-dialog.component.html',
   styleUrls: ['./offer-dialog.component.scss']
 })
-export class OfferDialogComponent implements OnInit {
+export class OfferDialogComponent implements OnInit, OnDestroy {
 
 subscription!: Subscription;
 

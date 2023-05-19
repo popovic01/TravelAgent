@@ -37,9 +37,9 @@ namespace TravelAgent.Controllers
 
         [HttpPost]
         [AuthRole("Role", "admin")]
-        public ActionResult Add([FromForm] string dataIn, IFormFile? image)
+        public ActionResult Add(OfferReviewDTO dataIn)
         {
-            return Ok(_offerService.Add(dataIn, image));
+            return Ok(_offerService.Add(dataIn));
         }
 
         [HttpDelete("{id}")]

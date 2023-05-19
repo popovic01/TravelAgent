@@ -1,1 +1,50 @@
-<p>offer-request works!</p>
+<div class="container">
+
+    <div class="card" *ngFor="let offer of offerRequests">
+
+        <div class="body">
+
+            <div class="inline-wrapper">
+                <div class="title">Zahtev za ponudom</div>
+            </div>
+
+            <div>
+                {{offer.startDate | date }} - {{offer.endDate | date}} 
+            </div>
+    
+            <div class="subtitle-wrapper">
+                <div *ngIf="offer.locations?.length > 0">
+                    <i class="fa fa-map-marker"></i>
+                    Lokacije: </div>
+                <div *ngFor="let location of offer.locations">
+                    <div>- {{location}} -</div>
+                </div>
+            </div>
+
+            <div class="subtitle-wrapper">
+                <div class="flex-wrapper">Broj potrebnih mesta: <div class="ml-1 bold">{{offer.spotNumber}}</div></div>
+                <div class="flex-wrapper">Mesto polaska: <div class="ml-1 bold">{{offer.departureLocation}}</div></div>
+            </div>
+
+            <div class="price-wrapper">
+                <div class="flex-wrapper">
+                    <div class="ml-1 price">{{offer.maxPrice}}e - cena po osobi</div>
+                </div>
+            </div>
+    
+        </div>
+
+        <div class="bottom-wrapper">
+
+            <div class="btn-wrapper">
+                <button class="btn" [routerLink]="['/offer-request-create', offer.id]" 
+                    *ngIf="authService.isLoggedIn() && authService.isAdmin() && !offer.offerId">Napravi ponudu</button>
+                <button class="btn" *ngIf="offer.offerId" [routerLink]="['/offer-review', offer.offerId]">Pogledaj ponudu</button>
+                <button class="btn" *ngIf="!authService.isAdmin() && !offer.offerId" (click)="delete(offer.id)">Obriši</button>
+                <button class="btn" *ngIf="!authService.isAdmin() && !offer.offerId" [routerLink]="['/offer-request', offer.id]">Izmeni</button>
+            </div>
+        </div>
+
+    </div>
+    
+</div>

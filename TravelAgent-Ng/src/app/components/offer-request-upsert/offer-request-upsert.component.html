@@ -33,9 +33,9 @@
 
             <div class="col-sm-6">
                 <label>Način prevoza</label>
-                <select class="form-control" name="transportationType" [(ngModel)]="offerRequest.transportationTypeId" #transportationType="ngModel" required>
+                <select class="form-control" name="transportationType" [(ngModel)]="offerRequest.transportationType" #transportationType="ngModel" required>
                     <option value="" selected disabled>Odaberite način prevoza</option>
-                    <option *ngFor="let x of transportationTypes" [ngValue]="x.id">{{x.name}}</option>
+                    <option *ngFor="let x of transportationTypes" [ngValue]="x.name">{{x.name}}</option>
                 </select>
                 <div *ngIf="f.submitted && transportationType.invalid" class="form-control-error">Način prevoza je obavezan</div>
             </div>

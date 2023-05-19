@@ -12,4 +12,5 @@ export class Offer {
     locations: Array<string> = [];
     tags: Array<string> = [];
     availableSpots: number = 0;
+    offerRequestId: number = 0;
 }

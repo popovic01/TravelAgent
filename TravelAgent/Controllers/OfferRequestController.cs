@@ -25,7 +25,7 @@ namespace TravelAgent.Controllers
         }
 
         [HttpPost("getAll")]
-        [AuthRole("Role", "admin")]
+        [AuthRole("Role", "admin,client")]
         public ActionResult GetAllRequestedOffers(RequestDTO pageInfo)
         {
             return Ok(_offerReqService.GetAllRequestedOffers(pageInfo));
@@ -46,7 +46,7 @@ namespace TravelAgent.Controllers
         }
 
         [HttpDelete("{id}")]
-        [AuthRole("Role", "admin")]
+        [AuthRole("Role", "admin,client")]
         public ActionResult DeleteRequestedOffer(int id)
         {
             return Ok(_offerReqService.DeleteRequestedOffer(id));

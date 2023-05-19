@@ -88,10 +88,10 @@ export class OfferRequestUpsertComponent implements OnInit {
 
         this.validateFields();
 
-        this.selectedLocations = this.offerRequest.locationIds.map((location: any) => {
+        this.selectedLocations = this.offerRequest.locations.map((location: any) => {
           return {
-            item_id: location,
-            item_text: this.locations.find(l => l.item_id == location)?.item_text ?? 0
+            item_id: this.locations.find(l => l.item_text == location)?.item_id ?? 0,
+            item_text: location
           };
         });
       }
@@ -115,12 +115,13 @@ export class OfferRequestUpsertComponent implements OnInit {
   }
 
   createOfferRequest() {
+    console.log(this.offerRequest)
     this.offerRequest.clientId = Number(this.authService.getCurrentUser().UserId);
     this.offerRequestService.add(this.offerRequest).subscribe(x => 
       {
         if (x.status === 200) {
-        this.snackBar.open(x?.message, 'OK', {duration: 2500});
-        this.router.navigate(['offer-requests']);
+          this.snackBar.open(x?.message, 'OK', {duration: 2500});
+          this.router.navigate(['offer-requests', this.offerRequest.clientId]);
         } else
         this.snackBar.open(x?.message, 'OK', {duration: 2500});
       }, error => {
@@ -133,8 +134,8 @@ export class OfferRequestUpsertComponent implements OnInit {
       {
         if (x.status === 200){
         this.snackBar.open(x?.message, 'OK', {duration: 2500});
-        this.router.navigate(['offers']);
-        } else
+        this.router.navigate(['offer-requests', Number(this.authService.getCurrentUser().UserId)]);
+      } else
         this.snackBar.open(x?.message, 'OK', {duration: 2500});
       }, error => {
         this.snackBar.open(error?.message, 'OK', {duration: 2500});
@@ -142,14 +143,14 @@ export class OfferRequestUpsertComponent implements OnInit {
   }
 
   onLocationSelect(e: any) {
-    this.offerRequest.locationIds.push(e.item_id);
+    this.offerRequest.locations.push(e.item_text);
     this.locationsValid = true;
   }
 
   onLocationDeselect(e: any) {
-    var i = this.offerRequest.locationIds.indexOf(e.item_id);
-    this.offerRequest.locationIds.splice(i, 1);
-    if (this.offerRequest.locationIds.length == 0)
+    var i = this.offerRequest.locations.indexOf(e.item_text);
+    this.offerRequest.locations.splice(i, 1);
+    if (this.offerRequest.locations.length == 0)
       this.locationsValid = false;
   }
 
@@ -187,7 +188,7 @@ export class OfferRequestUpsertComponent implements OnInit {
   }
 
   validateLocations() {
-    if (this.offerRequest.locationIds.length > 0)
+    if (this.offerRequest.locations.length > 0)
       this.locationsValid = true;
     else 
       this.locationsValid = false;

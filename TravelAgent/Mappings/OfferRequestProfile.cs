@@ -9,8 +9,8 @@ namespace TravelAgent.Mappings
         public OfferRequestProfile()
         {
             CreateMap<OfferRequest, OfferRequestDTO>()
-                .ForMember(dest => dest.TransportationTypeId, opt => opt.MapFrom(src => src.TransportationType.Id))
-                .ForMember(dest => dest.LocationIds, opt => opt.MapFrom(src => src.Locations.Select(l => l.Id).ToList()))
+                .ForMember(dest => dest.TransportationType, opt => opt.MapFrom(src => src.TransportationType.Name))
+                .ForMember(dest => dest.Locations, opt => opt.MapFrom(src => src.Locations.Select(l => l.Name).ToList()))
                 .ForMember(dest => dest.ClientId, opt => opt.MapFrom(src => src.Client.Id))
                 .ReverseMap();
         }

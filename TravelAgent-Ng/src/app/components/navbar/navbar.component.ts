@@ -11,10 +11,13 @@ import { Router } from '@angular/router';
 })
 export class NavbarComponent implements OnInit {
 
+  userId: number = 0;
+
   constructor(public authService: AuthService, 
     private offerComponent: OfferComponent, private router: Router) { }
 
   ngOnInit(): void {
+    this.userId = Number(this.authService.getCurrentUser().UserId);
   }
 
   wishlist() {

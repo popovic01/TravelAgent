@@ -30,6 +30,9 @@ const routes: Routes = [
   { path: 'offer-request', component: OfferRequestUpsertComponent, pathMatch: 'full', canActivate: [UserGuard] },
   { path: 'offer-request/:id', component: OfferRequestUpsertComponent, pathMatch: 'full', canActivate: [UserGuard] },
   { path: 'offer-requests', component: OfferRequestComponent, pathMatch: 'full', canActivate: [AdminGuard] },
+  { path: 'offer-requests/:id', component: OfferRequestComponent, pathMatch: 'full', canActivate: [UserGuard] },
+  { path: 'offer-request-create/:requestId', component: OfferUpsertComponent, pathMatch: 'full', canActivate: [AdminGuard] },
+  { path: 'offer-request-edit/:requestId', component: OfferUpsertComponent, pathMatch: 'full', canActivate: [AdminGuard] },
 
   { path: 'locations', component: LocationComponent, pathMatch: 'full', canActivate: [AdminGuard] },
   { path: 'tags', component: TagComponent, pathMatch: 'full', canActivate: [AdminGuard] },

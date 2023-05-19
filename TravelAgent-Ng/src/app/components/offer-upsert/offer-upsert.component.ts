@@ -11,6 +11,7 @@ import { OfferTypeService } from 'src/app/services/offer-type.service';
 import { OfferService } from 'src/app/services/offer.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
+import { OfferRequestService } from 'src/app/services/offer-request.service';
 
 @Component({
   selector: 'app-offer-upsert',
@@ -23,7 +24,9 @@ export class OfferUpsertComponent implements OnInit {
   offer: Offer = new Offer();
   offerId: number = 0;
 
-  image: File | undefined;
+  offerRequestId: number = 0;
+
+  isOfferRequest: boolean = false;
 
   transportationTypes: any[] = [];
   offerTypes: any[] = [];
@@ -44,12 +47,16 @@ export class OfferUpsertComponent implements OnInit {
   constructor(public snackBar: MatSnackBar, private locationService: LocationService,
     private tagService: TagService, private transportationTypeService: TransportationTypeService, 
     private offerTypeService: OfferTypeService, private offerService: OfferService, 
+    private offerRequestService: OfferRequestService, 
     private router: Router, private route: ActivatedRoute, private datePipe: DatePipe) { }
 
   ngOnInit(): void {
-    this.getDataFromBackend();
-    this.setDropdownSettings();
     this.offerId = Number(this.route.snapshot.paramMap.get('id'));
+    this.offerRequestId = Number(this.route.snapshot.paramMap.get('requestId'));
+    if (this.offerRequestId != 0)
+      this.isOfferRequest = true;
+    this.getDataFromBackend(this.isOfferRequest);
+    this.setDropdownSettings();
   }
 
   setDropdownSettings() {
@@ -61,45 +68,85 @@ export class OfferUpsertComponent implements OnInit {
     };
   }
 
-  getDataFromBackend() {
+  getDataFromBackend(isOfferRequest: boolean) {
     let obj = {
       page: 0,
       pageSize: 10,
       getAll: true
     }
 
-    this.locationService.getAll(obj).subscribe(x => 
-      {
-        this.locations = x.data.map((item: Location) => {
-          return {
-            item_id: item.id,
-            item_text: item.name
+    if (isOfferRequest) 
+    {
+      this.offerRequestService.getById(this.offerRequestId).subscribe(x => 
+        {
+          console.log(x)
+          this.offer = x.transferObject;
+          this.offer.price = x.transferObject.maxPrice;
+          this.offer.availableSpots = x.transferObject.spotNumber;
+          this.offer.tags = [];
+          this.offer.startDate = this.datePipe.transform(this.offer.startDate, 'yyyy-MM-dd')!;
+          this.offer.endDate = this.datePipe.transform(this.offer.endDate, 'yyyy-MM-dd')!;
+          
+          this.selectedLocations = this.offer.locations.map((location: any) => {
+            return {
+              item_id: this.locations.find(l => l.item_text == location)?.item_id ?? 0,
+              item_text: location
+            };
+          });
+
+          this.tagService.getAll(obj).subscribe(x => 
+            {
+              this.tags = x.data.map((item: Tag) => {
+                return {
+                  item_id: item.id,
+                  item_text: item.name
+                }
+              });
+            });
+
+          this.offerTypeService.getAll(obj).subscribe(x => 
+            {
+              this.offerTypes = x.data;
+            });
+
+          this.validateFields();
+        });
+    } 
+    else {
+      this.locationService.getAll(obj).subscribe(x => 
+        {
+          this.locations = x.data.map((item: Location) => {
+            return {
+              item_id: item.id,
+              item_text: item.name
+            }
+          });
+        });
+  
+      this.tagService.getAll(obj).subscribe(x => 
+        {
+          this.tags = x.data.map((item: Tag) => {
+            return {
+              item_id: item.id,
+              item_text: item.name
+            }
+          });
+          if (this.offerId) {
+            this.getOfferFromBackend();
           }
         });
-      });
-
-    this.tagService.getAll(obj).subscribe(x => 
-      {
-        this.tags = x.data.map((item: Tag) => {
-          return {
-            item_id: item.id,
-            item_text: item.name
-          }
+  
+      this.transportationTypeService.getAll(obj).subscribe(x => 
+        {
+          this.transportationTypes = x.data;
         });
-        if (this.offerId) {
-          this.getOfferFromBackend();
-        }
-      });
-
-    this.transportationTypeService.getAll(obj).subscribe(x => 
-      {
-        this.transportationTypes = x.data;
-      });
-
-    this.offerTypeService.getAll(obj).subscribe(x => 
-      {
-        this.offerTypes = x.data;
-      });
+  
+      this.offerTypeService.getAll(obj).subscribe(x => 
+        {
+          this.offerTypes = x.data;
+        });
+    }
+    
   }
 
   getOfferFromBackend() {
@@ -145,16 +192,9 @@ export class OfferUpsertComponent implements OnInit {
   }
 
   createOffer() {
-    const formData: FormData = new FormData();
-    formData.append('dataIn', JSON.stringify(this.offer));
-    if (this.image) {
-      formData.append('image', this.image);
-    }
-    console.log(this.offer)
-    console.log(formData)
-    console.log(this.image)
-
-    this.offerService.add(formData).subscribe(x => 
+    if (this.isOfferRequest)
+      this.offer.offerRequestId = this.offerRequestId;
+    this.offerService.add(this.offer).subscribe(x => 
       {
         if (x.status === 200) {
         this.snackBar.open(x?.message, 'OK', {duration: 2500});
@@ -169,7 +209,7 @@ export class OfferUpsertComponent implements OnInit {
   editOffer() {
     this.offerService.edit(this.offer, this.offerId).subscribe(x => 
       {
-        if (x.status === 200){
+        if (x.status === 200) {
         this.snackBar.open(x?.message, 'OK', {duration: 2500});
         this.router.navigate(['offers']);
         } else
@@ -179,15 +219,8 @@ export class OfferUpsertComponent implements OnInit {
       }); 
   }
 
-  onFileSelected(e: any) {
-    if (e.target.files) {
-      var reader = new FileReader();
-      reader.readAsDataURL(e.target.files[0]);
-      reader.onload = (event: any) => {
-        this.offer.imagePath = event.target.result;
-      };
-      this.image = e.target.files[0] as File;
-    }
+  deleteOfferRequest() {
+    this.offerRequestService.delete(this.offerRequestId).subscribe(); 
   }
 
   onLocationSelect(e: any) {
@@ -204,6 +237,7 @@ export class OfferUpsertComponent implements OnInit {
 
   onTagSelect(e: any) {
     this.offer.tags.push(e.item_text);
+    console.log(this.offer.tags)
     this.tagsValid = true;
   }
 
@@ -242,7 +276,7 @@ export class OfferUpsertComponent implements OnInit {
     else
       this.startDateValid = true;
 
-    if (new Date(this.offer.startDate).getTime() >= new Date(this.offer.endDate).getTime() )
+    if (new Date(this.offer.startDate).getTime() >= new Date(this.offer.endDate).getTime())
       this.endDateValid = false;
     else
       this.endDateValid = true;

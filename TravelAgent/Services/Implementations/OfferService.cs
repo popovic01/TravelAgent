@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using System.Data;
 using TravelAgent.AppDbContext;
 using TravelAgent.DTO.Common;
@@ -16,50 +15,23 @@ namespace TravelAgent.Services.Implementations
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
         private readonly ICommonHelper _commonHelper;
-        private readonly IWebHostEnvironment _hostEnvironment;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public OfferService(ApplicationDbContext context, IMapper mapper, ICommonHelper commonHelper,
-            IWebHostEnvironment hostEnvironment, IHttpContextAccessor httpContextAccessor)
+        public OfferService(ApplicationDbContext context, IMapper mapper, ICommonHelper commonHelper)
         {
             _context = context;
             _mapper = mapper;
             _commonHelper = commonHelper;
-            _hostEnvironment = hostEnvironment;
-            _httpContextAccessor = httpContextAccessor;
         }
 
-        public ResponsePackageNoData Add(string offerJson, IFormFile? image)
+        public ResponsePackageNoData Add(OfferReviewDTO offer)
         {
             var retVal = new ResponsePackageNoData();
 
-            var offer = JsonConvert.DeserializeObject<OfferReviewDTO>(offerJson);
-
             try
             {
-                //getting wwwRoth path
-                string wwwRootPath = _hostEnvironment.ContentRootPath;
-                if (image != null)
-                {
-                    //generating new name for uploaded image
-                    string fileName = Guid.NewGuid().ToString();
-                    //final location where image needs to be uploaded
-                    var uploads = Path.Combine(wwwRootPath, @"images\offers");
-                    //gets extension of the image
-                    var extension = Path.GetExtension(image.FileName);
-
-                    using (var fileStreams = new FileStream(Path.Combine(uploads, fileName + extension), FileMode.Create))
-                    {
-                        //copying the file
-                        image.CopyTo(fileStreams);
-                    }
-                    //saving to the db
-                    offer.ImagePath = @"images\offers\" + fileName + extension;
-                }
                 var offerDb = new Offer()
                 {
                     Name = offer.Name,
-                    ImagePath = offer.ImagePath,
                     Description = offer.Description,
                     Price = offer.Price,
                     DepartureLocation = offer.DepartureLocation,
@@ -71,7 +43,8 @@ namespace TravelAgent.Services.Implementations
                     OfferType = _context.OfferTypes.FirstOrDefault(x => x.Name == offer.OfferType),
                     TransportationType = _context.TransportationTypes.FirstOrDefault(x => x.Name == offer.TransportationType),
                     Locations = _context.Locations.Where(x => offer.Locations.Contains(x.Name)).ToList(),
-                    Tags = _context.Tags.Where(x => offer.Tags.Contains(x.Name)).ToList()
+                    Tags = _context.Tags.Where(x => offer.Tags.Contains(x.Name)).ToList(),
+                    OfferRequest = _context.OfferRequests.FirstOrDefault(x => x.Id == offer.OfferRequestId)
                 };
 
                 _context.Offers.Add(offerDb);
@@ -181,11 +154,6 @@ namespace TravelAgent.Services.Implementations
             {
                 retVal.TransferObject = _mapper.Map<OfferReviewDTO>(offer);
 
-                string baseUrl = _hostEnvironment.ContentRootPath;
-                var imagePath = Path.Combine("file:\\" + baseUrl, retVal.TransferObject.ImagePath);
-                //var imageUrl = Path.GetFullPath(imagePath);
-                retVal.TransferObject.ImagePath = imagePath;
-
                 retVal.TransferObject.Duration = retVal.TransferObject.EndDate.Subtract(retVal.TransferObject.StartDate).Days;
             }
 
@@ -229,6 +197,10 @@ namespace TravelAgent.Services.Implementations
             if (searchData.FilterParams.TagIds.Count > 0)
             {
                 offers = offers.Where(x => x.Tags.Any(y => searchData.FilterParams.TagIds.Contains(y.Id)));
+            }
+            if (searchData.FilterParams.UserId.HasValue)
+            {
+                offers = offers.Where(x => x.OfferRequestId.HasValue || x.OfferRequest.Client.Id == searchData.FilterParams.UserId);
             }
             retVal.Count = offers.Count();
 
@@ -276,17 +248,6 @@ namespace TravelAgent.Services.Implementations
         public ResponsePackageNoData Update(int id, OfferReviewDTO offer)
         {
             var retVal = new ResponsePackageNoData();
-
-
-            //deleting old image if we update
-            //if (offer.ImagePath != null)
-            //{
-            //    var oldImagePath = Path.Combine(wwwRootPath, offer.ImagePath.TrimStart('\\'));
-            //    if (File.Exists(oldImagePath))
-            //    {
-            //        File.Delete(oldImagePath);
-            //    }
-            //}
 
             var offerDb = _context.Offers
                 .Include(x => x.TransportationType)

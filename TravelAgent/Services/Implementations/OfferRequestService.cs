@@ -34,14 +34,14 @@ namespace TravelAgent.Services.Implementations
             {
                 _context.OfferRequests.Remove(offerReq);
                 _context.SaveChanges();
-                retVal.Message = $"Uspešno obrisan zahtev za ponudom sa id-jem {id}";
+                retVal.Message = $"Uspešno obrisan zahtev za ponudom";
             }
             return retVal;
         }
 
         public PaginationDataOut<OfferRequestDTO> GetAllRequestedOffers(RequestDTO pageInfo)
         {
-            PaginationDataOut<OfferRequestDTO> retVal = new PaginationDataOut<OfferRequestDTO>();
+            PaginationDataOut<OfferRequestDTO> retVal = new ();
 
             IQueryable<OfferRequest> offerRequests = _context.OfferRequests
                 .Include(x => x.TransportationType)
@@ -60,6 +60,11 @@ namespace TravelAgent.Services.Implementations
                 .Take(pageInfo.PageSize);
 
             offerRequests.ToList().ForEach(x => retVal.Data.Add(_mapper.Map<OfferRequestDTO>(x)));
+
+            foreach (var offerReq in retVal.Data)
+            {
+                offerReq.OfferId = _context.Offers.FirstOrDefault(x => x.OfferRequestId == offerReq.Id)?.Id;
+            }
 
             return retVal;
         }
@@ -100,8 +105,8 @@ namespace TravelAgent.Services.Implementations
                     EndDate = dataIn.EndDate,
                     SpotNumber = dataIn.SpotNumber,
                     Client = (Client)_context.Users.FirstOrDefault(x => x.Id == dataIn.ClientId),
-                    TransportationType = _context.TransportationTypes.FirstOrDefault(x => x.Id == dataIn.TransportationTypeId),
-                    Locations = _context.Locations.Where(x => dataIn.LocationIds.Contains(x.Id)).ToList()
+                    TransportationType = _context.TransportationTypes.FirstOrDefault(x => x.Name == dataIn.TransportationType),
+                    Locations = _context.Locations.Where(x => dataIn.Locations.Contains(x.Name)).ToList()
                 };
 
                 _context.OfferRequests.Add(offerReqDb);
@@ -139,11 +144,11 @@ namespace TravelAgent.Services.Implementations
                 offerReqDb.MaxPrice = dataIn.MaxPrice;
                 offerReqDb.SpotNumber = dataIn.SpotNumber;
                 offerReqDb.Client = (Client)_context.Users.FirstOrDefault(x => x.Id == dataIn.ClientId);
-                offerReqDb.TransportationType = _context.TransportationTypes.FirstOrDefault(x => x.Id == dataIn.TransportationTypeId);
-                offerReqDb.Locations = _context.Locations.Where(x => dataIn.LocationIds.Contains(x.Id)).ToList();
+                offerReqDb.TransportationType = _context.TransportationTypes.FirstOrDefault(x => x.Name == dataIn.TransportationType);
+                offerReqDb.Locations = _context.Locations.Where(x => dataIn.Locations.Contains(x.Name)).ToList();
                 _context.SaveChanges();
 
-                retVal.Message = $"Uspešno izmenjen zahtev za ponudom sa id-jem {id}";
+                retVal.Message = $"Uspešno izmenjen zahtev za ponudom";
             }
             catch (Exception ex)
             {
