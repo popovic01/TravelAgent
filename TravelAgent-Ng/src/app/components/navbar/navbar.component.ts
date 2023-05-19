@@ -17,7 +17,8 @@ export class NavbarComponent implements OnInit {
     private offerComponent: OfferComponent, private router: Router) { }
 
   ngOnInit(): void {
-    this.userId = Number(this.authService.getCurrentUser().UserId);
+    if (this.authService.getCurrentUser()?.UserId)
+      this.userId = Number(this.authService.getCurrentUser().UserId);
   }
 
   wishlist() {

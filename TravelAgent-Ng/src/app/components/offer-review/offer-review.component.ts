@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { OfferService } from 'src/app/services/offer.service';
 import { OfferComponent } from '../offer/offer.component';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-offer-review',
@@ -15,7 +16,7 @@ export class OfferReviewComponent implements OnInit {
   public offerId: number = 0;
   public offer: any;
 
-  constructor(private offerService: OfferService,
+  constructor(private offerService: OfferService, private authService: AuthService,
     private route: ActivatedRoute, public offerComponent: OfferComponent,
     public snackBar: MatSnackBar) { }
 
@@ -24,7 +25,10 @@ export class OfferReviewComponent implements OnInit {
       this.offerId = x['id'];
     });
 
-    this.offerService.getById(this.offerId).subscribe(x => {
+    let userId = -1;
+    if (this.authService.getCurrentUser()?.UserId)
+      userId = Number(this.authService.getCurrentUser().UserId);
+    this.offerService.getById(this.offerId, userId).subscribe(x => {
       if (x?.status == 200) {
         this.offer = x.transferObject;
         console.log(this.offer);

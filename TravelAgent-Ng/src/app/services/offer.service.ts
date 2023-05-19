@@ -26,8 +26,8 @@ export class OfferService {
     return this.http.post(`${environment.apiUrl}offer/getAll`, obj);
   }
 
-  getById(id: number): Observable<any> {
-    return this.http.get(`${environment.apiUrl}offer/${id}`);
+  getById(id: number, clientId: number): Observable<any> {
+    return this.http.get(`${environment.apiUrl}offer/${id}/${clientId}`);
   }
 
   addToWishlist(offerId: number, userId: number): Observable<any> {

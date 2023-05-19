@@ -134,7 +134,7 @@ namespace TravelAgent.Services.Implementations
             return retVal;
         }
 
-        public ResponsePackage<OfferReviewDTO> Get(int id)
+        public ResponsePackage<OfferReviewDTO> Get(int id, int clientId)
         {
             var retVal = new ResponsePackage<OfferReviewDTO>();
 
@@ -143,6 +143,7 @@ namespace TravelAgent.Services.Implementations
                 .Include(x => x.OfferType)
                 .Include(x => x.Locations)
                 .Include(x => x.Tags)
+                .Include(x => x.Clients)
                 .FirstOrDefault(x => x.Id == id);
 
             if (offer == null)
@@ -153,8 +154,14 @@ namespace TravelAgent.Services.Implementations
             else
             {
                 retVal.TransferObject = _mapper.Map<OfferReviewDTO>(offer);
-
                 retVal.TransferObject.Duration = retVal.TransferObject.EndDate.Subtract(retVal.TransferObject.StartDate).Days;
+
+                if (clientId != -1)
+                {
+                    var client = (Client)_context.Users
+                        .FirstOrDefault(x => x.Id == clientId);
+                    retVal.TransferObject.IsInWishlist = offer.Clients.Contains(client);
+                }
             }
 
             return retVal;
@@ -200,7 +207,7 @@ namespace TravelAgent.Services.Implementations
             }
             if (searchData.FilterParams.UserId.HasValue)
             {
-                offers = offers.Where(x => x.OfferRequestId.HasValue || x.OfferRequest.Client.Id == searchData.FilterParams.UserId);
+                offers = offers.Where(x => !x.OfferRequestId.HasValue || x.OfferRequest.Client.Id == searchData.FilterParams.UserId);
             }
             retVal.Count = offers.Count();
 

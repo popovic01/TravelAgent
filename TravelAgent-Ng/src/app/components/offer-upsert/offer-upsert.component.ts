@@ -150,7 +150,7 @@ export class OfferUpsertComponent implements OnInit {
   }
 
   getOfferFromBackend() {
-    this.offerService.getById(this.offerId).subscribe(x => {
+    this.offerService.getById(this.offerId, -1).subscribe(x => {
       if (x?.status == 200) {
         this.offer = x.transferObject;
         this.offer.startDate = this.datePipe.transform(this.offer.startDate, 'yyyy-MM-dd')!;

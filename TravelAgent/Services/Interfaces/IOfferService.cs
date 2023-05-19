@@ -7,7 +7,7 @@ namespace TravelAgent.Services.Interfaces
     {
         public PaginationDataOut<OfferIdDTO> GetAll(OfferPageInfo searchData);
         public PaginationDataOut<OfferDTO> GetWishlist(int id);
-        public ResponsePackage<OfferReviewDTO> Get(int id);
+        public ResponsePackage<OfferReviewDTO> Get(int id, int clientId);
         public ResponsePackageNoData Add(OfferReviewDTO offer);
         public ResponsePackageNoData Update(int id, OfferReviewDTO offer);
         public ResponsePackageNoData Delete(int id);

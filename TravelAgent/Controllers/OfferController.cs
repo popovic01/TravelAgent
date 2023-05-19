@@ -29,10 +29,10 @@ namespace TravelAgent.Controllers
             return Ok(_offerService.GetWishlist(id));
         }
 
-        [HttpGet("{id}")]
-        public ActionResult GetById(int id)
+        [HttpGet("{id}/{clientId}")]
+        public ActionResult GetById(int id, int clientId)
         {
-            return Ok(_offerService.Get(id));
+            return Ok(_offerService.Get(id, clientId));
         }
 
         [HttpPost]
