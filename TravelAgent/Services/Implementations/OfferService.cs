@@ -212,9 +212,33 @@ namespace TravelAgent.Services.Implementations
             retVal.Count = offers.Count();
 
             offers = offers
-                .OrderByDescending(x => x.Id)
                 .Skip(pageInfo.PageSize * (pageInfo.Page - 1))
                 .Take(pageInfo.PageSize);
+
+            switch (searchData.FilterParams.SortBy)
+            {
+                case "startDateAsc":
+                    offers = offers.OrderBy(x => x.StartDate);
+                    break;
+                case "endDateAsc":
+                    offers = offers.OrderBy(x => x.EndDate);
+                    break;
+                case "priceAsc":
+                    offers = offers.OrderBy(x => x.Price);
+                    break;
+                case "startDateDesc":
+                    offers = offers.OrderByDescending(x => x.StartDate);
+                    break;
+                case "endDateDesc":
+                    offers = offers.OrderByDescending(x => x.EndDate);
+                    break;
+                case "priceDesc":
+                    offers = offers.OrderByDescending(x => x.Price);
+                    break;
+                default:
+                    offers = offers.OrderByDescending(x => x.Id);
+                    break;
+            }
 
             offers.ToList().ForEach(x => retVal.Data.Add(_mapper.Map<OfferIdDTO>(x)));
 

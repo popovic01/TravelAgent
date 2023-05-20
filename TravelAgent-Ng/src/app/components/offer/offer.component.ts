@@ -49,8 +49,8 @@ export class OfferComponent implements OnInit {
     this.stripePromise = this.loadStripe();
   }
 
-  loadData(event?: PageEvent) {
-    let obj = this.getTableParams(event);
+  loadData(event?: PageEvent, sortBy?: string) {
+    let obj = this.getTableParams(event, sortBy);
 
     this.offerService.getAll(obj).subscribe(x => 
       {
@@ -60,7 +60,7 @@ export class OfferComponent implements OnInit {
       });
   }
 
-  private getTableParams(event?: PageEvent) {  
+  private getTableParams(event?: PageEvent, sortBy?: string) {  
     if (event != null) {
       this.pageSize = event.pageSize;
       this.currentPage = event.pageIndex + 1;
@@ -75,6 +75,7 @@ export class OfferComponent implements OnInit {
       searchFilter: this.search,
       // startDate: this.dateFrom,
       // endDate: this.dateTo,
+      sortBy: sortBy != undefined ? sortBy : "",
       startDate: "",
       endDate: "",
       locationIds: [],

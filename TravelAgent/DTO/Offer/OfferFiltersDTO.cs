@@ -9,5 +9,6 @@
         public List<int> TagIds { get; set; }
         public int? UserId { get; set; }
         public bool IsWishlist { get; set; }
+        public string SortBy { get; set; }
     }
 }

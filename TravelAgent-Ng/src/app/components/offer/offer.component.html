@@ -2,6 +2,19 @@
     <mat-form-field>
         <input matInput placeholder="Pretraži ponude" (keyup.enter)="loadData()" [(ngModel)]="search">
     </mat-form-field> 
+
+    <div class="dropdown">
+        <p class="dropbtn">Sortiraj po &nbsp; <i class="fa fa-sort-desc"></i></p>
+        <div class="dropdown-content">
+          <button (click)="loadData(undefined, 'priceAsc')">Ceni rastuće</button>
+          <button (click)="loadData(undefined, 'priceDesc')">Ceni opadajuće</button>
+          <button (click)="loadData(undefined, 'startDateAsc')">Početnom datumu rastuće</button>
+          <button (click)="loadData(undefined, 'startDateDesc')">Početnom datumu opadajuće</button>
+          <button (click)="loadData(undefined, 'endDateAsc')">Krajnjem datumu rastuće</button>
+          <button (click)="loadData(undefined, 'endDateDesc')">Krajnjem datumu opadajuće</button>
+        </div>
+    </div>
+
 </div>
 
 <div class="container">
