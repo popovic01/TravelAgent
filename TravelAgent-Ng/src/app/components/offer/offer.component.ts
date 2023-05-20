@@ -9,6 +9,7 @@ import { OfferDialogComponent } from '../offer-dialog/offer-dialog.component';
 import { ReservationService } from 'src/app/services/reservation.service';
 import { environment } from 'src/environments/environment';
 import { Stripe } from '@stripe/stripe-js';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-offer',
@@ -48,11 +49,8 @@ export class OfferComponent implements OnInit {
     this.stripePromise = this.loadStripe();
   }
 
-  loadData(page: any = null) {
-    if (page)
-      this.currentPage = page;
-
-    let obj = this.getTableParams();
+  loadData(event?: PageEvent) {
+    let obj = this.getTableParams(event);
 
     this.offerService.getAll(obj).subscribe(x => 
       {
@@ -62,7 +60,12 @@ export class OfferComponent implements OnInit {
       });
   }
 
-  private getTableParams() {  
+  private getTableParams(event?: PageEvent) {  
+    if (event != null) {
+      this.pageSize = event.pageSize;
+      this.currentPage = event.pageIndex + 1;
+    }
+    
     let pageInfo = {
       pageSize: this.pageSize,
       page: this.currentPage,

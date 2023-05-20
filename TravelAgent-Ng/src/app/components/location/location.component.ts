@@ -48,6 +48,7 @@ export class LocationComponent implements OnInit, OnDestroy {
       this.pageSize = event.pageSize;
       this.currentPage = event.pageIndex + 1;
     }
+    
     let obj = {
       pageSize: event == null ? this.pageSize : event.pageSize,
       page: event == null ? this.currentPage - 1: event.pageIndex
