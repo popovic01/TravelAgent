@@ -16,6 +16,8 @@ namespace TravelAgent.Mappings
                 .ForMember(dest => dest.StartDate, opt => opt.MapFrom(src => src.Offer.StartDate))
                 .ForMember(dest => dest.EndDate, opt => opt.MapFrom(src => src.Offer.EndDate))
                 .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Offer.Price))
+                .ForMember(dest => dest.PhoneNo, opt => opt.MapFrom(src => src.Client.PhoneNo))
+                .ForMember(dest => dest.Client, opt => opt.MapFrom(src => src.Client.FirstName + " " + src.Client.LastName))
                 .ReverseMap();
         }
     }

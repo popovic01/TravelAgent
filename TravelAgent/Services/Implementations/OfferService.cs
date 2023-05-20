@@ -211,10 +211,6 @@ namespace TravelAgent.Services.Implementations
             }
             retVal.Count = offers.Count();
 
-            offers = offers
-                .Skip(pageInfo.PageSize * (pageInfo.Page - 1))
-                .Take(pageInfo.PageSize);
-
             switch (searchData.FilterParams.SortBy)
             {
                 case "startDateAsc":
@@ -239,6 +235,10 @@ namespace TravelAgent.Services.Implementations
                     offers = offers.OrderByDescending(x => x.Id);
                     break;
             }
+
+            offers = offers
+                .Skip(pageInfo.PageSize * (pageInfo.Page - 1))
+                .Take(pageInfo.PageSize);
 
             offers.ToList().ForEach(x => retVal.Data.Add(_mapper.Map<OfferIdDTO>(x)));
 

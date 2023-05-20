@@ -13,6 +13,9 @@ export class RegistrationComponent implements OnInit {
 
   public user: User = new User();
 
+  passportNoValid: boolean = false;
+  phoneNoValid: boolean = false;
+
   constructor(private authService: AuthService, 
     private router: Router, 
     public snackBar: MatSnackBar) { }
@@ -21,6 +24,8 @@ export class RegistrationComponent implements OnInit {
   }
 
   register() {    
+    if (!this.phoneNoValid || !this.passportNoValid)
+      return;
     this.authService.register(this.user).subscribe(x => {
       if (x?.status == 200) {
         localStorage.setItem('token', x.transferObject);
@@ -33,6 +38,20 @@ export class RegistrationComponent implements OnInit {
     }, error => {
       this.snackBar.open(error?.message, 'OK', {duration: 2500});
     });
+  }
+
+  validatePassportNo() {
+    if (this.user.passportNo?.length == 9)
+      this.passportNoValid = true;
+    else 
+      this.passportNoValid = false;
+  }
+
+  validatePhoneNo() {
+    if (this.user.phoneNo?.length == 9 || this.user.phoneNo?.length == 10)
+      this.phoneNoValid = true;
+    else 
+      this.phoneNoValid = false;
   }
 
 }

@@ -65,7 +65,7 @@
                 </div>
 
                 <div class="btn-wrapper">
-                    <button class="btn" (click)="offerComponent.book(offer?.id)">Rezerviši</button>
+                    <button class="btn" (click)="offerComponent.book(offer?.id)" *ngIf="!authService.isAdmin()">Rezerviši</button>
                 </div>
 
             </div>

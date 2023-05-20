@@ -27,6 +27,10 @@
                 <div class="flex-wrapper">Cena: <div class="ml-1">{{reservation.price}}e</div></div>
             </div>
 
+            <div class="subtitle-wrapper">
+                <div class="flex-wrapper">Klijent: <div class="ml-1">{{reservation.client}} ({{reservation.phoneNo}})</div></div>
+            </div>
+
             <div class="bottom-wrapper">   
                 <button class="btn" [routerLink]="['/offer-review', reservation.offerId]">Vidi detalje ponude</button>
             </div>

@@ -27,6 +27,7 @@ export class OfferComponent implements OnInit {
   public count: number = 0;
 
   public search: string = '';
+  public sortBy: string = '';
   public dateFrom: any = new Date();
   public dateTo: any = new Date();
 
@@ -50,7 +51,12 @@ export class OfferComponent implements OnInit {
   }
 
   loadData(event?: PageEvent, sortBy?: string) {
-    let obj = this.getTableParams(event, sortBy);
+    if (sortBy != undefined)
+      this.sortBy = sortBy;
+
+    let obj = this.getTableParams(event);
+
+    console.log(obj)
 
     this.offerService.getAll(obj).subscribe(x => 
       {
@@ -60,7 +66,7 @@ export class OfferComponent implements OnInit {
       });
   }
 
-  private getTableParams(event?: PageEvent, sortBy?: string) {  
+  private getTableParams(event?: PageEvent) {  
     if (event != null) {
       this.pageSize = event.pageSize;
       this.currentPage = event.pageIndex + 1;
@@ -75,7 +81,7 @@ export class OfferComponent implements OnInit {
       searchFilter: this.search,
       // startDate: this.dateFrom,
       // endDate: this.dateTo,
-      sortBy: sortBy != undefined ? sortBy : "",
+      sortBy: this.sortBy != undefined ? this.sortBy : "",
       startDate: "",
       endDate: "",
       locationIds: [],
@@ -137,10 +143,11 @@ export class OfferComponent implements OnInit {
   }
 
   async book(id: number) {
-    this.isLoggedIn();
+    if (!this.isLoggedIn() || this.authService.isAdmin())
+      return;
     let reservation = {
       offerId: id,
-      clientId: Number(this.authService.getCurrentUser().UserId),
+      clientId: Number(this.authService.getCurrentUser()?.UserId),
       date: formatDate(new Date(), "yyyy-MM-dd", "en"),
       reservationCode: ""
     };
@@ -177,7 +184,7 @@ export class OfferComponent implements OnInit {
     if (this.authService.getCurrentUser())
       return true;
     this.snackBar.open('Morate se prijaviti', 'OK', {duration: 2500});
-    return false;
+      return false;
   }
 
 }

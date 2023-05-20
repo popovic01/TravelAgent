@@ -16,7 +16,7 @@ export class OfferReviewComponent implements OnInit {
   public offerId: number = 0;
   public offer: any;
 
-  constructor(private offerService: OfferService, private authService: AuthService,
+  constructor(private offerService: OfferService, public authService: AuthService,
     private route: ActivatedRoute, public offerComponent: OfferComponent,
     public snackBar: MatSnackBar) { }
 
@@ -26,7 +26,7 @@ export class OfferReviewComponent implements OnInit {
     });
 
     let userId = -1;
-    if (this.authService.getCurrentUser()?.UserId)
+    if (this.authService.getCurrentUser()?.UserId && !this.authService.isAdmin())
       userId = Number(this.authService.getCurrentUser().UserId);
     this.offerService.getById(this.offerId, userId).subscribe(x => {
       if (x?.status == 200) {

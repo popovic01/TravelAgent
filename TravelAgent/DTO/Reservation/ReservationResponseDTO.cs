@@ -9,6 +9,8 @@
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public double Price { get; set; }
+        public double PhoneNo { get; set; }
+        public string Client { get; set; }
         public int ClientId { get; set; }
     }
 }
