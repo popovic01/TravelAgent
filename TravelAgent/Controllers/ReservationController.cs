@@ -17,18 +17,11 @@ namespace TravelAgent.Controllers
             _reservationService = reservationService;
         }
 
-        [HttpPost("getAll")]
-        [AuthRole("Role", "admin")]
-        public ActionResult GetAll(PageInfo pageInfo)
+        [HttpPost("getAll/{id}")]
+        [AuthRole("Role", "admin,client")]
+        public ActionResult GetAll(PageInfo pageInfo, int id)
         {
-            return Ok(_reservationService.GetAll(pageInfo));
-        }
-
-        [HttpPost("getAllByUser/{id}")]
-        [AuthRole("UserId", "id")]
-        public ActionResult GetAllByUser(PageInfo pageInfo, int id)
-        {
-            return Ok(_reservationService.GetAllByUser(pageInfo, id));
+            return Ok(_reservationService.GetAll(pageInfo, id));
         }
 
         [HttpGet("{id}")]

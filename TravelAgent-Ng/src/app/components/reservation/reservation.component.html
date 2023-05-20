@@ -1,1 +1,38 @@
-<p>reservation works!</p>
+<div class="container">
+
+    <div class="card" *ngFor="let reservation of reservations">
+
+        <div class="body">
+            <div class="inline-wrapper">
+                <div class="title">{{reservation.offerName}}</div>
+            </div>
+
+            <div class="subtitle-wrapper">
+                <div class="flex-wrapper">Datum rezervacije: <div class="ml-1">{{reservation.date | date }}</div></div>
+            </div>
+
+            <div class="subtitle-wrapper">
+                <div class="flex-wrapper">Kod rezervacije: <div class="ml-1">{{reservation.reservationCode}}</div></div>
+            </div>
+
+            <div class="subtitle-wrapper">
+                <div class="flex-wrapper">Početak putovanja: <div class="ml-1">{{reservation.startDate | date}}</div></div>
+            </div>
+
+            <div class="subtitle-wrapper">
+                <div class="flex-wrapper">Kraj putovanja: <div class="ml-1">{{reservation.endDate | date}}</div></div>
+            </div>
+
+            <div class="subtitle-wrapper">
+                <div class="flex-wrapper">Cena: <div class="ml-1">{{reservation.price}}e</div></div>
+            </div>
+
+            <div class="bottom-wrapper">   
+                <button class="btn" [routerLink]="['/offer-review', reservation.offerId]">Vidi detalje ponude</button>
+            </div>
+    
+        </div>
+
+    </div>
+    
+</div>

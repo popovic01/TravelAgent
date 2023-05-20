@@ -1,0 +1,42 @@
+.container {
+    display: flex;
+    padding: 0;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+    align-content: center;
+    height: 50rem;
+}
+
+h1 {
+    color: red;
+    font-family: "Nunito Sans", "Helvetica Neue", sans-serif;
+    font-weight: 900;
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+.wrapper {
+    border-radius: 200px; 
+    height: 200px; 
+    width: 200px; 
+    background: #F8FAF5; 
+    margin: 0 auto;
+}
+
+i {
+    color: red;
+    font-size: 7rem;
+    line-height: 12rem;
+    display: flex;
+    justify-content: center;
+}
+
+.card {
+    background: white;
+    padding: 60px;
+    border-radius: 4px;
+    box-shadow: 0 2px 3px #C8D0D8;
+    display: inline-block;
+    margin: 0 auto;
+}

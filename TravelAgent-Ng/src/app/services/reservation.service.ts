@@ -20,4 +20,10 @@ export class ReservationService {
 
   add(obj: any): Observable<any> {
     return this.http.post(`${environment.apiUrl}reservation`, obj);
-  }}
+  }
+
+  getAll(obj: any, id: number): Observable<any> {
+    return this.http.post(`${environment.apiUrl}reservation/getAll/${id}`, obj);
+  }
+
+}

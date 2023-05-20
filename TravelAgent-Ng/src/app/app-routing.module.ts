@@ -15,6 +15,7 @@ import { OfferRequestUpsertComponent } from './components/offer-request-upsert/o
 import { OfferRequestComponent } from './components/offer-request/offer-request.component';
 import { SuccessComponent } from './components/success/success.component';
 import { FailureComponent } from './components/failure/failure.component';
+import { ReservationComponent } from './components/reservation/reservation.component';
 
 const routes: Routes = [
   // { path: '', pathMatch: 'full', redirectTo: 'home'  },
@@ -35,6 +36,8 @@ const routes: Routes = [
   { path: 'offer-requests/:id', component: OfferRequestComponent, pathMatch: 'full', canActivate: [UserGuard] },
   { path: 'offer-request-create/:requestId', component: OfferUpsertComponent, pathMatch: 'full', canActivate: [AdminGuard] },
   { path: 'offer-request-edit/:requestId', component: OfferUpsertComponent, pathMatch: 'full', canActivate: [AdminGuard] },
+
+  { path: 'reservations', component: ReservationComponent, pathMatch: 'full' },
 
   { path: 'locations', component: LocationComponent, pathMatch: 'full', canActivate: [AdminGuard] },
   { path: 'tags', component: TagComponent, pathMatch: 'full', canActivate: [AdminGuard] },

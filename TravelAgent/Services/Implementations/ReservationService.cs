@@ -3,6 +3,7 @@ using Azure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Stripe.Checkout;
+using Stripe.Terminal;
 using TravelAgent.AppDbContext;
 using TravelAgent.DTO.Common;
 using TravelAgent.DTO.Reservation;
@@ -31,6 +32,15 @@ namespace TravelAgent.Services.Implementations
 
             try
             {
+                var reservationInDb = _context.Reservations
+                    .Include(x => x.Offer)
+                    .FirstOrDefault(x => x.Client.Id == reservation.ClientId && x.Offer.Id == reservation.OfferId);
+                if (reservationInDb != null)
+                {
+                    retVal.Message = $"Već ste rezervisali ponudu {reservationInDb.Offer.Name}";
+                    retVal.Status = 409;
+                    return retVal;
+                }
                 var reservationDb = new Reservation()
                 {
                     ReservationCode = _commonHelper.RandomString(6),
@@ -114,9 +124,9 @@ namespace TravelAgent.Services.Implementations
             return retVal;
         }
 
-        public ResponsePackage<ReservationDTO> Get(int id)
+        public ResponsePackage<ReservationResponseDTO> Get(int id)
         {
-            var retVal = new ResponsePackage<ReservationDTO>();
+            var retVal = new ResponsePackage<ReservationResponseDTO>();
 
             var reservation = _context.Reservations
                 .Include(x => x.Offer)
@@ -129,38 +139,21 @@ namespace TravelAgent.Services.Implementations
                 retVal.Message = $"No postoji rezervacija sa id-jem {id}";
             }
             else
-                retVal.TransferObject = _mapper.Map<ReservationDTO>(reservation);
+                retVal.TransferObject = _mapper.Map<ReservationResponseDTO>(reservation);
 
             return retVal;
         }
 
-        public PaginationDataOut<ReservationDTO> GetAll(PageInfo pageInfo)
+        public PaginationDataOut<ReservationResponseDTO> GetAll(PageInfo pageInfo, int id)
         {
-            PaginationDataOut<ReservationDTO> retVal = new ();
+            PaginationDataOut<ReservationResponseDTO> retVal = new ();
 
             IQueryable<Reservation> reservations = _context.Reservations
                 .Include(x => x.Offer)
                 .Include(x => x.Client);
 
-            retVal.Count = reservations.Count();
-
-            reservations = reservations
-                .OrderByDescending(x => x.Id)
-                .Skip(pageInfo.PageSize * (pageInfo.Page - 1))
-                .Take(pageInfo.PageSize);
-
-            reservations.ToList().ForEach(x => retVal.Data.Add(_mapper.Map<ReservationDTO>(x)));
-            return retVal;
-        }
-
-        public PaginationDataOut<ReservationDTO> GetAllByUser(PageInfo pageInfo, int id)
-        {
-            PaginationDataOut<ReservationDTO> retVal = new ();
-
-            IQueryable<Reservation> reservations = _context.Reservations
-                .Include(x => x.Offer)
-                .Include(x => x.Client)
-                .Where(x => x.Client.Id == id);
+            if (id != 0)
+                reservations = reservations.Where(x => x.Client.Id == id);
 
             retVal.Count = reservations.Count();
 
@@ -169,7 +162,7 @@ namespace TravelAgent.Services.Implementations
                 .Skip(pageInfo.PageSize * (pageInfo.Page - 1))
                 .Take(pageInfo.PageSize);
 
-            reservations.ToList().ForEach(x => retVal.Data.Add(_mapper.Map<ReservationDTO>(x)));
+            reservations.ToList().ForEach(x => retVal.Data.Add(_mapper.Map<ReservationResponseDTO>(x)));
             return retVal;
         }
 
