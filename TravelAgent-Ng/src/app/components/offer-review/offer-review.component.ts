@@ -31,7 +31,6 @@ export class OfferReviewComponent implements OnInit {
     this.offerService.getById(this.offerId, userId).subscribe(x => {
       if (x?.status == 200) {
         this.offer = x.transferObject;
-        console.log(this.offer);
       } else {
         this.snackBar.open(x?.message, 'OK', {duration: 2500});
       }

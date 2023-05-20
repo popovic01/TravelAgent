@@ -56,11 +56,8 @@ export class OfferComponent implements OnInit {
 
     let obj = this.getTableParams(event);
 
-    console.log(obj)
-
     this.offerService.getAll(obj).subscribe(x => 
       {
-        console.log(x)
         this.offers = x.data;
         this.count = x.count;
       });

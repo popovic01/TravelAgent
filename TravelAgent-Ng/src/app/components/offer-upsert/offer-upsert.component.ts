@@ -79,7 +79,6 @@ export class OfferUpsertComponent implements OnInit {
     {
       this.offerRequestService.getById(this.offerRequestId).subscribe(x => 
         {
-          console.log(x)
           this.offer = x.transferObject;
           this.offer.price = x.transferObject.maxPrice;
           this.offer.availableSpots = x.transferObject.spotNumber;
@@ -237,7 +236,6 @@ export class OfferUpsertComponent implements OnInit {
 
   onTagSelect(e: any) {
     this.offer.tags.push(e.item_text);
-    console.log(this.offer.tags)
     this.tagsValid = true;
   }
 

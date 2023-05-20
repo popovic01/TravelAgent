@@ -115,7 +115,6 @@ export class OfferRequestUpsertComponent implements OnInit {
   }
 
   createOfferRequest() {
-    console.log(this.offerRequest)
     this.offerRequest.clientId = Number(this.authService.getCurrentUser().UserId);
     this.offerRequestService.add(this.offerRequest).subscribe(x => 
       {

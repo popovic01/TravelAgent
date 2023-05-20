@@ -43,7 +43,6 @@ export class OfferRequestComponent implements OnInit {
 
     this.offerRequestService.getAll(obj).subscribe(x => 
       {
-        console.log(x)
         this.offerRequests = x.data;
         this.count = x.count;
       });
