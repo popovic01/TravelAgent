@@ -13,6 +13,8 @@ import { TransportationTypeComponent } from './components/transportation-type/tr
 import { UserGuard } from './services/guards/user-guard.service';
 import { OfferRequestUpsertComponent } from './components/offer-request-upsert/offer-request-upsert.component';
 import { OfferRequestComponent } from './components/offer-request/offer-request.component';
+import { SuccessComponent } from './components/success/success.component';
+import { FailureComponent } from './components/failure/failure.component';
 
 const routes: Routes = [
   // { path: '', pathMatch: 'full', redirectTo: 'home'  },
@@ -38,6 +40,9 @@ const routes: Routes = [
   { path: 'tags', component: TagComponent, pathMatch: 'full', canActivate: [AdminGuard] },
   { path: 'offer-types', component: OfferTypeComponent, pathMatch: 'full', canActivate: [AdminGuard] },
   { path: 'transportation-types', component: TransportationTypeComponent, pathMatch: 'full', canActivate: [AdminGuard] },
+
+  { path: 'success', component: SuccessComponent, pathMatch: 'full' },
+  { path: 'failure', component: FailureComponent, pathMatch: 'full' },
 
 ];
 

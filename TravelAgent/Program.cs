@@ -1,8 +1,10 @@
 using Microsoft.EntityFrameworkCore;
+using Stripe;
 using TravelAgent.AppDbContext;
 using TravelAgent.Helpers;
 using TravelAgent.Services.Implementations;
 using TravelAgent.Services.Interfaces;
+using TravelAgent.Utility;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,7 +23,10 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(
     builder.Configuration.GetConnectionString("DefaultConnection")
 ));
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+//mapping values from appsettings.json to properties in StripeSettings class
+//we are configuring StripeSettings class
+builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("StripeSettings"));
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IOfferService, OfferService>();
@@ -52,6 +57,10 @@ app.UseHttpsRedirection();
 app.UseCors("EnableCORS");
 
 app.UseRouting();
+
+//stripe config of api key at global level
+//using : we get key name
+StripeConfiguration.ApiKey = builder.Configuration.GetSection("StripeSettings:SecretKey").Get<string>();
 
 app.UseAuthentication();
 app.UseAuthorization();

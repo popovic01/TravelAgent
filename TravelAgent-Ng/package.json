@@ -23,6 +23,7 @@
     "@angular/platform-browser-dynamic": "~11.2.11",
     "@angular/router": "~11.2.11",
     "@auth0/angular-jwt": "^5.0.2",
+    "@stripe/stripe-js": "^1.53.0",
     "ng-multiselect-dropdown": "^0.3.9",
     "ngx-ui-loader": "^11.0.0",
     "rxjs": "~6.6.0",

@@ -1,5 +1,8 @@
 ﻿using AutoMapper;
+using Azure;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Stripe.Checkout;
 using TravelAgent.AppDbContext;
 using TravelAgent.DTO.Common;
 using TravelAgent.DTO.Reservation;
@@ -24,7 +27,7 @@ namespace TravelAgent.Services.Implementations
 
         public ResponsePackageNoData Add(ReservationDTO reservation)
         {
-            var retVal = new ResponsePackageNoData();
+            var retVal = new ResponsePackage<string>();
 
             try
             {
@@ -38,8 +41,46 @@ namespace TravelAgent.Services.Implementations
 
                 _context.Reservations.Add(reservationDb);
                 _commonHelper.ExecuteProcedure("BUY_OFFER_PROCEDURE", reservation.OfferId, 1);
+
+                //stripe settings 
+                var domain = "http://localhost:4200/";
+                //we are creating session
+                var options = new SessionCreateOptions
+                {
+                    PaymentMethodTypes = new List<string>
+                    {
+                      "card",
+                    },
+                    LineItems = new List<SessionLineItemOptions>(),
+                    Mode = "payment",
+                    SuccessUrl = domain + "success",
+                    CancelUrl = domain + "failure",
+                };
+
+                var sessionLineItem = new SessionLineItemOptions
+                {
+                    PriceData = new SessionLineItemPriceDataOptions
+                    {
+                        UnitAmount = (long)(reservationDb.Offer.Price * 100),//20.00 -> 2000
+                        Currency = "eur",
+                        ProductData = new SessionLineItemPriceDataProductDataOptions
+                        {
+                            Name = reservationDb.Offer.Name,
+                            Description = reservationDb.Offer.Description
+                        },
+                    },
+                    Quantity = 1
+                };
+                options.LineItems.Add(sessionLineItem);
+
+                var service = new SessionService();
+                Session session = service.Create(options);
+
+                reservationDb.PaymentIntentId = session.PaymentIntentId;
+                reservationDb.SessionId = session.Id;
                 _context.SaveChanges();
                 retVal.Message = $"Uspešno dodata rezervacija {reservationDb.ReservationCode}";
+                retVal.TransferObject = session.Id;
             }
             catch (Exception ex)
             {
@@ -95,7 +136,7 @@ namespace TravelAgent.Services.Implementations
 
         public PaginationDataOut<ReservationDTO> GetAll(PageInfo pageInfo)
         {
-            PaginationDataOut<ReservationDTO> retVal = new PaginationDataOut<ReservationDTO>();
+            PaginationDataOut<ReservationDTO> retVal = new ();
 
             IQueryable<Reservation> reservations = _context.Reservations
                 .Include(x => x.Offer)
@@ -114,7 +155,7 @@ namespace TravelAgent.Services.Implementations
 
         public PaginationDataOut<ReservationDTO> GetAllByUser(PageInfo pageInfo, int id)
         {
-            PaginationDataOut<ReservationDTO> retVal = new PaginationDataOut<ReservationDTO>();
+            PaginationDataOut<ReservationDTO> retVal = new ();
 
             IQueryable<Reservation> reservations = _context.Reservations
                 .Include(x => x.Offer)

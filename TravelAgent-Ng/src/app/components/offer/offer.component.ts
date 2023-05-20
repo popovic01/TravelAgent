@@ -6,6 +6,9 @@ import { AuthService } from 'src/app/services/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { OfferDialogComponent } from '../offer-dialog/offer-dialog.component';
+import { ReservationService } from 'src/app/services/reservation.service';
+import { environment } from 'src/environments/environment';
+import { Stripe } from '@stripe/stripe-js';
 
 @Component({
   selector: 'app-offer',
@@ -26,8 +29,10 @@ export class OfferComponent implements OnInit {
   public dateFrom: any = new Date();
   public dateTo: any = new Date();
 
+  private stripePromise: Promise<Stripe> | undefined;
+
   constructor(private offerService: OfferService, public snackBar: MatSnackBar,
-    private router: Router, public authService: AuthService, 
+    private router: Router, public authService: AuthService, private reservationService: ReservationService,
     public dialog: MatDialog, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
@@ -40,6 +45,7 @@ export class OfferComponent implements OnInit {
     this.dateFrom = formatDate(new Date().setDate(new Date().getDate() - 7), "yyyy-MM-dd", "en");
     this.dateTo = formatDate(new Date(), "yyyy-MM-dd", "en");
     this.loadData();
+    this.stripePromise = this.loadStripe();
   }
 
   loadData(page: any = null) {
@@ -124,6 +130,43 @@ export class OfferComponent implements OnInit {
     }, error => {
       this.snackBar.open(error?.statusText, 'OK', {duration: 2500});
     });
+  }
+
+  async book(id: number) {
+    this.isLoggedIn();
+    let reservation = {
+      offerId: id,
+      clientId: Number(this.authService.getCurrentUser().UserId),
+      date: formatDate(new Date(), "yyyy-MM-dd", "en"),
+      reservationCode: ""
+    };
+    this.reservationService.add(reservation).subscribe(async x => {
+      if (x?.status == 200) {
+        const stripe = await this.getStripe();
+        stripe.redirectToCheckout({ sessionId: x.transferObject });
+        this.snackBar.open(x?.message, 'OK', {duration: 2500});
+      } else {
+        this.snackBar.open(x?.message, 'OK', {duration: 2500});
+      }
+    }, error => {
+      this.snackBar.open(error?.statusText, 'OK', {duration: 2500});
+    });
+  }
+
+  private loadStripe(): Promise<Stripe> {
+    return new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = 'https://js.stripe.com/v3/';
+      script.onload = () => {
+        resolve((window as any).Stripe(environment.publishableKey));
+      };
+      script.onerror = (error) => reject(error);
+      document.body.appendChild(script);
+    });
+  }
+
+  async getStripe(): Promise<Stripe> {
+    return this.stripePromise!;
   }
 
   isLoggedIn(): boolean {

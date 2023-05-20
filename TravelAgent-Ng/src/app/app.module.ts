@@ -37,6 +37,8 @@ import { OfferDialogComponent } from './components/offer-dialog/offer-dialog.com
 import { OfferRequestComponent } from './components/offer-request/offer-request.component';
 import { OfferRequestUpsertComponent } from './components/offer-request-upsert/offer-request-upsert.component';
 import { ReservationComponent } from './components/reservation/reservation.component';
+import { SuccessComponent } from './components/success/success.component';
+import { FailureComponent } from './components/failure/failure.component';
 
 const loaderColor = '#d5b4b4';
 
@@ -68,7 +70,9 @@ const ngxUiLoaderConfig: NgxUiLoaderConfig = {
     OfferDialogComponent,
     OfferRequestComponent,
     OfferRequestUpsertComponent,
-    ReservationComponent
+    ReservationComponent,
+    SuccessComponent,
+    FailureComponent
   ],
   imports: [
     BrowserModule,
