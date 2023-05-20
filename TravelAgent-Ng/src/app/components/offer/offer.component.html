@@ -74,28 +74,6 @@
 
         <div class="bottom-wrapper">
 
-            <div class="rating-wrapper">
-                <div *ngIf="offer.rating < 0.5; else filledStar">
-                    <i class="fa fa-star-o"></i>
-                </div>
-                <div *ngIf="offer.rating < 1.5; else filledStar">
-                    <i class="fa fa-star-o"></i>
-                </div>
-                <div *ngIf="offer.rating < 2.5; else filledStar">
-                    <i class="fa fa-star-o"></i>
-                </div>
-                <div *ngIf="offer.rating < 3.5; else filledStar">
-                    <i class="fa fa-star-o"></i>
-                </div>
-                <div *ngIf="offer.rating < 4.5; else filledStar">
-                    <i class="fa fa-star-o"></i>
-                </div>
-                  
-                <ng-template #filledStar>
-                    <i class="fa fa-star"></i>
-                </ng-template>
-            </div>
-
             <button class="btn" (click)="book(offer?.id)" *ngIf="(authService.isLoggedIn() && !authService.isAdmin()) || !authService.isLoggedIn()">Rezerviši</button>
             <div class="btn-wrapper">
                 <button class="btn" *ngIf="authService.isLoggedIn() && authService.isAdmin()" (click)="openDialog(offer?.id, offer?.name)">Obriši</button>
