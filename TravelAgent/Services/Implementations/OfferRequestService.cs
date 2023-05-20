@@ -113,7 +113,7 @@ namespace TravelAgent.Services.Implementations
                 _context.SaveChanges();
                 retVal.Message = $"Zahtev za ponudom je uspešno poslat";
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 retVal.Message = "Došlo je do greške";
                 retVal.Status = 400;
@@ -150,7 +150,7 @@ namespace TravelAgent.Services.Implementations
 
                 retVal.Message = $"Uspešno izmenjen zahtev za ponudom";
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 retVal.Message = "Došlo je do greške";
                 retVal.Status = 400;

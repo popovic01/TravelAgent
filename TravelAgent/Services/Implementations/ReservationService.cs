@@ -1,9 +1,6 @@
 ﻿using AutoMapper;
-using Azure;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Stripe.Checkout;
-using Stripe.Terminal;
 using TravelAgent.AppDbContext;
 using TravelAgent.DTO.Common;
 using TravelAgent.DTO.Reservation;
@@ -92,7 +89,7 @@ namespace TravelAgent.Services.Implementations
                 retVal.Message = $"Uspešno dodata rezervacija {reservationDb.ReservationCode}";
                 retVal.TransferObject = session.Id;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 retVal.Message = "Došlo je do greške";
                 retVal.Status = 400;

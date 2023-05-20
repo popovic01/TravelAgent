@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TravelAgent.DTO.Common;
 using TravelAgent.DTO.OfferRequest;
 using TravelAgent.Helpers;
 using TravelAgent.Services.Interfaces;
