@@ -8,15 +8,7 @@
 
         <div class="img-wrapper">
 
-            <!-- <img [src]="offer?.imagePath" class="offer-img"> -->
             <img src="assets/images/offer.jpg" class="offer-img">
-
-            <div *ngIf="!offer?.isInWishlist" class="top-right">                    
-                <button class="wishlist-btn" (click)="offerComponent.addToWishlist(offer.id)"><i class="fa fa-heart-o"></i></button> {{offer?.wishlistCount}}
-            </div>
-            <div *ngIf="offer?.isInWishlist" class="top-right">
-                <button class="wishlist-btn" (click)="offerComponent.removeFromWishlist(offer.id)"><i class="fa fa-heart"></i></button> {{offer?.wishlistCount}}
-            </div>
 
             <div class="top-left">
                 <div *ngFor="let tag of offer?.tags" class="tag">

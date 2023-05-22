@@ -24,7 +24,7 @@
         <div class="img-wrapper">
             <img src="assets/images/offer.jpg" class="offer-img">
             <div class="img-hover">
-                <button class="img-btn" (click)="reviewOffer(offer.id)">Pogledaj detalje ponude</button>
+                <button class="img-btn" (click)="reviewOffer(offer.id)" *ngIf="!offer.isBooked">Pogledaj detalje ponude</button>
             </div>
             <div class="bottom-left">
                 {{offer.transportationType}}
@@ -74,7 +74,9 @@
 
         <div class="bottom-wrapper">
 
-            <button class="btn" (click)="book(offer?.id)" *ngIf="(authService.isLoggedIn() && !authService.isAdmin()) || !authService.isLoggedIn()">Rezerviši</button>
+            <button class="btn" (click)="book(offer?.id)" 
+                *ngIf="((authService.isLoggedIn() && !authService.isAdmin()) || !authService.isLoggedIn()) && !offer.isBooked">Rezerviši</button>
+            <button class="btn-contrast" *ngIf="offer.isBooked">Rasprodato</button>
             <div class="btn-wrapper">
                 <button class="btn" *ngIf="authService.isLoggedIn() && authService.isAdmin()" (click)="openDialog(offer?.id, offer?.name)">Obriši</button>
                 <button class="btn" [routerLink]="['/offer-edit', offer.id]" *ngIf="authService.isLoggedIn() && authService.isAdmin()">Izmeni</button>
@@ -84,5 +86,5 @@
     </div>
 
 </div>
-<mat-paginator [length]="count" [pageSize]="pageSize" [pageSizeOptions]="[5,10,25,100]" (page)="loadData($event)"></mat-paginator>   
+<mat-paginator [length]="count" [pageSize]="pageSize" [pageSizeOptions]="[5,10,25,100]" (page)="loadData($event)" *ngIf="offers.length > 0"></mat-paginator>   
 

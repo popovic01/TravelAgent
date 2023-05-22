@@ -137,6 +137,12 @@
             display: flex;
             gap: 0.6rem;
         }
+
+        .btn-contrast {
+            width: 7rem;
+            border: 0.1rem solid $btn-background;
+            cursor: default;
+        }
     }
 }
 

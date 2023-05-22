@@ -59,6 +59,10 @@ export class OfferComponent implements OnInit {
     this.offerService.getAll(obj).subscribe(x => 
       {
         this.offers = x.data;
+        this.offers.forEach((x: { isBooked: boolean; availableSpotsLeft: number; }) => {
+          x.isBooked = x.availableSpotsLeft > 0 ? false : true;
+        });
+        console.log(this.offers)
         this.count = x.count;
       });
   }
@@ -83,7 +87,7 @@ export class OfferComponent implements OnInit {
       endDate: "",
       locationIds: [],
       tagIds: [],
-      userId: this.authService.isAdmin() ? null : Number(this.authService.getCurrentUser()?.UserId),
+      userId: this.authService.isAdmin() ? 0 : Number(this.authService.getCurrentUser()?.UserId),
       isWishlist: this.isWishlist
     };
 

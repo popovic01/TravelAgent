@@ -13,8 +13,7 @@ export class NavbarComponent implements OnInit {
 
   userId: number = 0;
 
-  constructor(public authService: AuthService, 
-    private offerComponent: OfferComponent, private router: Router) { }
+  constructor(public authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
     if (this.authService.getCurrentUser()?.UserId)
@@ -27,7 +26,6 @@ export class NavbarComponent implements OnInit {
 
   logout() {
     this.authService.logout();
-    this.offerComponent.loadData(); //ovo je ubaceno da be nestalo obojeno srce kod liste zelja, ali ne radi dobro
   }
 
 }

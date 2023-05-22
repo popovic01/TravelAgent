@@ -180,7 +180,8 @@ namespace TravelAgent.Services.Implementations
                 .Include(x => x.TransportationType)
                 .Include(x => x.OfferType)
                 .Include(x => x.Locations)
-                .Include(x => x.Tags);
+                .Include(x => x.Tags)
+                .Where(x => x.StartDate > DateTime.Today);
 
             if (searchData.FilterParams.IsWishlist)
             {
@@ -205,9 +206,20 @@ namespace TravelAgent.Services.Implementations
             {
                 offers = offers.Where(x => x.Tags.Any(y => searchData.FilterParams.TagIds.Contains(y.Id)));
             }
+
             if (searchData.FilterParams.UserId.HasValue)
             {
-                offers = offers.Where(x => !x.OfferRequestId.HasValue || x.OfferRequest.Client.Id == searchData.FilterParams.UserId);
+                var client = (Client)_context.Users
+                    .FirstOrDefault(x => x.Id == searchData.FilterParams.UserId);
+
+                if (client != null)
+                {
+                    offers = offers.Where(x => x.OfferRequest.Client.Id == searchData.FilterParams.UserId || !x.OfferRequestId.HasValue);
+                }
+            }
+            else
+            {
+                offers = offers.Where(x => !x.OfferRequestId.HasValue);
             }
             retVal.Count = offers.Count();
 
@@ -242,9 +254,6 @@ namespace TravelAgent.Services.Implementations
 
             offers.ToList().ForEach(x => retVal.Data.Add(_mapper.Map<OfferIdDTO>(x)));
 
-            foreach (var offer in retVal.Data)
-                offer.Duration = offer.EndDate.Subtract(offer.StartDate).Days;
-
             if (searchData.FilterParams.UserId.HasValue)
             {
                 var client = (Client)_context.Users
@@ -252,6 +261,9 @@ namespace TravelAgent.Services.Implementations
                 foreach (var offer in retVal.Data)
                     offer.IsInWishlist = offers.FirstOrDefault(x => x.Clients.Contains(client) && x.Id == offer.Id) != null;
             }
+
+            foreach (var offer in retVal.Data)
+                offer.Duration = offer.EndDate.Subtract(offer.StartDate).Days;
 
             return retVal;
         }
