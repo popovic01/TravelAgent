@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { ReservationService } from 'src/app/services/reservation.service';
 import { formatDate } from '@angular/common';
@@ -41,7 +40,6 @@ export class ReservationComponent implements OnInit {
 
     this.reservationService.getAll(obj, userId).subscribe(x => 
       {
-        console.log(x)
         this.reservations = x.data;
         this.count = x.count;
       });

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Stripe;
 using TravelAgent.DTO.Common;
 using TravelAgent.DTO.Reservation;
 using TravelAgent.Helpers;
@@ -11,10 +12,12 @@ namespace TravelAgent.Controllers
     public class ReservationController : ControllerBase
     {
         private readonly IReservationService _reservationService;
+        private readonly IConfiguration _configuration;
 
-        public ReservationController(IReservationService reservationService)
+        public ReservationController(IReservationService reservationService, IConfiguration configuration)
         {
             _reservationService = reservationService;
+            _configuration = configuration;
         }
 
         [HttpPost("getAll/{id}")]
@@ -50,6 +53,13 @@ namespace TravelAgent.Controllers
         public ActionResult Put(int id, ReservationDTO dataIn)
         {
             return Ok(_reservationService.Update(id, dataIn));
+        }
+
+        [HttpPost("webhook")]
+        public async Task<IActionResult> Webhook()
+        {
+            var payload = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();
+            return Ok(_reservationService.WebHook(payload));
         }
     }
 }

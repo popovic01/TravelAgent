@@ -144,6 +144,7 @@ export class OfferComponent implements OnInit {
   }
 
   async book(id: number) {
+    this.isLoggedIn();
     if (!this.isLoggedIn() || this.authService.isAdmin())
       return;
     let reservation = {
@@ -156,7 +157,6 @@ export class OfferComponent implements OnInit {
       if (x?.status == 200) {
         const stripe = await this.getStripe();
         stripe.redirectToCheckout({ sessionId: x.transferObject });
-        this.snackBar.open(x?.message, 'OK', {duration: 2500});
       } else {
         this.snackBar.open(x?.message, 'OK', {duration: 2500});
       }

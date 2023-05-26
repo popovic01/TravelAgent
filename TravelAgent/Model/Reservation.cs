@@ -9,6 +9,7 @@
         public Client Client { get; set; }
         //for stripe
         public string? SessionId { get; set; }
-        public string? PaymentIntentId { get; set; }
+        public string? PaymentIntent { get; set; }
+        public bool Paid { get; set; }
     }
 }

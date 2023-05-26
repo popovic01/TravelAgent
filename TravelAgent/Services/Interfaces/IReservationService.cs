@@ -10,5 +10,6 @@ namespace TravelAgent.Services.Interfaces
         public ResponsePackageNoData Add(ReservationDTO reservation);
         public ResponsePackageNoData Update(int id, ReservationDTO reservation);
         public ResponsePackageNoData Delete(int id);
+        public ResponsePackageNoData WebHook(string payload);
     }
 }

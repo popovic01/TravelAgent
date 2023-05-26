@@ -37,6 +37,9 @@ export class AuthService {
     if (!token)
       return false;
 
+    if (this.jwtService.isTokenExpired(token))
+      localStorage.removeItem('token');
+      
     return !this.jwtService.isTokenExpired(token);
   }
 

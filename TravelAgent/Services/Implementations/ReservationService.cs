@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Stripe;
 using Stripe.Checkout;
 using TravelAgent.AppDbContext;
 using TravelAgent.DTO.Common;
@@ -16,7 +17,8 @@ namespace TravelAgent.Services.Implementations
         private readonly IMapper _mapper;
         private readonly ICommonHelper _commonHelper;
 
-        public ReservationService(ApplicationDbContext context, IMapper mapper, ICommonHelper commonHelper)
+        public ReservationService(ApplicationDbContext context, IMapper mapper, 
+            ICommonHelper commonHelper)
         {
             _context = context;
             _mapper = mapper;
@@ -83,7 +85,6 @@ namespace TravelAgent.Services.Implementations
                 var service = new SessionService();
                 Session session = service.Create(options);
 
-                reservationDb.PaymentIntentId = session.PaymentIntentId;
                 reservationDb.SessionId = session.Id;
                 _context.SaveChanges();
                 retVal.Message = $"Uspešno dodata rezervacija {reservationDb.ReservationCode}";
@@ -155,9 +156,7 @@ namespace TravelAgent.Services.Implementations
             retVal.Count = reservations.Count();
 
             reservations = reservations
-                .OrderByDescending(x => x.Id)
-                .Skip(pageInfo.PageSize * (pageInfo.Page - 1))
-                .Take(pageInfo.PageSize);
+                .OrderByDescending(x => x.Id);
 
             reservations.ToList().ForEach(x => retVal.Data.Add(_mapper.Map<ReservationResponseDTO>(x)));
             return retVal;
@@ -185,6 +184,20 @@ namespace TravelAgent.Services.Implementations
                 retVal.Message = $"Uspešno izmenjena rezervacija {reservation.ReservationCode}";
             }
 
+            return retVal;
+        }
+
+        public ResponsePackageNoData WebHook(string payload)
+        {
+            var retVal = new ResponsePackageNoData();
+
+            var stripeObject = Newtonsoft.Json.JsonConvert.DeserializeObject<StripeDTO>(payload);
+            if (stripeObject.Type.Equals("checkout.session.completed"))
+            {
+                var reservationDb = _context.Reservations.OrderByDescending(x => x.Id).FirstOrDefault();
+                reservationDb.PaymentIntent = stripeObject.Data.Object.PaymentIntent;
+                _context.SaveChanges();
+            }
             return retVal;
         }
     }
