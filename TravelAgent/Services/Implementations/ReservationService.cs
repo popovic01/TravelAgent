@@ -43,7 +43,7 @@ namespace TravelAgent.Services.Implementations
                 var reservationDb = new Reservation()
                 {
                     ReservationCode = _commonHelper.RandomString(6),
-                    Date = reservation.Date,
+                    Date = DateTime.Now,
                     Offer = _context.Offers.FirstOrDefault(x => x.Id == reservation.OfferId),
                     Client = (Client)_context.Users.FirstOrDefault(x => x.Id == reservation.ClientId)
                 };
@@ -70,7 +70,7 @@ namespace TravelAgent.Services.Implementations
                 {
                     PriceData = new SessionLineItemPriceDataOptions
                     {
-                        UnitAmount = (long)(reservationDb.Offer.Price * 100),//20.00 -> 2000
+                        UnitAmount = (long)(reservationDb.Offer.Price * 100),
                         Currency = "eur",
                         ProductData = new SessionLineItemPriceDataProductDataOptions
                         {
@@ -196,6 +196,7 @@ namespace TravelAgent.Services.Implementations
             {
                 var reservationDb = _context.Reservations.OrderByDescending(x => x.Id).FirstOrDefault();
                 reservationDb.PaymentIntent = stripeObject.Data.Object.PaymentIntent;
+                reservationDb.Paid = stripeObject.Data.Object.Paid.Equals("paid") ? true : false;
                 _context.SaveChanges();
             }
             return retVal;

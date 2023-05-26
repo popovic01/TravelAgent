@@ -20,6 +20,8 @@ namespace TravelAgent.DTO.Common
             public string Id { get; set; }
             [JsonProperty("payment_intent")]
             public string PaymentIntent { get; set; }
+            [JsonProperty("payment_status")]
+            public string Paid { get; set; }
         }
     }
 }
