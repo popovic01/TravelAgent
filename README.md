@@ -1,3 +1,8 @@
+![License](https://img.shields.io/badge/license-MIT-green)
+![.NET](https://img.shields.io/badge/.NET-6.0-blueviolet)
+![Angular](https://img.shields.io/badge/Angular-11-red)
+![Stripe](https://img.shields.io/badge/Stripe-API-blue)
+
 # TravelAgent 🧳🌍
 
 A full-stack web application for a custom Travel Agency, built as a university project. The platform allows users to browse existing travel offers or request personalized trips tailored to their needs. The project consists of both backend and frontend components, following a clean and modular structure.
